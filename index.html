@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game</title>
+</head>
+
+    <!--CSS Part Start-->
+    <style>
+        .chess_board {
+            width: 500px;
+            height: 500px;
+            margin: auto;
+            background-color: cyan;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .chess_board div {
+            width: 12.5%;
+            height: 12.5%;
+            box-sizing: border-box;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+    <!--CSS Part End-->
+
+    <!--JavaScript Part Start-->
+    <script defer>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Variables Start
+            const chess_board = document.querySelector(".chess_board");
+            let boxes = 8;
+            const chess_pieces = ["Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"];
+            let tempNum = 1;
+            let selectedPiece = null;
+            // Variables End
+
+
+            for(let rowNum = 1; rowNum <= boxes; rowNum++){
+                // start of row outer for loop
+
+                // start of inner for loop
+                for(let colNum = 1; colNum <= boxes; colNum++){
+                    let newCell = document.createElement("div");
+                
+
+                    // Different colors
+                    if ((rowNum +colNum) % 2 === 0) {
+                        newCell.style.backgroundColor = "rgb(99, 70, 49)";
+                        
+                    } else {
+                        newCell.style.backgroundColor = "antiquewhite";
+                        
+                    }
+                    newCell.className = `cell_${rowNum}_${colNum}`;
+
+                    // when clicked it shows where piece can move
+                    newCell.setAttribute("onclick", `clicked("cell_${rowNum}_${colNum}")`);
+
+                    chess_board.appendChild(newCell);
+                }// end of inner for loop
+            
+            } // end of row outer for loop
+
+            // White and Black Pawn position
+            for(let i = 1; i <= 8; i++){
+                const whitePawnPosition = document.querySelector(`.cell_2_${i}`);
+                whitePawnPosition.innerHTML = `<img src="./img/whitePawn.png" alt="whitePawn">`
+
+                const blackPawnPosition = document.querySelector(`.cell_7_${i}`);
+                blackPawnPosition.innerHTML = `<img src="./img/blackPawn.png" alt="blackPawn">`
+            }
+
+            // White and Black Rook Position
+            chess_pieces.forEach((piece) => {
+                const whitePosition = document.querySelector(`.cell_1_${tempNum}`);
+                whitePosition.innerHTML = `<img src="./img/white${piece}.png" alt="white${piece}">`
+                const blackPosition = document.querySelector(`.cell_8_${tempNum}`);
+                blackPosition.innerHTML = `<img src="./img/black${piece}.png" alt="black${piece}">`
+                tempNum++;
+            });
+
+            tempNum = 0;
+
+            window.clicked = function(coordinateValue) {
+                // selecting a coordinate
+                const coordinate = document.querySelector(`.${coordinateValue}`);
+
+                if(selectedPiece) {
+                    // if the piece is selected
+                    if (coordinate.innerHTML === "") {
+                        coordinate.appendChild(selectedPiece);
+                        selectedPiece = null;
+                    } else {
+                        // need something to add
+                        selectedPiece = coordinate.querySelector("img");
+                    }
+                } else {
+                    if(coordinate.querySelector("img")){
+                        selectedPiece = coordinate.querySelector("img");
+                    }
+                }
+            }
+        });
+        
+        
+        
+
+        class Pawn {
+            constructor () {
+                this.firstMove = true;
+                this.pawnPosition = "7_1";
+            }
+            
+            move(coordinates) {
+                if (this.firstMove === true) {
+                    
+                } 
+            }
+        }
+        
+    </script>
+    <!--JavaScript Part End-->
+<body>
+    <div class="chess_board">
+
+    </div>
+</body>
+</html>
