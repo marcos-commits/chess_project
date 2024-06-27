@@ -35,12 +35,72 @@
     <script defer>
         document.addEventListener("DOMContentLoaded", function() {
 
+            // Pawn class start
+            class Pawn {
+                constructor (pawnPosition) {
+                    this.firstMove = true;
+                    this.pawnPosition = pawnPosition;
+                }
+                
+                possibleMove(coordinates) {
+                    
+                    let xAxisValue = coordinates.substr(6, 1);
+                    let yAxisValue = coordinates.substr(coordinates.length -1, 1);
+                    let possibleMovements = [];
+
+                    if (this.firstMove === true) {
+                        this.firstMove = false;
+                        possibleMovements.push(`.cell_${parseInt(xAxisValue)+1}_${yAxisValue}`);
+                        possibleMovements.push(`.cell_${parseInt(xAxisValue)+2}_${yAxisValue}`);
+                    } else {
+                        if (parseInt(yAxisValue) <= 8) {
+                            possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
+                        }
+                    }
+                
+                    return possibleMovements;
+                }
+
+
+            }
+            // Pawn class end
+
+            // possible moves calculate start
+            function possibleMove(piece, coordinates) {
+                let foundIdx = 0;
+                let xAxisValue = coordinates.substr(6, 1);
+                let yAxisValue = coordinates.substr(coordinates.length -1, 1);
+                let possibleMoves = [];
+
+
+                // Trying to extract src 
+
+
+                if (piece.getAttribute('alt').includes("whitePawn")) {
+                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${xAxisValue}_${yAxisValue}`})
+                }
+
+
+                if (foundIdx !== 0) {
+                    possibleMoves = whitePawnPieces[foundIdx].possibleMove(`.cell_${xAxisValue}_${yAxisValue}`);
+                }
+                
+                return possibleMoves;
+
+            }
+            // possible moves calculate end
+
+
             // Variables Start
             const chess_board = document.querySelector(".chess_board");
             let boxes = 8;
             const chess_pieces = ["Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"];
             let tempNum = 1;
             let selectedPiece = null;
+            let prevCoordinate = null;
+            let whitePawnPieces = [];
+            let blackPawnPieces = [];
+            let possibleMoves = [];
             // Variables End
 
 
@@ -63,7 +123,7 @@
                     newCell.className = `cell_${rowNum}_${colNum}`;
 
                     // when clicked it shows where piece can move
-                    newCell.setAttribute("onclick", `clicked("cell_${rowNum}_${colNum}")`);
+                    newCell.setAttribute("onclick", `clicked(".cell_${rowNum}_${colNum}")`);
 
                     chess_board.appendChild(newCell);
                 }// end of inner for loop
@@ -71,13 +131,19 @@
             } // end of row outer for loop
 
             // White and Black Pawn position
+            
             for(let i = 1; i <= 8; i++){
                 const whitePawnPosition = document.querySelector(`.cell_2_${i}`);
                 whitePawnPosition.innerHTML = `<img src="./img/whitePawn.png" alt="whitePawn">`
+                var whitePawn = new Pawn(`.cell_2_${i}`);
+                whitePawnPieces.push(whitePawn);
 
                 const blackPawnPosition = document.querySelector(`.cell_7_${i}`);
                 blackPawnPosition.innerHTML = `<img src="./img/blackPawn.png" alt="blackPawn">`
+                var blackPawn = new Pawn(`.cell_7_${i}`);
+                blackPawnPieces.push(blackPawn);
             }
+
 
             // White and Black Rook Position
             chess_pieces.forEach((piece) => {
@@ -92,20 +158,38 @@
 
             window.clicked = function(coordinateValue) {
                 // selecting a coordinate
-                const coordinate = document.querySelector(`.${coordinateValue}`);
+                const coordinate = document.querySelector(`${coordinateValue}`);
 
                 if(selectedPiece) {
                     // if the piece is selected
                     if (coordinate.innerHTML === "") {
-                        coordinate.appendChild(selectedPiece);
+                        
+                        possibleMoves = possibleMove(selectedPiece, prevCoordinate);
+
+                        if (possibleMoves.length > 0) {
+                            possibleMoves.forEach((possibleMovement) => {
+                                // if it matches with coordinate movement
+                                if(possibleMovement === `${coordinateValue}`) {
+                                    coordinate.appendChild(selectedPiece);
+                                }
+                            });
+                        }
+
+                        
                         selectedPiece = null;
+                        
                     } else {
+
                         // need something to add
                         selectedPiece = coordinate.querySelector("img");
+                        
+                        
                     }
                 } else {
                     if(coordinate.querySelector("img")){
+                        // if it is not selectedPiece, then selection 
                         selectedPiece = coordinate.querySelector("img");
+                        prevCoordinate = `${coordinateValue}`;
                     }
                 }
             }
@@ -113,19 +197,7 @@
         
         
         
-
-        class Pawn {
-            constructor () {
-                this.firstMove = true;
-                this.pawnPosition = "7_1";
-            }
-            
-            move(coordinates) {
-                if (this.firstMove === true) {
-                    
-                } 
-            }
-        }
+        
         
     </script>
     <!--JavaScript Part End-->
