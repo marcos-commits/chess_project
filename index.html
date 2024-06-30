@@ -71,31 +71,29 @@
                         if (!this.blackUp && this.color === "white") {
                             possibleMovements.push(`.cell_${parseInt(xAxisValue)+1}_${yAxisValue}`);
                             possibleMovements.push(`.cell_${parseInt(xAxisValue)+2}_${yAxisValue}`);
-                        }
-
-                        
+                        }    
                     } else {
                         if (this.blackUp && this.color === "black") {
                             if (parseInt(yAxisValue) <= 8) {
-                                possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
+                                possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
                             }
                         }
 
                         if (!this.blackUp && this.color === "black") {
                             if (parseInt(yAxisValue) >= 1) {
-                                possibleMovements.push(`cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
+                                possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
                             }
                         }
 
                         if (this.blackUp && this.color === "white") {
                             if (parseInt(yAxisValue) <= 8) {
-                                possibleMovements.push(`cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
+                                possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
                             }
                         }
 
                         if (!this.blackUp && this.color === "white") {
                             if (parseInt(yAxisValue) <= 8) {
-                                possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
+                                possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
                             }
                         }
 
@@ -109,7 +107,7 @@
                     this.pawnPosition = newCoordinates;
                 }
 
-                eatingPossibilities(coordinates) {
+                eatingPossibility(coordinates) {
                     let xAxisValue = coordinates.substr(6, 1);
                     let yAxisValue = coordinates.substr(coordinates.length -1, 1);
                     let possibleMovements = [];
@@ -117,29 +115,29 @@
                     
                     if (this.blackUp && this.color === "black") {
                         if (parseInt(yAxisValue) <= 8) {
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) + 1}`);
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) - 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) + 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) - 1}`);
                         }
                     }
 
                     if (!this.blackUp && this.color === "black") {
                         if (parseInt(yAxisValue) >= 1) {
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) + 1}`);
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) - 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) + 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) - 1}`);
                         }
                     }
 
                     if (this.blackUp && this.color === "white") {
                         if (parseInt(yAxisValue) <= 8) {
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) + 1}`);
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) - 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) + 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${parseInt(yAxisValue) - 1}`);
                         }
                     }
 
                     if (!this.blackUp && this.color === "white") {
                         if (parseInt(yAxisValue) <= 8) {
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) + 1}`);
-                            possibleMovements.push(`cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) - 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) + 1}`);
+                            possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${parseInt(yAxisValue) - 1}`);
                         }
                     }
 
@@ -187,12 +185,14 @@
             // possible moves calculate end
 
             // possible eating move start
-            function eatingPossibilities(piece, coordinates) {
+            function eatingPossibility(piece, coordinates) {
                 let foundIdx = 0;
                 let xAxisValue = coordinates.substr(6, 1);
                 let yAxisValue = coordinates.substr(coordinates.length -1, 1);
                 let possibleMoves = [];
                 let pieceName = "";
+
+                
 
                 // white pawn movement
                 if (piece.getAttribute('alt').includes("whitePawn")) {
@@ -202,15 +202,14 @@
                     foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "blackPawn";
                 }
-
                 
                 if (foundIdx !== 0) {
                     switch (pieceName){
                         case "whitePawn":
-                            possibleMoves = whitePawnPieces[foundIdx].possibleMove(`.cell_${xAxisValue}_${yAxisValue}`);
+                            possibleMoves = whitePawnPieces[foundIdx].eatingPossibility(`.cell_${xAxisValue}_${yAxisValue}`);
                             break;
                         case "blackPawn":
-                            possibleMoves = blackPawnPieces[foundIdx].possibleMove(`.cell_${xAxisValue}_${yAxisValue}`);
+                            possibleMoves = blackPawnPieces[foundIdx].eatingPossibility(`.cell_${xAxisValue}_${yAxisValue}`);
                             break;
                     }
                     
@@ -225,7 +224,7 @@
 
 
             // updating pieces start
-            function updateCoordinate(piece, prevCoordinate, coordinates, eaten) {
+            function updateCoordinate(piece, prevCoordinate, coordinates, eaten, eatenPiece) {
                 let foundIdx = 0;
                 let prev_xAxisValue = prevCoordinate.substr(6, 1);
                 let prev_yAxisValue = prevCoordinate.substr(coordinates.length -1, 1);
@@ -247,15 +246,24 @@
                     switch (pieceName){
                         case "whitePawn":
                             whitePawnPieces[foundIdx].updatePawnPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
-                            if (eaten) {
-                                
-                            }
                             break;
                         case "blackPawn":
                             blackPawnPieces[foundIdx].updatePawnPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                     } // end of switch case
                 } // end of if foundIdx !== 0
+
+                // Decrease pieces if some piece is eaten
+                if (eaten) {
+                    if (eatenPiece.getAttribute('alt').includes("whitePawn")) {
+                        foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        whitePawnPieces.splice(foundIdx, 1);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackPawn")) {
+                        foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        blackPawnPieces.splice(foundIdx, 1);
+                    }
+                }
+
             }
             // updating pieces end
 
@@ -372,6 +380,9 @@
                 if(selectedPiece) {
                     // if the movement place is empty
                     if (coordinate.innerHTML === "") {
+                        console.log(coordinate);
+                        console.log(selectedPiece);
+                        console.log(prevCoordinate);
                         
                         possibleMoves = possibleMove(selectedPiece, prevCoordinate);
 
@@ -401,14 +412,17 @@
                         let otherPiece = coordinate.querySelector("img");
                         let eatingPossibilities = [];
                         if (otherPiece.getAttribute('alt').includes("white") && turn === "black" || otherPiece.getAttribute('alt').includes("black") && turn === "white"){
-                            eatingPossibilities = eatingPossibilities(selectedPiece, prevCoordinate);
+                            eatingPossibilities = eatingPossibility(selectedPiece, prevCoordinate);
 
                             if (eatingPossibilities.length > 0) {
                                 eatingPossibilities.forEach((eatingpossibleMovement) => {
+
                                     // if it matches with coordinate movement
                                     if(eatingpossibleMovement === `${coordinateValue}`) {
+                                        eatenPiece = coordinate.innerHTML;
+                                        coordinate.innerHTML = "";
                                         coordinate.appendChild(selectedPiece);
-                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true);
+                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece);
 
                                         switch (turn) {
                                             case "white":
@@ -421,8 +435,6 @@
                                     } // end of if it matches possible movements
                                 }); // possible moves for each statement
                             }
-                            
-
                         }
                         // need something to add
                         selectedPiece = coordinate.querySelector("img");
@@ -443,10 +455,6 @@
                 } // outer else statement
             }
         });
-        
-        
-        
-        
         
     </script>
     <!--JavaScript Part End-->
