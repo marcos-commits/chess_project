@@ -40,7 +40,7 @@
             class Pawn {
                 constructor (pawnPosition, blackUp, color) {
                     this.firstMove = true;
-                    this.pawnPosition = pawnPosition;
+                    this.position = pawnPosition;
                     this.blackUp = blackUp;
                     this.color = color;
                 }
@@ -100,8 +100,8 @@
                     return possibleMovements;
                 }
 
-                updatePawnPosition(newCoordinates) {
-                    this.pawnPosition = newCoordinates;
+                updatePosition(newCoordinates) {
+                    this.position = newCoordinates;
                 }
 
                 eatingPossibility(xAxisValue, yAxisValue) {
@@ -146,7 +146,7 @@
             // Rook class start
             class Rook{
                 constructor (rookPosition, blackUp, color) {
-                    this.rookPosition = rookPosition;
+                    this.position = rookPosition;
                     this.blackUp = blackUp;
                     this.color = color;
                 }
@@ -209,13 +209,13 @@
                                 }
                             } // end of for each statement
                         }
-                    } // end of if newxAxisValue == xAxisValue statement
+                    } // end of if newyAxisValue == yAxisValue statement
                 
                     return possibleMovements;   
                 }
 
-                updateRookPosition(newCoordinates) {
-                    this.rookPosition = newCoordinates;
+                updatePosition(newCoordinates) {
+                    this.position = newCoordinates;
                 }
 
                 // eating possibilities
@@ -223,6 +223,7 @@
                     let possibleMovements = [];
                     let recNumber = 0;
 
+                    // start of if newxAxisValue == xAxisValue statement
                     if(newxAxisValue == xAxisValue) {
                         if (yAxisValue < newyAxisValue) {
                             let yAxisValuePlusOne = parseInt(yAxisValue)+1;
@@ -268,6 +269,7 @@
                     } // end of if newxAxisValue == xAxisValue statement
 
 
+                    // start of if newyAxisValue == yAxisValue statement
                     if(newyAxisValue == yAxisValue) {
                         if (xAxisValue < newxAxisValue) {
                             let xAxisValuePlusOne = parseInt(xAxisValue)+1;
@@ -310,7 +312,7 @@
                                 possibleMovements.push(`.cell_${recNumber}_${newyAxisValue}`);
                             }
                         }
-                    } // end of if newxAxisValue == xAxisValue statement
+                    } // end of if newyAxisValue == yAxisValue statement
 
                     return possibleMovements;
 
@@ -322,7 +324,7 @@
             // Bishop class start
             class Bishop {
                 constructor (bishopPosition, blackUp, color) {
-                    this.bishopPosition = bishopPosition;
+                    this.position = bishopPosition;
                     this.blackUp = blackUp;
                     this.color = color;
                 }
@@ -397,8 +399,8 @@
                     return possibleMovements;   
                 }
 
-                updateBishopPosition(newCoordinates) {
-                    this.bishopPosition = newCoordinates;
+                updatePosition(newCoordinates) {
+                    this.position = newCoordinates;
                 }
 
                 // eating possibilities
@@ -499,7 +501,7 @@
             // Knight class start
             class Knight {
                 constructor (knightPosition, blackUp, color) {
-                    this.knightPosition = knightPosition;
+                    this.position = knightPosition;
                     this.blackUp = blackUp;
                     this.color = color;
                 }
@@ -533,13 +535,747 @@
                     return possibleMovements;
                 }
 
-                updateKnightPosition(newCoordinates) {
-                    this.knightPosition = newCoordinates;
+                updatePosition(newCoordinates) {
+                    this.position = newCoordinates;
                 }
 
                 
             }
             // Knight class end
+
+            // Queen class start
+            class Queen {
+                constructor (queenPosition, blackUp, color) {
+                    this.position = queenPosition;
+                    this.blackUp = blackUp;
+                    this.color = color;
+                }
+
+                possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue) {
+                    let possibleMovements = [];
+                    let diff_x_value = newxAxisValue - xAxisValue;
+                    let diff_y_value = newyAxisValue - yAxisValue;
+                    let abs_diff_x_value = Math.abs(diff_x_value);
+                    let abs_diff_y_value = Math.abs(diff_y_value);
+                    let abs_total_val = abs_diff_x_value + abs_diff_y_value;
+                    let row_recNumber = 0;
+                    let col_recNumber = 0;
+
+                    // It has Rookmovements start
+                    if(newxAxisValue == xAxisValue) {
+                        if (yAxisValue < newyAxisValue) {
+                            for(let i = yAxisValue; i < newyAxisValue; i++){
+                                let blockingPiece = document.querySelector(`.cell_${newxAxisValue}_${parseInt(i) + 1}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${newxAxisValue}_${parseInt(i) + 1}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+
+                        if (yAxisValue > newyAxisValue) {
+                            for(let i = yAxisValue; i > newyAxisValue; i--){
+                                let blockingPiece = document.querySelector(`.cell_${newxAxisValue}_${parseInt(i) - 1}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${newxAxisValue}_${parseInt(i) - 1}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+                    } // end of if newxAxisValue == xAxisValue statement
+
+
+                    if(newyAxisValue == yAxisValue) {
+                        if (xAxisValue < newxAxisValue) {
+                            for(let i = xAxisValue; i < newxAxisValue; i++){
+                                let blockingPiece = document.querySelector(`.cell_${parseInt(i) + 1}_${newyAxisValue}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${parseInt(i) + 1}_${newyAxisValue}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+
+                        if (xAxisValue > newxAxisValue) {
+                            for(let i = xAxisValue; i > newxAxisValue; i--){
+                                let blockingPiece = document.querySelector(`.cell_${parseInt(i) - 1}_${newyAxisValue}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${parseInt(i) - 1}_${newyAxisValue}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+                    } // end of if newyAxisValue == yAxisValue statement
+                    // Rook movement end
+
+                    // It has Bishop Movements
+                    // absolute value has to be same for x value and y value
+                    if(abs_diff_x_value == abs_diff_y_value) {
+                        // down diagonally(down right)
+                        if (diff_x_value > 0 && diff_y_value > 0) {
+                            for(let i = 1; i <= abs_diff_x_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + i}_${yAxisValue + i}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + i}_${yAxisValue + i}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+
+                        // down diagonally(down left)
+                        if (diff_x_value > 0 && diff_y_value < 0) {
+                            for(let i = 1; i <= abs_diff_y_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + i}_${yAxisValue + (i * -1)}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + i}_${yAxisValue + (i * -1)}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+
+                        // up diagonally(up right)
+                        if (diff_x_value < 0 && diff_y_value > 0) {
+                            for(let i = 1; i <= abs_diff_y_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + i}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + i}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+
+                        // up diagonally(up left)
+                        if (diff_x_value < 0 && diff_y_value < 0) {
+                            for(let i = 1; i <= abs_diff_y_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + (i * -1)}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + (i * -1)}`);
+                                } else {
+                                    break;
+                                }
+                            } // end of for each statement
+                        }
+
+                    } // end of if newxAxisValue == xAxisValue statement
+                    // end of Bishop movement
+
+
+                
+                    return possibleMovements;   
+                }
+
+                updatePosition(newCoordinates) {
+                    this.position = newCoordinates;
+                }
+
+                // eating possibilities
+                eatingPossibility(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue) {
+                    let possibleMovements = [];
+                    let diff_x_value = newxAxisValue - xAxisValue;
+                    let diff_y_value = newyAxisValue - yAxisValue;
+                    let abs_diff_x_value = Math.abs(diff_x_value);
+                    let abs_diff_y_value = Math.abs(diff_y_value);
+                    let row_recNumber = 0;
+                    let col_recNumber = 0;
+                    let recNumber = 0;
+
+                    // start of if newxAxisValue == xAxisValue statement
+                    if(newxAxisValue == xAxisValue) {
+                        if (yAxisValue < newyAxisValue) {
+                            let yAxisValuePlusOne = parseInt(yAxisValue)+1;
+                            recNumber = yAxisValuePlusOne;
+
+                            for(let i = yAxisValuePlusOne; i < newyAxisValue; i++){
+                                let blockingPiece = document.querySelector(`.cell_${newxAxisValue}_${i}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${newxAxisValue}_${i}`);
+                                } else {
+                                    break;
+                                }
+                                recNumber++;
+                            } // end of for each statement
+
+                            if (recNumber == newyAxisValue) {
+                                possibleMovements.push(`.cell_${newxAxisValue}_${recNumber}`);
+                            }
+                            
+                        }
+
+                        if (yAxisValue > newyAxisValue) {
+                            let yAxisValueMinusOne = parseInt(yAxisValue)-1;
+                            recNumber = yAxisValueMinusOne; 
+                            for(let i = yAxisValueMinusOne; i > newyAxisValue; i--){
+                                let blockingPiece = document.querySelector(`.cell_${newxAxisValue}_${i}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${newxAxisValue}_${i}`);
+                                } else {
+                                    break;
+                                }
+                                recNumber--;
+                            } // end of for each statement
+
+                            if (recNumber == newyAxisValue) {
+                                possibleMovements.push(`.cell_${newxAxisValue}_${recNumber}`);
+                            }
+                        }
+                    } // end of if newxAxisValue == xAxisValue statement
+
+
+                    // start of if newyAxisValue == yAxisValue statement
+                    if(newyAxisValue == yAxisValue) {
+                        if (xAxisValue < newxAxisValue) {
+                            let xAxisValuePlusOne = parseInt(xAxisValue)+1;
+                            recNumber = xAxisValuePlusOne;
+
+                            for(let i = xAxisValuePlusOne; i < newxAxisValue; i++){
+                                let blockingPiece = document.querySelector(`.cell_${i}_${newyAxisValue}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${i}_${newyAxisValue}`);
+                                } else {
+                                    break;
+                                }
+                                recNumber++;
+                            } // end of for each statement
+
+                            if (recNumber == newxAxisValue) {
+                                possibleMovements.push(`.cell_${recNumber}_${newyAxisValue}`);
+                            }
+                        }
+
+                        if (xAxisValue > newxAxisValue) {
+                            let xAxisValueMinusOne = parseInt(xAxisValue)-1;
+                            recNumber = xAxisValueMinusOne;
+
+                            for(let i = xAxisValueMinusOne; i > newxAxisValue; i--){
+                                let blockingPiece = document.querySelector(`.cell_${i}_${newyAxisValue}`);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${i}_${newyAxisValue}`);
+                                } else {
+                                    break;
+                                }
+                                recNumber--;
+                            } // end of for each statement
+
+                            if (recNumber == newxAxisValue) {
+                                possibleMovements.push(`.cell_${recNumber}_${newyAxisValue}`);
+                            }
+                        }
+                    } // end of if newyAxisValue == yAxisValue statement
+
+                    if(abs_diff_x_value == abs_diff_y_value) {
+                        // down diagonally(down right)
+                        if (diff_x_value > 0 && diff_y_value > 0) {
+                            for(let i = 1; i <= abs_diff_x_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + i}_${yAxisValue + i}`);
+                                row_recNumber = xAxisValue + i;
+                                col_recNumber = yAxisValue + i;
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + i}_${yAxisValue + i}`);
+                                } else {
+                                    break;
+                                }
+                                
+                            } // end of for each statement
+                        }
+
+                        // down diagonally(down left)
+                        if (diff_x_value > 0 && diff_y_value < 0) {
+                            for(let i = 1; i <= abs_diff_y_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + i}_${yAxisValue + (i * -1)}`);
+                                row_recNumber = xAxisValue + i;
+                                col_recNumber = yAxisValue + (i * -1);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + i}_${yAxisValue + (i * -1)}`);
+                                    
+                                } else {
+                                    break;
+                                }
+                                
+                            } // end of for each statement
+                        }
+
+                        // up diagonally(up right)
+                        if (diff_x_value < 0 && diff_y_value > 0) {
+                            for(let i = 1; i <= abs_diff_y_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + i}`);
+                                row_recNumber = xAxisValue + (i * -1);
+                                col_recNumber = yAxisValue + i;
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + i}`);
+                                    
+                                } else {
+                                    break;
+                                }
+                                
+                            } // end of for each statement
+                        }
+
+                        // up diagonally(up left)
+                        if (diff_x_value < 0 && diff_y_value < 0) {
+                            for(let i = 1; i <= abs_diff_y_value; i++){
+                                let blockingPiece = document.querySelector(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + (i * -1)}`);
+                                row_recNumber = xAxisValue + (i * -1);
+                                col_recNumber = yAxisValue + (i * -1);
+
+                                // if blockingPiece is none then add
+                                if (blockingPiece.innerHTML === ""){
+                                    possibleMovements.push(`.cell_${xAxisValue + (i * -1)}_${yAxisValue + (i * -1)}`);
+                                    
+                                } else {
+                                    break;
+                                }
+                                
+                            } // end of for each statement
+                        }
+                        if (row_recNumber == newxAxisValue && col_recNumber == newyAxisValue) {
+                                possibleMovements.push(`.cell_${row_recNumber}_${col_recNumber}`);
+                        }
+
+                    }
+
+                    return possibleMovements;
+
+                }
+
+                
+            }
+            // Queen Class end
+
+            // King Class start
+            class King {
+                constructor (kingPosition, blackUp, color) {
+                    this.position = kingPosition;
+                    this.blackUp = blackUp;
+                    this.color = color;
+                }
+
+                possibleMove(xAxisValue, yAxisValue) {
+                    let possibleMovements = [];
+                    let arr_col_recNumber = [];
+                    arr_col_recNumber.push(yAxisValue);
+                    arr_col_recNumber.push(yAxisValue+1);
+                    arr_col_recNumber.push(yAxisValue-1);
+
+                    let i = 1;
+                    
+                    arr_col_recNumber.forEach((yAxisElement) => {
+                        switch (i) {
+                            case 1:
+                                possibleMovements.push(`.cell_${xAxisValue+i}_${yAxisElement}`);
+                            case 2:
+                                possibleMovements.push(`.cell_${xAxisValue-1}_${yAxisElement}`);
+                        }
+                    });
+
+                    possibleMovements.push(`.cell_${xAxisValue}_${yAxisValue+1}`);
+                    possibleMovements.push(`.cell_${xAxisValue}_${yAxisValue-1}`)
+
+                    return possibleMovements;
+                }
+
+                // update position
+                updatePosition(newCoordinates) {
+                    this.position = newCoordinates;
+                }
+
+                checked(attackerPiece, attackerCoordinate) {
+                    // variables
+                    let attacker_xAxisValue = parseInt(attackerCoordinate.substr(6, 1));
+                    let attacker_yAxisValue = parseInt(attackerCoordinate.substr(attackerCoordinate.length -1, 1));
+                    let king_xAxisValue = parseInt(this.position.substr(6, 1));
+                    let king_yAxisValue = parseInt(this.position.substr(this.position.length - 1, 1))
+                    let attackerPieceName = attackerPiece.getAttribute('alt');
+                    let diff_x_value = king_xAxisValue - attacker_xAxisValue;
+                    let diff_y_value = king_yAxisValue - attacker_yAxisValue;
+                    let abs_diff_x_value = Math.abs(diff_x_value);
+                    let abs_diff_y_value = Math.abs(diff_y_value);
+                    let abs_total_val = abs_diff_x_value + abs_diff_y_value;
+                    let row_recNumber = 0;
+                    let col_recNumber = 0;
+                    let recNumber = 0;
+                    let possibleMovements = [];
+                    let isChecked = false;
+
+                    
+                    // It Rook or Queen attack movement
+                    if(attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")) {
+                        if(attacker_xAxisValue == king_xAxisValue) {
+                            if (attacker_yAxisValue < king_yAxisValue) {
+                                let yAxisValuePlusOne = parseInt(attacker_yAxisValue)+1;
+                                recNumber = yAxisValuePlusOne;
+
+                                for(let i = yAxisValuePlusOne; i < king_yAxisValue; i++){
+                                    let blockingPiece = document.querySelector(`.cell_${attacker_xAxisValue}_${i}`);
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${attacker_xAxisValue}_${i}`);
+                                    } else {
+                                        break;
+                                    }
+                                    recNumber++;
+                                } // end of for each statement
+
+                                if (recNumber == king_yAxisValue) {
+                                    possibleMovements.push(`.cell_${attacker_xAxisValue}_${recNumber}`);
+                                }
+                                
+                            }
+
+                            if (attacker_yAxisValue > king_yAxisValue) {
+                                let yAxisValueMinusOne = parseInt(attacker_yAxisValue)-1;
+                                recNumber = yAxisValueMinusOne; 
+                                for(let i = yAxisValueMinusOne; i > king_yAxisValue; i--){
+                                    let blockingPiece = document.querySelector(`.cell_${attacker_xAxisValue}_${i}`);
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${attacker_xAxisValue}_${i}`);
+                                    } else {
+                                        break;
+                                    }
+                                    recNumber--;
+                                } // end of for each statement
+
+                                if (recNumber == king_yAxisValue) {
+                                    possibleMovements.push(`.cell_${attacker_xAxisValue}_${recNumber}`);
+                                }
+                            }
+                        } // end of if newxAxisValue == xAxisValue statement
+
+
+                        // start of if newyAxisValue == yAxisValue statement
+                        if(attacker_yAxisValue == king_yAxisValue) {
+                            if (attacker_xAxisValue < king_xAxisValue) {
+                                let xAxisValuePlusOne = parseInt(attacker_xAxisValue)+1;
+                                recNumber = xAxisValuePlusOne;
+
+                                for(let i = xAxisValuePlusOne; i < king_xAxisValue; i++){
+                                    let blockingPiece = document.querySelector(`.cell_${i}_${attacker_yAxisValue}`);
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${i}_${attacker_yAxisValue}`);
+                                    } else {
+                                        break;
+                                    }
+                                    recNumber++;
+                                } // end of for each statement
+
+                                if (recNumber == king_xAxisValue) {
+                                    possibleMovements.push(`.cell_${recNumber}_${attacker_yAxisValue}`);
+                                }
+                            }
+
+                            if (attacker_xAxisValue > king_xAxisValue) {
+                                let xAxisValueMinusOne = parseInt(attacker_xAxisValue)-1;
+                                recNumber = xAxisValueMinusOne;
+
+                                for(let i = xAxisValueMinusOne; i > king_xAxisValue; i--){
+                                    let blockingPiece = document.querySelector(`.cell_${i}_${attacker_yAxisValue}`);
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${i}_${attacker_yAxisValue}`);
+                                    } else {
+                                        break;
+                                    }
+                                    recNumber--;
+                                } // end of for each statement
+
+                                if (recNumber == king_xAxisValue) {
+                                    possibleMovements.push(`.cell_${recNumber}_${attacker_yAxisValue}`);
+                                }
+                            }
+                        } // end of if newyAxisValue == yAxisValue statement
+                       
+                    } 
+
+                    // Bishop or Queen Attacking Movement 
+                    if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")) {
+                        if(abs_diff_x_value == abs_diff_y_value) {
+                            // down diagonally(down right)
+                            if (diff_x_value > 0 && diff_y_value > 0) {
+                                for(let i = 1; i <= abs_diff_x_value; i++){
+                                    let blockingPiece = document.querySelector(`.cell_${attacker_xAxisValue + i}_${attacker_yAxisValue + i}`);
+                                    row_recNumber = attacker_xAxisValue + i;
+                                    col_recNumber = attacker_yAxisValue + i;
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${attacker_xAxisValue + i}_${attacker_yAxisValue + i}`);
+                                    } else {
+                                        break;
+                                    }
+                                    
+                                } // end of for each statement
+                            }
+
+                            // down diagonally(down left)
+                            if (diff_x_value > 0 && diff_y_value < 0) {
+                                for(let i = 1; i <= abs_diff_y_value; i++){
+                                    let blockingPiece = document.querySelector(`.cell_${attacker_xAxisValue + i}_${attacker_yAxisValue + (i * -1)}`);
+                                    row_recNumber = attacker_xAxisValue + i;
+                                    col_recNumber = attacker_yAxisValue + (i * -1);
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${attacker_xAxisValue + i}_${attacker_yAxisValue + (i * -1)}`);
+                                        
+                                    } else {
+                                        break;
+                                    }
+                                    
+                                } // end of for each statement
+                            }
+
+                            // up diagonally(up right)
+                            if (diff_x_value < 0 && diff_y_value > 0) {
+                                for(let i = 1; i <= abs_diff_y_value; i++){
+                                    let blockingPiece = document.querySelector(`.cell_${attacker_xAxisValue + (i * -1)}_${attacker_yAxisValue + i}`);
+                                    row_recNumber = attacker_xAxisValue + (i * -1);
+                                    col_recNumber = attacker_yAxisValue + i;
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${attacker_xAxisValue + (i * -1)}_${attacker_yAxisValue + i}`);
+                                        
+                                    } else {
+                                        break;
+                                    }
+                                    
+                                } // end of for each statement
+                            }
+
+                            // up diagonally(up left)
+                            if (diff_x_value < 0 && diff_y_value < 0) {
+                                for(let i = 1; i <= abs_diff_y_value; i++){
+                                    let blockingPiece = document.querySelector(`.cell_${attacker_xAxisValue + (i * -1)}_${attacker_yAxisValue + (i * -1)}`);
+                                    row_recNumber = attacker_xAxisValue + (i * -1);
+                                    col_recNumber = attacker_yAxisValue + (i * -1);
+
+                                    // if blockingPiece is none then add
+                                    if (blockingPiece.innerHTML === ""){
+                                        possibleMovements.push(`.cell_${attacker_xAxisValue + (i * -1)}_${attacker_yAxisValue + (i * -1)}`);
+                                        
+                                    } else {
+                                        break;
+                                    }
+                                    
+                                } // end of for each statement
+                            }
+                            if (row_recNumber == king_xAxisValue && col_recNumber == king_yAxisValue) {
+                                    possibleMovements.push(`.cell_${row_recNumber}_${col_recNumber}`);
+                            }
+
+                        }
+                    
+                    }
+                    // Knight attacking Movement 
+                    if(attackerPieceName.includes("Knight")) {
+                        if((abs_total_val == 3 && abs_diff_x_value !== 0) ||(abs_total_val == 3 && abs_diff_y_value !== 0)) {
+                        // 2 down right and left
+                            if (abs_diff_x_value == 2) {
+                                possibleMovements.push(`.cell_${attacker_xAxisValue+2}_${attacker_yAxisValue+1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue+2}_${attacker_yAxisValue-1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue-2}_${attacker_yAxisValue+1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue-2}_${attacker_yAxisValue-1}`);
+                            } else if (abs_diff_x_value == 1) {
+                                possibleMovements.push(`.cell_${attacker_xAxisValue+1}_${attacker_yAxisValue+2}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue+1}_${attacker_yAxisValue-2}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue-1}_${attacker_yAxisValue+2}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue-1}_${attacker_yAxisValue-2}`);
+                            }
+                        }
+                    } 
+
+                    // Pawn possible attacking movements
+                    if(attackerPieceName.includes("Pawn")) {
+                        if (this.blackUp && this.color === "black") {
+                            if (parseInt(attacker_yAxisValue) <= 8) {
+                                possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue + 1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue - 1}`);
+                            }
+                        }
+
+                        if (!this.blackUp && this.color === "black") {
+                            if (parseInt(attacker_yAxisValue) >= 1) {
+                                possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue + 1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue - 1}`);
+                            }
+                        }
+
+                        if (this.blackUp && this.color === "white") {
+                            if (parseInt(attacker_yAxisValue) <= 8) {
+                                possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue + 1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue - 1}`);
+                            }
+                        }
+
+                        if (!this.blackUp && this.color === "white") {
+                            if (parseInt(attacker_yAxisValue) <= 8) {
+                                possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue + 1}`);
+                                possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue - 1}`);
+                            }
+                        }
+                    // King attacking possible movements
+                    } else if(attackerPieceName.includes("King")) {
+                        possibleMovements = this.possibleMove(attacker_xAxisValue, attacker_yAxisValue);
+                    }
+
+                    possibleMovements.some((attackCoordinate) => {
+                        if (attackCoordinate === this.position) {
+                            let isCheckMate = false;
+                            isChecked = true;
+                            //isCheckMate = this.checkMate(king_xAxisValue, king_yAxisValue);
+                            if (isCheckMate) {
+                                alert("CheckMate!!!")
+                            } else {
+                                return isChecked;
+                            }
+                            
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+
+                }
+
+                checkMate(king_xAxisValue, king_yAxisValue) {
+                    let kingPossibleMovement = [];
+                    let getKilledMovement = [];
+                    kingPossibleMovement = this.possibleMove(king_xAxisValue, king_yAxisValue);
+                
+
+                    kingPossibleMovement.some((eachMovement) => {
+                        let eachMovement_xAxisValue = parseInt(eachMovement.substr(6, 1));
+                        let eachMovement_yAxisValue = parseInt(attackerCoordinates.substr(attackerCoordinates.length -1, 1));
+
+                        // check left
+                        for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
+                            
+                            let leftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                            
+                            switch(i) {
+                                case eachMovement_yAxisValue - 1:
+                                    if (leftPiece.querySelector("img")) {
+                                        let leftImagePiece = leftPiece.querySelector("img");
+                                        if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            getKilledMovement.push(false);
+                                            break;
+                                        }
+                                    } 
+                                    break;
+                                default:
+                                    if (leftImagePiece.querySelector("img")) {
+                                        if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            getKilledMovement.push(false);
+                                            break;
+                                        }
+                                    }
+                                    
+                                    break;
+                            } // end of switch case
+
+                            if (i === 0) {
+                                getKilledMovement.push(false);
+                            }
+                                
+                             // if king's yAxisValue is 1 then don't check if it's not check all the lefts
+                        } // end of for each statement
+
+                        // check right
+                        for(let i = king_yAxisValue; i <= 8; i++) {
+                            if (king_yAxisValue == 8) {
+                                break;
+                            } else {
+                                let rightPiece = document.querySelector(`.cell_${king_xAxisValue}_${i}`)
+                                let rightImagePiece = rightPiece.querySelector("img");
+
+                                switch(i) {
+                                    case king_yAxisValue:
+                                        if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        }
+                                        break;
+                                    default:
+                                        if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                            getKilledMovement.push(true);
+                                            break;
+                                        }
+                                        break;
+                                } // end of switch case
+                                
+                            } // if king's yAxisValue is 1 then don't check if it's not check all the lefts
+                        } // end of for each statement
+
+
+                        
+                    });
+                    
+                }
+        }
+            // King Class end
 
             // Classes ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -558,29 +1294,41 @@
 
                 // pieces movement
                 if (piece.getAttribute('alt').includes("whitePawn")) {
-                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "whitePawn";
                 } else if (piece.getAttribute('alt').includes("blackPawn")) {
-                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "blackPawn";
                 } else if (piece.getAttribute('alt').includes("blackRook")) {
-                    foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "blackRook";
                 } else if (piece.getAttribute('alt').includes("whiteRook")) {
-                    foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "whiteRook";
                 } else if (piece.getAttribute('alt').includes("whiteBishop")) {
-                    foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "whiteBishop";
                 } else if (piece.getAttribute('alt').includes("blackBishop")) {
-                    foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "blackBishop";
                 } else if (piece.getAttribute('alt').includes("blackKnight")) {
-                    foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "blackKnight";
                 } else if (piece.getAttribute('alt').includes("whiteKnight")) {
-                    foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === `.cell_${xAxisValue}_${yAxisValue}`});
+                    foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
                     pieceName = "whiteKnight";
+                } else if (piece.getAttribute('alt').includes("blackQueen")) {
+                    foundIdx = blackQueenPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
+                    pieceName = "blackQueen";
+                } else if (piece.getAttribute('alt').includes("whiteQueen")) {
+                    foundIdx = whiteQueenPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
+                    pieceName = "whiteQueen";
+                } else if (piece.getAttribute('alt').includes("blackKing")) {
+                    foundIdx = blackKingPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
+                    pieceName = "blackKing";
+                } else {
+                    foundIdx = whiteKingPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${xAxisValue}_${yAxisValue}`});
+                    pieceName = "whiteKing";
                 }
 
 
@@ -611,6 +1359,18 @@
                         case "whiteKnight":
                             possibleMoves = whiteKnightPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
                             break;
+                        case "blackQueen":
+                            possibleMoves = blackQueenPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            break;
+                        case "whiteQueen":
+                            possibleMoves = whiteQueenPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            break;
+                        case "blackKing":
+                            possibleMoves = blackKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            break;
+                        case "whiteKing":
+                            possibleMoves = whiteKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            break;
                     }
                     
                 }
@@ -637,31 +1397,43 @@
 
                 // find index of piece
                 if (piece.getAttribute('alt').includes("whitePawn")) {
-                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === currentPosition});
+                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "whitePawn";
                 } else if (piece.getAttribute('alt').includes("blackPawn")) {
-                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === currentPosition});
+                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "blackPawn";
                 } else if (piece.getAttribute('alt').includes("blackRook")) {
-                    foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === currentPosition});
+                    foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "blackRook";
                 } else if (piece.getAttribute('alt').includes("whiteRook")) {
-                    foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === currentPosition});
+                    foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "whiteRook";
                 } else if (piece.getAttribute('alt').includes("blackBishop")) {
-                    foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === currentPosition});
+                    foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "blackBishop";
                 } else if (piece.getAttribute('alt').includes("whiteBishop")) {
-                    foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === currentPosition});
+                    foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "whiteBishop";
                 } else if (piece.getAttribute('alt').includes("blackKnight")) {
-                    foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === currentPosition});
+                    foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "blackKnight";
                 } else if (piece.getAttribute('alt').includes("whiteKnight")) {
-                    foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === currentPosition});
+                    foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
                     pieceName = "whiteKnight";
+                } else if (piece.getAttribute('alt').includes("blackQueen")) {
+                    foundIdx = blackQueenPiece.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
+                    pieceName = "blackQueen";
+                } else if (piece.getAttribute('alt').includes("whiteQueen")) {
+                    foundIdx = whiteQueenPiece.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
+                    pieceName = "whiteQueen";
+                } else if (piece.getAttribute('alt').includes("blackKing")) {
+                    foundIdx = blackKingPiece.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
+                    pieceName = "blackKing";
+                } else {
+                    foundIdx = whiteKingPiece.findIndex(function(cellNumber){return cellNumber.position === currentPosition});
+                    pieceName = "whiteKing";
                 }
-                
+
                 if (foundIdx !== -1) {
                     switch (pieceName){
                         case "whitePawn":
@@ -688,6 +1460,18 @@
                         case "whiteKnight":
                             possibleMoves = whiteKnightPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
                             break;
+                        case "blackQueen":
+                            possibleMoves = blackQueenPiece[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            break;
+                        case "whiteQueen":
+                            possibleMoves = whiteQueenPiece[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            break;
+                        case "blackKing":
+                            possibleMoves = blackKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            break;
+                        case "whiteKing":
+                            possibleMoves = whiteKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            break;
                     }
                     
                 }
@@ -712,29 +1496,41 @@
                 
                 // getting previous movement
                 if (piece.getAttribute('alt').includes("whitePawn")) {
-                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "whitePawn";
                 } else if (piece.getAttribute('alt').includes("blackPawn")) {
-                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "blackPawn";
                 } else if (piece.getAttribute('alt').includes("blackRook")) {
-                    foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "blackRook";
                 } else if (piece.getAttribute('alt').includes("whiteRook")) {
-                    foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "whiteRook";
                 } else if (piece.getAttribute('alt').includes("blackBishop")) {
-                    foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "blackBishop";
                 } else if (piece.getAttribute('alt').includes("whiteBishop")) {
-                    foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "whiteBishop";
                 } else if (piece.getAttribute('alt').includes("blackKnight")) {
-                    foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "blackKnight";
                 } else if (piece.getAttribute('alt').includes("whiteKnight")) {
-                    foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
                     pieceName = "whiteKnight";
+                } else if (piece.getAttribute('alt').includes("blackQueen")) {
+                    foundIdx = blackQueenPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    pieceName = "blackQueen";
+                } else if (piece.getAttribute('alt').includes("whiteQueen")) {
+                    foundIdx = whiteQueenPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    pieceName = "whiteQueen";
+                } else if (piece.getAttribute('alt').includes("blackKing")) {
+                    foundIdx = blackKingPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    pieceName = "blackKing";
+                } else {
+                    foundIdx = whiteKingPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${prev_xAxisValue}_${prev_yAxisValue}`});
+                    pieceName = "whiteKing";
                 }
             
 
@@ -742,60 +1538,87 @@
                 if (foundIdx !== -1) {
                     switch (pieceName){
                         case "whitePawn":
-                            whitePawnPieces[foundIdx].updatePawnPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            whitePawnPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "blackPawn":
-                            blackPawnPieces[foundIdx].updatePawnPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            blackPawnPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "blackRook":
-                            blackRookPieces[foundIdx].updateRookPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            blackRookPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "whiteRook":
-                            whiteRookPieces[foundIdx].updateRookPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            whiteRookPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "whiteBishop":
-                            whiteBishopPieces[foundIdx].updateBishopPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            whiteBishopPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "blackBishop":
-                            blackBishopPieces[foundIdx].updateBishopPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            blackBishopPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "blackKnight":
-                            blackKnightPieces[foundIdx].updateKnightPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            blackKnightPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
                             break;
                         case "whiteKnight":
-                            whiteKnightPieces[foundIdx].updateKnightPosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
-                            break;             
+                            whiteKnightPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            break;
+                        case "blackQueen":
+                            blackQueenPiece[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            break;
+                        case "whiteQueen":
+                            whiteQueenPiece[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            break;
+                        case "blackKing":
+                            blackKingPiece[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            break;
+                        case "whiteKing":
+                            whiteKingPiece[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                            break;                          
                     } // end of switch case
                 } // end of if foundIdx !== 0
 
                 // Decrease pieces if some piece is eaten
                 if (eaten) {
                     if (eatenPiece.getAttribute('alt').includes("whitePawn")) {
-                        foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         whitePawnPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("blackPawn")) {
-                        foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.pawnPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         blackPawnPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("blackRook")) {
-                        foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = blackRookPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         blackRookPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("whiteRook")) {
-                        foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.rookPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = whiteRookPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         whiteRookPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("whiteBishop")) {
-                        foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = whiteBishopPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         whiteBishopPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("blackBishop")) {
-                        foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.bishopPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = blackBishopPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         blackBishopPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("blackKnight")) {
-                        foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = blackKnightPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         blackKnightPieces.splice(foundIdx, 1);
                     } else if (eatenPiece.getAttribute('alt').includes("whiteKnight")) {
-                        foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.knightPosition === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        foundIdx = whiteKnightPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
                         whiteKnightPieces.splice(foundIdx, 1);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackQueen")) {
+                        foundIdx = blackQueenPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        blackQueenPiece.splice(foundIdx, 1);
+                    } else if (eatenPiece.getAttribute('alt').includes("whiteQueen")) {
+                        foundIdx = whiteQueenPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        whiteQueenPiece.splice(foundIdx, 1);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackKing")) {
+                        foundIdx = blackKingPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        blackKingPiece.splice(foundIdx, 1);
+                        alert("White Won!");
+                        location.reload();
+                    } else {
+                        foundIdx = whiteKingPiece.findIndex(function(cellNumber){return cellNumber.position === `.cell_${new_xAxisValue}_${new_yAxisValue}`});
+                        whiteKingPiece.splice(foundIdx, 1);
+                        alert("Black Won!");
+                        location.reload();
                     }
-
                 }
 
             }
@@ -835,12 +1658,7 @@
             let whiteUp = true;
             // Variables End
 
-            if (confirm("First Turn: White piece goes first?")) {
-                turn = "white";
-            } else {
-                turn = "black";
-            }
-
+            turn = "white";
             
             if (confirm("Do you want black pieces to be in the upperp position?")) {
                 blackUp = true;
@@ -922,7 +1740,14 @@
                         var whiteKnight = new Knight(`.cell_${whiteRowNum}_${tempNum}`, blackUp, "white");
                         whiteKnightPieces.push(whiteKnight);
                         break;
-                    // Something to add on
+                    case "Queen":
+                        var whiteQueen = new Queen(`.cell_${whiteRowNum}_${tempNum}`, blackUp, "white");
+                        whiteQueenPiece.push(whiteQueen);
+                        break;   
+                    case "King":
+                        var whiteKing = new King(`.cell_${whiteRowNum}_${tempNum}`, blackUp, "white");
+                        whiteKingPiece.push(whiteKing);
+                        break;
                 }
 
                 // Black Pieces
@@ -941,15 +1766,20 @@
                         var blackKnight = new Knight(`.cell_${blackRowNum}_${tempNum}`, blackUp, "black");
                         blackKnightPieces.push(blackKnight);
                         break;
-                 // Something to add on   
+                    case "Queen":
+                        var blackQueen = new Queen(`.cell_${blackRowNum}_${tempNum}`, blackUp, "black");
+                        blackQueenPiece.push(blackQueen);
+                        break; 
+                    case "King":
+                        var blackKing = new King(`.cell_${blackRowNum}_${tempNum}`, blackUp, "black");
+                        blackKingPiece.push(blackKing);
+                        break;
                 }
 
                 tempNum++;
             });
 
             tempNum = 0;
-
-            
 
             window.clicked = function(coordinateValue) {
                 // selecting a coordinate
@@ -970,9 +1800,17 @@
 
                                     switch (turn) {
                                         case "white":
+                                            let isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                            if (isCheckBlack) {
+                                                alert("CHECK!")
+                                            }
                                             turn = "black";
                                             break;
                                         case "black":
+                                            let isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                            if (isCheckWhite) {
+                                                alert("CHECK!")
+                                            }
                                             turn = "white";
                                             break;
                                     } // end of switch case statement
@@ -1004,9 +1842,17 @@
 
                                         switch (turn) {
                                             case "white":
+                                                let isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                                if (isCheckBlack) {
+                                                    alert("Check!!!!");
+                                                }
                                                 turn = "black";
                                                 break;
                                             case "black":
+                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                                if (isCheckWhite) {
+                                                    alert("Check!!!!");
+                                                }
                                                 turn = "white";
                                                 break;
                                         } // end of switch case statement
@@ -1028,6 +1874,9 @@
                     if(coordinate.querySelector("img")){
                         // if it is not selectedPiece, then selection 
                         selectedPiece = coordinate.querySelector("img");
+
+                        let test = selectedPiece.getAttribute('alt');
+
                         if(!selectedPiece.getAttribute('alt').includes(turn)) {
                             selectedPiece = null;
                         } else {
