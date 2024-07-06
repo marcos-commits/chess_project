@@ -28,6 +28,17 @@
             height: 100%;
             box-sizing: border-box;
         }
+
+        .checked {
+            width: 50%;
+            margin: auto;
+        }
+        h1 {
+            width: 50%;
+            margin: auto;
+            text-align: center;
+            opacity: 0;
+        }
     </style>
     <!--CSS Part End-->
 
@@ -1167,15 +1178,13 @@
                             //isCheckMate = this.checkMate(king_xAxisValue, king_yAxisValue);
                             if (isCheckMate) {
                                 alert("CheckMate!!!")
-                            } else {
-                                return isChecked;
-                            }
-                            
+                            } 
                             return true;
                         } else {
                             return false;
                         }
                     });
+                    return isChecked;
 
                 }
 
@@ -1656,6 +1665,9 @@
             let whiteRowNum = 0;
             let blackRowNum = 0;
             let whiteUp = true;
+            let isCheckBlack = false;
+            let isCheckWhite = false;
+            let checkedWord = document.querySelector('h1');
             // Variables End
 
             turn = "white";
@@ -1691,6 +1703,7 @@
                 }// end of inner for loop
             
             } // end of row outer for loop
+
 
             // White and Black Pawn position(For the Pawn)
             if (blackUp) {
@@ -1800,17 +1813,21 @@
 
                                     switch (turn) {
                                         case "white":
-                                            let isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                            isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
                                             if (isCheckBlack) {
-                                                alert("CHECK!")
+                                                checkedWord = document.querySelector('h1');
+                                                checkedWord.style.opacity = 1;
                                             }
+                                            
                                             turn = "black";
                                             break;
                                         case "black":
-                                            let isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                            isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
                                             if (isCheckWhite) {
-                                                alert("CHECK!")
+                                                checkedWord = document.querySelector('h1');
+                                                checkedWord.style.opacity = 1;
                                             }
+                                            
                                             turn = "white";
                                             break;
                                     } // end of switch case statement
@@ -1842,18 +1859,22 @@
 
                                         switch (turn) {
                                             case "white":
-                                                let isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
                                                 if (isCheckBlack) {
-                                                    alert("Check!!!!");
+                                                    checkedWord = document.querySelector('h1');
+                                                    checkedWord.style.opacity = 1;
                                                 }
                                                 turn = "black";
+                                                
                                                 break;
                                             case "black":
                                                 isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
                                                 if (isCheckWhite) {
-                                                    alert("Check!!!!");
+                                                    checkedWord = document.querySelector('h1');
+                                                    checkedWord.style.opacity = 1;
                                                 }
                                                 turn = "white";
+                                                
                                                 break;
                                         } // end of switch case statement
                                         selectedPiece = null;
@@ -1872,6 +1893,7 @@
                     }
                 } else {
                     if(coordinate.querySelector("img")){
+                        checkedWord.style.opacity = 0;
                         // if it is not selectedPiece, then selection 
                         selectedPiece = coordinate.querySelector("img");
 
@@ -1894,5 +1916,10 @@
     <div class="chess_board">
 
     </div>
+    <p></p>
+    <div class="checked">
+        <h1>CHECKED</h1>
+    </div>
+    
 </body>
 </html>
