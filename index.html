@@ -63,47 +63,25 @@
                     if (this.firstMove === true) {
                         this.firstMove = false;
 
-                        if (this.blackUp && this.color === "black") {
+                        if ((this.blackUp && this.color === "black") || (!this.blackUp && this.color === "white")) {
                             possibleMovements.push(`.cell_${parseInt(xAxisValue)+1}_${yAxisValue}`);
                             possibleMovements.push(`.cell_${parseInt(xAxisValue)+2}_${yAxisValue}`);
                         }
 
-                        if (!this.blackUp && this.color === "black") {
+                        if ((!this.blackUp && this.color === "black") || (this.blackUp && this.color === "white")) {
                             possibleMovements.push(`.cell_${parseInt(xAxisValue)-1}_${yAxisValue}`);
                             possibleMovements.push(`.cell_${parseInt(xAxisValue)-2}_${yAxisValue}`);
                         }
-
-                        if (this.blackUp && this.color === "white") {
-                            possibleMovements.push(`.cell_${parseInt(xAxisValue)-1}_${yAxisValue}`);
-                            possibleMovements.push(`.cell_${parseInt(xAxisValue)-2}_${yAxisValue}`);
-                        }
-
-                        if (!this.blackUp && this.color === "white") {
-                            possibleMovements.push(`.cell_${parseInt(xAxisValue)+1}_${yAxisValue}`);
-                            possibleMovements.push(`.cell_${parseInt(xAxisValue)+2}_${yAxisValue}`);
-                        }    
                     } else {
-                        if (this.blackUp && this.color === "black") {
+                        if ((this.blackUp && this.color === "black") || (!this.blackUp && this.color === "white")) {
                             if (parseInt(yAxisValue) <= 8) {
                                 possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
                             }
                         }
 
-                        if (!this.blackUp && this.color === "black") {
+                        if ((!this.blackUp && this.color === "black") || (this.blackUp && this.color === "white")) {
                             if (parseInt(yAxisValue) >= 1) {
                                 possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
-                            }
-                        }
-
-                        if (this.blackUp && this.color === "white") {
-                            if (parseInt(yAxisValue) <= 8) {
-                                possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
-                            }
-                        }
-
-                        if (!this.blackUp && this.color === "white") {
-                            if (parseInt(yAxisValue) <= 8) {
-                                possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
                             }
                         }
                     }
@@ -1548,9 +1526,85 @@
                     switch (pieceName){
                         case "whitePawn":
                             whitePawnPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+
+                            // Pawn Promotion
+                            if((prev_xAxisValue == 7 && new_xAxisValue == 8) || (prev_xAxisValue == 2 && new_xAxisValue == 1)) {
+                                let promotedPiece = prompt("Congratulations! Your Pawn is promoted! Which piece would you like to select? Examples are shown below", `"knight", "bishop", "queen", "rook"`);
+                                let newCoordinatePiece = document.querySelector(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                                switch (promotedPiece) {
+                                    case "knight":
+                                        var whiteKnight = new Knight(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                                        whiteKnightPieces.push(whiteKnight);
+                                        whitePawnPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/whiteKnight.png" alt="whiteKnight">`;
+                                        break
+                                    case "bishop":
+                                        var whiteBishop = new Bishop(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                                        whiteBishopPieces.push(whiteBishop);
+                                        whitePawnPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/whiteBishop.png" alt="whiteBishop">`;
+                                        break;
+                                    case "queen":
+                                        var whiteQueen = new Queen(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                                        whiteQueenPiece.push(whiteQueen);
+                                        whitePawnPiece.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/whiteQueen.png" alt="whiteQueen">`;
+                                        break;
+                                    case "rook":
+                                        var whiteRook = new Rook(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                                        whiteRookPieces.push(whiteRook);
+                                        whitePawnPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/whiteRook.png" alt="whiteRook">`;
+                                        break;
+
+                                } // end of switch case
+                            }
+
                             break;
                         case "blackPawn":
                             blackPawnPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+
+                            // Pawn Promotion
+                            if((prev_xAxisValue == 7 && new_xAxisValue == 8) || (prev_xAxisValue == 2 && new_xAxisValue == 1)) {
+                                let promotedPiece = prompt("Congratulations! Your Pawn is promoted! Which piece would you like to select? Examples are shown below", `"knight", "bishop", "queen", "rook"`);
+                                let newCoordinatePiece = document.querySelector(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
+                                switch (promotedPiece) {
+                                    case "knight":
+                                        var blackKnight = new Knight(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                                        blackKnightPieces.push(blackKnight);
+                                        blackPawnPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/blackKnight.png" alt="blackKnight">`;
+                                        break;
+                                    case "bishop":
+                                        var blackBishop = new Bishop(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                                        blackBishop.push(blackBishop);
+                                        blackBishopPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/blackBishop.png" alt="blackBishop">`;
+                                        break;
+                                    case "queen":
+                                        var blackQueen = new Queen(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                                        blackQueenPiece.push(blackQueen);
+                                        blackPawnPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/blackQueen.png" alt="blackQueen">`;
+                                        break;
+                                    case "rook":
+                                        var blackRook = new Rook(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                                        blackRookPieces.push(blackRook);
+                                        blackPawnPieces.splice(foundIdx, 1);
+                                        newCoordinatePiece.innerHTML = "";
+                                        newCoordinatePiece.innerHTML = `<img src="./img/blackRook.png" alt="blackRook">`;
+                                        break;
+
+                                } // end of switch case
+                            }
+
                             break;
                         case "blackRook":
                             blackRookPieces[foundIdx].updatePosition(`.cell_${new_xAxisValue}_${new_yAxisValue}`);
@@ -1809,7 +1863,7 @@
                                 // if it matches with coordinate movement
                                 if(possibleMovement === `${coordinateValue}`) {
                                     coordinate.appendChild(selectedPiece);
-                                    updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false);
+                                    updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
 
                                     switch (turn) {
                                         case "white":
@@ -1855,7 +1909,7 @@
                                         eatenPiece = coordinate.innerHTML;
                                         coordinate.innerHTML = "";
                                         coordinate.appendChild(selectedPiece);
-                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece);
+                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
 
                                         switch (turn) {
                                             case "white":
