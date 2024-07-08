@@ -1117,31 +1117,17 @@
 
                     // Pawn possible attacking movements
                     if(attackerPieceName.includes("Pawn")) {
-                        if (this.blackUp && this.color === "black") {
+                        if ((this.blackUp && this.color === "black") || (!this.blackUp && this.color === "white")) {
                             if (parseInt(attacker_yAxisValue) <= 8) {
                                 possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue + 1}`);
                                 possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue - 1}`);
                             }
                         }
 
-                        if (!this.blackUp && this.color === "black") {
+                        if ((!this.blackUp && this.color === "black") || (this.blackUp && this.color === "white")) {
                             if (parseInt(attacker_yAxisValue) >= 1) {
                                 possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue + 1}`);
                                 possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue - 1}`);
-                            }
-                        }
-
-                        if (this.blackUp && this.color === "white") {
-                            if (parseInt(attacker_yAxisValue) <= 8) {
-                                possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue + 1}`);
-                                possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue - 1}`);
-                            }
-                        }
-
-                        if (!this.blackUp && this.color === "white") {
-                            if (parseInt(attacker_yAxisValue) <= 8) {
-                                possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue + 1}`);
-                                possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue - 1}`);
                             }
                         }
                     // King attacking possible movements
@@ -1168,100 +1154,431 @@
 
                 checkMate(king_xAxisValue, king_yAxisValue) {
                     let kingPossibleMovement = [];
-                    let getKilledMovement = [];
+                    let eachKingMovements = [];
                     kingPossibleMovement = this.possibleMove(king_xAxisValue, king_yAxisValue);
+                    let originLength = kingPossibleMovement.length;
+                    letOneTimeLetIn = false;
+                    let foundIndex = 0;
                 
+                    // filtering out unnecessary movements
+                    let j = 0;
+                    while(j < originLength){
+                        let xAxisValue = parseInt(kingPossibleMovement[j].substr(6, 1));
+                        let yAxisValue = parseInt(kingPossibleMovement[j].substr(kingPossibleMovement[j].length - 1, 1));
+
+                        if (xAxisValue == 0 || yAxisValue == 0 || xAxisValue == 9 || yAxisValue == 9){
+                            kingPossibleMovement.splice(j, 1)
+                        }
+                        j++;
+                    }
 
                     kingPossibleMovement.some((eachMovement) => {
                         let eachMovement_xAxisValue = parseInt(eachMovement.substr(6, 1));
                         let eachMovement_yAxisValue = parseInt(attackerCoordinates.substr(attackerCoordinates.length -1, 1));
 
-                        // check left
-                        for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
-                            
-                            let leftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
-                            
-                            switch(i) {
-                                case eachMovement_yAxisValue - 1:
-                                    if (leftPiece.querySelector("img")) {
-                                        let leftImagePiece = leftPiece.querySelector("img");
-                                        if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                            getKilledMovement.push(false);
-                                            break;
-                                        }
-                                    } 
-                                    break;
-                                default:
-                                    if (leftImagePiece.querySelector("img")) {
-                                        if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                            getKilledMovement.push(false);
-                                            break;
-                                        }
-                                    }
-                                    
-                                    break;
-                            } // end of switch case
+                        let eachKingMovement = new KingMovement(eachMovement_xAxisValue, eachMovement_yAxisValue, `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`);
+                        eachKingMovements.push(eachKingMovement);
 
-                            if (i === 0) {
-                                getKilledMovement.push(false);
-                            }
+                        // check left start
+                        if(eachMovement_yAxisValue == 1) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
+                                // if y axis value is one, then don't check left
+                                let leftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
                                 
-                             // if king's yAxisValue is 1 then don't check if it's not check all the lefts
-                        } // end of for each statement
-
-                        // check right
-                        for(let i = king_yAxisValue; i <= 8; i++) {
-                            if (king_yAxisValue == 8) {
-                                break;
-                            } else {
-                                let rightPiece = document.querySelector(`.cell_${king_xAxisValue}_${i}`)
-                                let rightImagePiece = rightPiece.querySelector("img");
-
                                 switch(i) {
-                                    case king_yAxisValue:
-                                        if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        }
+                                    case eachMovement_yAxisValue - 1:
+                                        if (leftPiece.querySelector("img")) {
+                                            let leftImagePiece = leftPiece.querySelector("img");
+                                            if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
                                         break;
                                     default:
-                                        if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                            getKilledMovement.push(true);
-                                            break;
-                                        } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                            getKilledMovement.push(true);
-                                            break;
+                                        if (leftImagePiece.querySelector("img")) {
+                                            if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
                                         }
+                                        
                                         break;
                                 } // end of switch case
-                                
-                            } // if king's yAxisValue is 1 then don't check if it's not check all the lefts
-                        } // end of for each statement
 
-
+                                // last element number
+                                if (i === 1) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                }
+                                    
+                                // if king's yAxisValue is 1 then don't check if it's not check all the lefts
+                            } // end of for each statement
+                        } // check left finished
                         
+
+                        // check right
+                        if(eachMovement_yAxisValue == 8) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = eachMovement_yAxisValue + 1; i <= 8; i++) {
+                                let rightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                
+                                switch(i) {
+                                    case eachMovement_yAxisValue + 1:
+                                        if (rightPiece.querySelector("img")) {
+                                            let rightImagePiece = rightPiece.querySelector("img");
+                                            if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (rightImagePiece.querySelector("img")) {
+                                            if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (i === 8) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                }
+                            } // end of for each statement
+                        } // End of checking right side statement
+
+                        // check up
+                        if(eachMovement_xAxisValue == 1) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = eachMovement_xAxisValue - 1; i >= 1; i++) {
+                                let upPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                
+                                switch(i) {
+                                    case eachMovement_xAxisValue - 1:
+                                        if (upPiece.querySelector("img")) {
+                                            let upImagePiece = upPiece.querySelector("img");
+                                            if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen") || upImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen") || upImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upImagePiece.querySelector("img")) {
+                                            if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (i === 1) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                }
+                            } // end of for each statement
+                        } // End of checking up side statement
+
+                        // check down side statement
+                        if(eachMovement_xAxisValue == 8) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = eachMovement_xAxisValue + 1; i <= 8; i++) {
+                                let downPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                
+                                switch(i) {
+                                    case eachMovement_xAxisValue + 1:
+                                        if (downPiece.querySelector("img")) {
+                                            let downImagePiece = downPiece.querySelector("img");
+                                            if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen") || downImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen") || downImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (downImagePiece.querySelector("img")) {
+                                            if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (i === 8) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                }
+                            } // end of for each statement
+                        } // End of checking down side statement
+
+                        // Checking diagonally left down
+                        if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 8) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                let leftDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue-i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (leftDownPiece.querySelector("img")) {
+                                            let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                            if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen") || leftDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen") || leftDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (leftDownImagePiece.querySelector("img")) {
+                                            if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (eachMovement_yAxisValue-i === 1 || eachMovement_xAxisValue+i === 8) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally left down side statement
+
+                        // checking diagonally right down
+                        if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 8) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                let rightDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue+i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (rightDownPiece.querySelector("img")) {
+                                            let rightDownImagePiece = leftDownPiece.querySelector("img");
+                                            if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen") || rightDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen") || rightDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (rightDownImagePiece.querySelector("img")) {
+                                            if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (eachMovement_yAxisValue+i === 1 || eachMovement_xAxisValue+i === 8) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally right down side statement
+
+                        // diagonal up left checking
+                        if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 1) {
+                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                            eachKingMovements[foundIndex].safeMovements.push(true);
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                let upLeftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue-i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (upLeftPiecePiece.querySelector("img")) {
+                                            let upLeftPieceImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftPieceImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("whiteQueen") || upLeftPieceImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("blackBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("blackQueen") || upLeftPieceImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftPieceImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upLeftPieceImagePiece.querySelector("img")) {
+                                            if((upLeftPieceImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("blackBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(false);
+                                                break;
+                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftPieceImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                                eachKingMovements[foundIndex].safeMovements.push(true);
+                                                break;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (eachMovement_yAxisValue-i === 1 || eachMovement_xAxisValue-i === 1) {
+                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
+                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally up left side statement
+
                     });
                     
                 }
-        }
+            }
+
+            class KingMovement {
+                constructor(xAxisValue, yAxisValue, position){
+                    this.xAxisValue = xAxisValue;
+                    this.yAxisValue = yAxisValue;
+                    this.position = position;
+                    this.safeMovements = [];
+                }
+
+            }
             // King Class end
 
             // Classes ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
