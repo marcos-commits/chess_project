@@ -904,7 +904,7 @@
                     this.position = newCoordinates;
                 }
 
-                checked(attackerPiece, attackerCoordinate) {
+                checked(attackerPiece, attackerCoordinate, turn, attackerOriginalCoordinate) {
                     // variables
                     let attacker_xAxisValue = parseInt(attackerCoordinate.substr(6, 1));
                     let attacker_yAxisValue = parseInt(attackerCoordinate.substr(attackerCoordinate.length -1, 1));
@@ -921,6 +921,7 @@
                     let recNumber = 0;
                     let possibleMovements = [];
                     let isChecked = false;
+                    let isCheckMate = false;
 
                     
                     // It Rook or Queen attack movement
@@ -1117,14 +1118,14 @@
 
                     // Pawn possible attacking movements
                     if(attackerPieceName.includes("Pawn")) {
-                        if ((this.blackUp && this.color === "black") || (!this.blackUp && this.color === "white")) {
+                        if ((this.blackUp && attackerPieceName.includes("black")) || (!this.blackUp && attackerPieceName.includes("white"))) {
                             if (parseInt(attacker_yAxisValue) <= 8) {
                                 possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue + 1}`);
                                 possibleMovements.push(`.cell_${attacker_xAxisValue + 1}_${attacker_yAxisValue - 1}`);
                             }
                         }
 
-                        if ((!this.blackUp && this.color === "black") || (this.blackUp && this.color === "white")) {
+                        if ((!this.blackUp && attackerPieceName.includes("black")) || (this.blackUp && attackerPieceName.includes("white"))) {
                             if (parseInt(attacker_yAxisValue) >= 1) {
                                 possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue + 1}`);
                                 possibleMovements.push(`.cell_${attacker_xAxisValue - 1}_${attacker_yAxisValue - 1}`);
@@ -1137,28 +1138,43 @@
 
                     possibleMovements.some((attackCoordinate) => {
                         if (attackCoordinate === this.position) {
-                            let isCheckMate = false;
                             isChecked = true;
-                            //isCheckMate = this.checkMate(king_xAxisValue, king_yAxisValue);
-                            if (isCheckMate) {
-                                alert("CheckMate!!!")
-                            } 
+                            isCheckMate = this.checkMate(king_xAxisValue, king_yAxisValue, attackerPiece, attackCoordinate, attackerOriginalCoordinate);
                             return true;
                         } else {
                             return false;
                         }
                     });
+
+                    if (isCheckMate) {
+                        if(attackerPieceName.includes("white")) {
+                            alert("CHECKMATE! White Won!");
+                        } else if (attackerPieceName.includes("black")) {
+                            alert("CHECKMATE! Black Won!");
+                        }
+                        
+                        // Game Over start over
+                        location.reload;
+                    }
+
                     return isChecked;
 
                 }
 
-                checkMate(king_xAxisValue, king_yAxisValue) {
+                checkMate(king_xAxisValue, king_yAxisValue, attackerPiece, attackerCoordinate) {
                     let kingPossibleMovement = [];
-                    let eachKingMovements = [];
+                    let gettingEatenMovements = [];
                     kingPossibleMovement = this.possibleMove(king_xAxisValue, king_yAxisValue);
                     let originLength = kingPossibleMovement.length;
-                    letOneTimeLetIn = false;
                     let foundIndex = 0;
+                    let isCheckMate = true;
+                    let counter = 0;
+                    let attacker_xAxisValue = parseInt(attackerCoordinate.substr(6, 1));
+                    let attacker_yAxisValue = parseInt(attackerCoordinate.substr(attackerCoordinate.length -1, 1));
+                    let attackerPieceName = attackerPiece.getAttribute('alt');
+                    
+
+                    
                 
                     // filtering out unnecessary movements
                     let j = 0;
@@ -1168,21 +1184,40 @@
 
                         if (xAxisValue == 0 || yAxisValue == 0 || xAxisValue == 9 || yAxisValue == 9){
                             kingPossibleMovement.splice(j, 1)
+                            j--;
+                            originLength = kingPossibleMovement.length;
                         }
                         j++;
                     }
 
-                    kingPossibleMovement.some((eachMovement) => {
-                        let eachMovement_xAxisValue = parseInt(eachMovement.substr(6, 1));
-                        let eachMovement_yAxisValue = parseInt(attackerCoordinates.substr(attackerCoordinates.length -1, 1));
+                    // if there is same color next to it, filter out as well
+                    j = 0;
+                    while(j < originLength){
+                        let xAxisValue = parseInt(kingPossibleMovement[j].substr(6, 1));
+                        let yAxisValue = parseInt(kingPossibleMovement[j].substr(kingPossibleMovement[j].length - 1, 1));
+                        let cell = document.querySelector(`.cell_${xAxisValue}_${yAxisValue}`);
+                        if (cell.querySelector("img")){
+                            let imageCell = cell.querySelector("img");
+                            if ((imageCell.getAttribute('alt').includes("white") && this.color === "white") || (imageCell.getAttribute('alt').includes("black") && this.color === "black")) {
+                                kingPossibleMovement.splice(j, 1);
+                                j--;
+                                originLength = kingPossibleMovement.length;
+                            }
+                        }
+                        j++;
+                    }
 
-                        let eachKingMovement = new KingMovement(eachMovement_xAxisValue, eachMovement_yAxisValue, `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`);
-                        eachKingMovements.push(eachKingMovement);
 
-                        // check left start
+                    // Each king Movement
+                    for(let i = 0; i < kingPossibleMovement.length; i++){
+                        let eachMovement_xAxisValue = parseInt(kingPossibleMovement[i].substr(6, 1));
+                        let eachMovement_yAxisValue = parseInt(kingPossibleMovement[i].substr(kingPossibleMovement[i].length -1, 1));
+                        let isDangerous = false;
+                        let needsBreak = false;
+
+                        // check left start rook queen
                         if(eachMovement_yAxisValue == 1) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                            
                         } else {
                             for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
                                 // if y axis value is one, then don't check left
@@ -1193,55 +1228,58 @@
                                         if (leftPiece.querySelector("img")) {
                                             let leftImagePiece = leftPiece.querySelector("img");
                                             if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
                                     default:
-                                        if (leftImagePiece.querySelector("img")) {
+                                        if (leftPiece.querySelector("img")) {
+                                            let leftImagePiece = leftPiece.querySelector("img");
                                             if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
                                         
                                         break;
                                 } // end of switch case
 
-                                // last element number
-                                if (i === 1) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
+                                    break;
                                 }
                                     
-                                // if king's yAxisValue is 1 then don't check if it's not check all the lefts
-                            } // end of for each statement
+                            } // end of inner for each statement left side
                         } // check left finished
-                        
 
-                        // check right
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check right rook and queen
                         if(eachMovement_yAxisValue == 8) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                            
                         } else {
                             for(let i = eachMovement_yAxisValue + 1; i <= 8; i++) {
                                 let rightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
@@ -1251,53 +1289,60 @@
                                         if (rightPiece.querySelector("img")) {
                                             let rightImagePiece = rightPiece.querySelector("img");
                                             if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
                                     default:
-                                        if (rightImagePiece.querySelector("img")) {
+                                        if (rightPiece.querySelector("img")) {
+                                            let rightImagePiece = rightPiece.querySelector("img");
                                             if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
                                         
                                         break;
                                 } // end of switch case
 
-                                if (i === 8) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
+                                    break;
                                 }
-                            } // end of for each statement
+
+                            } // end of inner for each statement
                         } // End of checking right side statement
 
-                        // check up
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check up rook and queen
                         if(eachMovement_xAxisValue == 1) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                            
                         } else {
-                            for(let i = eachMovement_xAxisValue - 1; i >= 1; i++) {
+                            for(let i = eachMovement_xAxisValue - 1; i >= 1; i--) {
                                 let upPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
                                 
                                 switch(i) {
@@ -1305,51 +1350,58 @@
                                         if (upPiece.querySelector("img")) {
                                             let upImagePiece = upPiece.querySelector("img");
                                             if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen") || upImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen") || upImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
                                     default:
-                                        if (upImagePiece.querySelector("img")) {
+                                        if (upPiece.querySelector("img")) {
+                                            let upImagePiece = upPiece.querySelector("img");
                                             if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
                                         
                                         break;
                                 } // end of switch case
 
-                                if (i === 1) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
+                                    break;
                                 }
+
                             } // end of for each statement
                         } // End of checking up side statement
 
-                        // check down side statement
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check down side statement queen and rook
                         if(eachMovement_xAxisValue == 8) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                            
                         } else {
                             for(let i = eachMovement_xAxisValue + 1; i <= 8; i++) {
                                 let downPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
@@ -1359,51 +1411,57 @@
                                         if (downPiece.querySelector("img")) {
                                             let downImagePiece = downPiece.querySelector("img");
                                             if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen") || downImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen") || downImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
                                     default:
-                                        if (downImagePiece.querySelector("img")) {
+                                        if (downPiece.querySelector("img")) {
+                                            let downImagePiece = downPiece.querySelector("img");
                                             if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
                                         
                                         break;
                                 } // end of switch case
 
-                                if (i === 8) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
+                                    break;
                                 }
                             } // end of for each statement
                         } // End of checking down side statement
 
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
                         // Checking diagonally left down
                         if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 8) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                           
                         } else {
                             for(let i = 1; i <= 8; i++) {
                                 let leftDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue-i}`)
@@ -1413,52 +1471,59 @@
                                         if (leftDownPiece.querySelector("img")) {
                                             let leftDownImagePiece = leftDownPiece.querySelector("img");
                                             if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen") || leftDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen") || leftDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
-                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((leftDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((leftDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            }  else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
+
                                         } 
                                         break;
                                     default:
-                                        if (leftDownImagePiece.querySelector("img")) {
+                                        if (leftDownPiece.querySelector("img")) {
+                                            let leftDownImagePiece = leftDownPiece.querySelector("img");
                                             if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
-                                        
                                         break;
                                 } // end of switch case
-
-                                if (eachMovement_yAxisValue-i === 1 || eachMovement_xAxisValue+i === 8) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
                                     break;
-                                }
-                            } // end of for each statement
-                        } // End of checking diagonally left down side statement
+                                }    
+                            } // diagonal left down for each statement
+                        } // diagonal left down finished
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
 
                         // checking diagonally right down
                         if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 8) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                            
                         } else {
                             for(let i = 1; i <= 8; i++) {
                                 let rightDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue+i}`)
@@ -1466,119 +1531,1552 @@
                                 switch(i) {
                                     case 1:
                                         if (rightDownPiece.querySelector("img")) {
-                                            let rightDownImagePiece = leftDownPiece.querySelector("img");
+                                            let rightDownImagePiece = rightDownPiece.querySelector("img");
                                             if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen") || rightDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen") || rightDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((rightDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((rightDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
                                     default:
-                                        if (rightDownImagePiece.querySelector("img")) {
+                                        if (rightDownPiece.querySelector("img")) {
+                                            let rightDownImagePiece = rightDownPiece.querySelector("img");
                                             if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
                                             } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
                                         
                                         break;
                                 } // end of switch case
 
-                                if (eachMovement_yAxisValue+i === 1 || eachMovement_xAxisValue+i === 8) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
                                     break;
                                 }
                             } // end of for each statement
                         } // End of checking diagonally right down side statement
 
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+
                         // diagonal up left checking
                         if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 1) {
-                            foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                            eachKingMovements[foundIndex].safeMovements.push(true);
+                            
                         } else {
                             for(let i = 1; i <= 8; i++) {
                                 let upLeftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue-i}`)
                                 
                                 switch(i) {
                                     case 1:
-                                        if (upLeftPiecePiece.querySelector("img")) {
-                                            let upLeftPieceImagePiece = upLeftPiece.querySelector("img");
-                                            if((upLeftPieceImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("whiteQueen") || upLeftPieceImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
-                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("blackBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("blackQueen") || upLeftPieceImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
-                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftPieceImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                        if (upLeftPiece.querySelector("img")) {
+                                            let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen") || upLeftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen") || upLeftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((upLeftImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upLeftImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
                                     default:
-                                        if (upLeftPieceImagePiece.querySelector("img")) {
-                                            if((upLeftPieceImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
-                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("blackBishop") || upLeftPieceImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(false);
-                                                break;
-                                            } else if ((upLeftPieceImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftPieceImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
-                                                foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                                eachKingMovements[foundIndex].safeMovements.push(true);
-                                                break;
+                                        if (upLeftPiece.querySelector("img")) {
+                                            let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         }
                                         
                                         break;
                                 } // end of switch case
 
-                                if (eachMovement_yAxisValue-i === 1 || eachMovement_xAxisValue-i === 1) {
-                                    foundIndex = eachKingMovements.findIndex(function(cellNumber){return cellNumber.position === `.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`});
-                                    eachKingMovements[foundIndex].safeMovements.push(true);
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of for each statement
+                        } // End of checking diagonally up left side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check diagonally up right
+                        if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                let upRightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue+i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (upRightPiece.querySelector("img")) {
+                                            let upRightImagePiece = upRightPiece.querySelector("img");
+                                            if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen") || upRightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen") || upRightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((upRightImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upRightImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upRightPiece.querySelector("img")) {
+                                            let upRightImagePiece = upRightPiece.querySelector("img");
+                                            if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                gettingEatenMovements.push(true);
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
                                     break;
                                 }
                             } // end of for each statement
                         } // End of checking diagonally up left side statement
 
-                    });
-                    
-                }
-            }
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
 
-            class KingMovement {
-                constructor(xAxisValue, yAxisValue, position){
-                    this.xAxisValue = xAxisValue;
-                    this.yAxisValue = yAxisValue;
-                    this.position = position;
-                    this.safeMovements = [];
-                }
+                        // Check left side if enemy Knight is there
+                        if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue-2 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue-2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
 
-            }
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue-1 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue-1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue-2 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue-2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue-1 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue-1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check right if knight is there
+                        if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue+2 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue+2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+
+                        if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue+1 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue+1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue+2 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue+2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = false;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = false;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue+1 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue+1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    gettingEatenMovements.push(true);
+                                    isDangerous = true;
+                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+                        
+                        // last element
+                        if (isDangerous) {
+                            continue;
+                        } else {
+                            gettingEatenMovements.push(false);
+                        }
+                       
+
+                    } // End of outer for each statement for king movements
+
+                        
+                    // check gettingEatenMovements condition
+                    for(let i = 0; i < gettingEatenMovements.length; i++){
+                        if (gettingEatenMovements[i] !== true) {
+                            isCheckMate = false;
+                            break;
+                        }
+                    }
+
+                    // `.cell_${attacker_xAxisValue}_${attacker_yAxisValue}`
+                    // if is possible to eat the opponent
+                    if (isCheckMate) {
+                        // if pawn can capture the attacker
+                        if (attackerPieceName.includes("white")) {
+                            // check if blackPawn can capture that thing
+                            let piece_xAxisValue;
+                            let piece_yAxisValue;
+                            let eatingMoves;
+
+                            for(let i = 0; i < blackPawnPieces.length; i++) {
+                                piece_xAxisValue = parseInt(blackPawnPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(blackPawnPieces[i].position.substr(blackPawnPieces[i].position.length - 1, 1));
+                                eatingMoves = blackPawnPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+
+                                    if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                    } // if attacker name is rook or queen end
+
+                                    // if attacker name is queen or bishop
+                                    if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                        let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                        let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                        if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                            if (diff_y_Value > 0 && diff_x_value > 0){
+                                                // right down: king is at the left and bishop or queen is at the right down
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                                // left down : Bishop/Queen is left down and King is right up
+                                                for(let i = 1; i <= diff_yValue; i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                                // bishop is left up position and king is in right down position
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                                // bishop is right up position and king is in left down position
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if bishop coordinate matches
+                                    } // if attacker is queen or bishop end
+
+                                } // inner for each loop for pawn pieces possible moves
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+                            } // blackPawn check complete
+
+                            // check if blackBishop can capture the attacker
+                            for(let i = 0; i < blackBishopPieces.length; i++) {
+                                piece_xAxisValue = parseInt(blackBishopPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(blackBishopPieces[i].position.substr(blackBishopPieces[i].position.length - 1, 1));
+                                eatingMoves = blackBishopPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+
+                                    // Can protect the king by blocking the enemy start
+                                    if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                    } // if attacker name is rook or queen end
+
+                                    // if attacker name is queen or bishop
+                                    if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                        let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                        let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                        if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                            if (diff_y_Value > 0 && diff_x_value > 0){
+                                                // right down: king is at the left and bishop or queen is at the right down
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                                // left down : Bishop/Queen is left down and King is right up
+                                                for(let i = 1; i <= diff_yValue; i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                                // bishop is left up position and king is in right down position
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                                // bishop is right up position and king is in left down position
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if bishop coordinate matches
+                                    } // if attacker is queen or bishop end
+
+                                } // inner for each loop
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // black bishop check complete
+
+                            // check if blackRook can capture the attacker
+                            for(let i = 0; i < blackRookPieces.length; i++) {
+                                piece_xAxisValue = parseInt(blackRookPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(blackRookPieces[i].position.substr(blackRookPieces[i].position.length - 1, 1));
+                                eatingMoves = blackRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // black rook check complete
+
+                            // check if blackQueen can capture the attacker
+                            for(let i = 0; i < blackQueenPiece.length; i++) {
+                                piece_xAxisValue = parseInt(blackQueenPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(blackQueenPieces[i].position.substr(blackQueenPieces[i].position.length - 1, 1));
+                                eatingMoves = blackQueenPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_xAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_xAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // black queen check complete
+
+
+                            // check if blackKnight can capture the attacker
+                            for(let i = 0; i < blackKnightPieces.length; i++) {
+                                piece_xAxisValue = parseInt(blackKnightPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(blackKnightPieces[i].position.substr(blackKnightPieces[i].position.length - 1, 1));
+                                eatingMoves = blackKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // black Knight check complete
+                        
+                        } else if (attackerPieceName.includes("black")) {
+                            // check if blackPawn can capture that thing
+                            let piece_xAxisValue;
+                            let piece_yAxisValue;
+                            let eatingMoves;
+
+                            // check if whitePawn can capture the attacker
+                            for(let i = 0; i < whitePawnPieces.length; i++) {
+                                piece_xAxisValue = parseInt(whitePawnPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(whitePawnPieces[i].position.substr(whitePawnPieces[i].position.length - 1, 1));
+                                eatingMoves = whitePawnPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+                            } // whitePawn check complete
+
+                            // check if whiteBishop can capture the attacker
+                            for(let i = 0; i < whiteBishopPieces.length; i++) {
+                                piece_xAxisValue = parseInt(whiteBishopPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(whiteBishopPieces[i].position.substr(whiteBishopPieces[i].position.length - 1, 1));
+                                eatingMoves = whiteBishopPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // white bishop check complete
+
+                            // check if whiteRook can capture the attacker
+                            for(let i = 0; i < whiteRookPieces.length; i++) {
+                                piece_xAxisValue = parseInt(whiteRookPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(whiteRookPieces[i].position.substr(whiteRookPieces[i].position.length - 1, 1));
+                                eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_xAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // white rook check complete
+
+                            // check if whiteQueen can capture the attacker
+                            for(let i = 0; i < whiteQueenPieces.length; i++) {
+                                piece_xAxisValue = parseInt(whiteQueenPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(whiteQueenPieces[i].position.substr(whiteQueenPieces[i].position.length - 1, 1));
+                                eatingMoves = whiteQueenPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // white queen check complete
+
+
+                            // check if whitekKnight can capture the attacker
+                            for(let i = 0; i < whiteKnightPieces.length; i++) {
+                                piece_xAxisValue = parseInt(whiteKnightPieces[i].position.substr(6, 1));
+                                piece_yAxisValue = parseInt(whiteKnightPieces[i].position.substr(whiteKnightPieces[i].position.length - 1, 1));
+                                eatingMoves = whiteKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue);
+
+                                for(let j = 0; j < eatingMoves.length; j++){
+                                    if (eatingMoves[j] === attackerCoordinate) {
+                                        isCheckMate = false;
+                                        break;
+                                    }
+                                } // inner for each loop
+
+                                //////////////////////
+                                // Can protect the king by blocking the enemy start
+                                if (attackerPieceName.includes("Rook") || attackerPieceName.includes("Queen")){
+                                        if(attacker_xAxisValue === king_xAxisValue) {
+                                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                            if (diff_yValue > 0){
+                                                // positive value: king is at the left and rook is at the right
+                                                for(let i = 1; i <= diff_yValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the right and rook is at the left
+                                                for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+i}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Value
+
+                                        // if y axis is eqaul for the rook
+                                        if(attacker_yAxisValue === king_yAxisValue) {
+                                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                            if (diff_xValue > 0){
+                                                // positive value: king is at the top and rook is at the bottom
+                                                for(let i = 1; i <= diff_xValue; i--){
+                                                    if (eatingMoves[j] === `.cell_${xAxisValue-i}_${yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                                // check diff yvalue is bigger than 0
+                                            } else {
+                                                // negative value: king is at the bottom and rook is at the top
+                                                for(let i = 1; i <= Math.abs(diff_xValue); i++){
+                                                    if (eatingMoves[j] === `.cell_${xAxisValue+i}_${yAxisValue}`) {
+                                                        isCheckMate = false;
+                                                        break;
+                                                    }
+                                                } // inner for loop for diff value
+                                            }
+                                        } // check if attacker xAxisValue equals king xAxis Valu
+
+
+                                } // if attacker name is rook or queen end
+
+                                // if attacker name is queen or bishop
+                                if (attackerPieceName.includes("Bishop") || attackerPieceName.includes("Queen")){
+                                    let diff_x_value = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_y_value = attacker_xAxisValue - king_xAxisValue;
+                                    if(Math.abs(diff_x_value) === Math.abs(diff_y_value)) {
+                                        if (diff_y_Value > 0 && diff_x_value > 0){
+                                            // right down: king is at the left and bishop or queen is at the right down
+                                            for(let i = 1; i <= diff_yValue; i--){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                            // check diff yvalue is bigger than 0
+                                        } else if (diff_y_value > 0 && diff_x_value < 0) {
+                                            // left down : Bishop/Queen is left down and King is right up
+                                            for(let i = 1; i <= diff_yValue; i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue-i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value < 0) {
+                                            // bishop is left up position and king is in right down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue+i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        } else if (diff_y_value < 0 && diff_x_value > 0) {
+                                            // bishop is right up position and king is in left down position
+                                            for(let i = 1; i <= Math.abs(diff_yValue); i++){
+                                                if (eatingMoves[j] === `.cell_${attacker_xAxisValue+i}_${attacker_yAxisValue-i}`) {
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            } // inner for loop for diff value
+                                        }
+                                    } // check if bishop coordinate matches
+                                } // if attacker is queen or bishop end
+                                ////////////////////////
+
+                                if (isCheckMate === false){
+                                    break;
+                                }
+
+                            } // white Knight check complete
+                        
+                        }
+
+                        // Can protect the king
+                        
+
+                    } // still check mate check if you can capture the enemy
+
+                    // check if protector can defend the king
+
+
+                    return isCheckMate
+                        
+                } // checkmate ends       
+                 
+
+            } // end of king class
+            
             // King Class end
 
             // Classes ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2039,6 +3537,7 @@
             let isCheckBlack = false;
             let isCheckWhite = false;
             let checkedWord = document.querySelector('h1');
+            let isCheckMate = false;
             // Variables End
 
             turn = "white";
@@ -2184,7 +3683,7 @@
 
                                     switch (turn) {
                                         case "white":
-                                            isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                            isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
                                             if (isCheckBlack) {
                                                 checkedWord = document.querySelector('h1');
                                                 checkedWord.style.opacity = 1;
@@ -2193,7 +3692,7 @@
                                             turn = "black";
                                             break;
                                         case "black":
-                                            isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                            isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn);
                                             if (isCheckWhite) {
                                                 checkedWord = document.querySelector('h1');
                                                 checkedWord.style.opacity = 1;
@@ -2230,7 +3729,7 @@
 
                                         switch (turn) {
                                             case "white":
-                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn);
                                                 if (isCheckBlack) {
                                                     checkedWord = document.querySelector('h1');
                                                     checkedWord.style.opacity = 1;
@@ -2239,7 +3738,7 @@
                                                 
                                                 break;
                                             case "black":
-                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`);
+                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn);
                                                 if (isCheckWhite) {
                                                     checkedWord = document.querySelector('h1');
                                                     checkedWord.style.opacity = 1;
