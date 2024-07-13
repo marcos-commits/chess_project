@@ -57,7 +57,7 @@
                 }
 
                 
-                possibleMove(xAxisValue, yAxisValue, predition) {
+                possibleMove(xAxisValue, yAxisValue, prediction) {
                     let possibleMovements = [];
 
                     if (this.firstMove === true) {
@@ -2023,7 +2023,7 @@
                                 for(let i = 0; i < blackKnightPieces.length; i++) {
                                     piece_xAxisValue = parseInt(blackKnightPieces[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(blackKnightPieces[i].position.substr(blackKnightPieces[i].position.length - 1, 1));
-                                    eatingMoves = blackKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue);
+                                    eatingMoves = blackKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2090,7 +2090,7 @@
                                 for(let i = 0; i < whiteRookPieces.length; i++) {
                                     piece_xAxisValue = parseInt(whiteRookPieces[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteRookPieces[i].position.substr(whiteRookPieces[i].position.length - 1, 1));
-                                    eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+                                    eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2111,7 +2111,7 @@
                                 for(let i = 0; i < whiteQueenPieces.length; i++) {
                                     piece_xAxisValue = parseInt(whiteQueenPiece[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteQueenPiece[i].position.substr(whiteQueenPiece[i].position.length - 1, 1));
-                                    eatingMoves = whiteQueenPiece[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+                                    eatingMoves = whiteQueenPiece[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2133,7 +2133,7 @@
                                 for(let i = 0; i < whiteKnightPieces.length; i++) {
                                     piece_xAxisValue = parseInt(whiteKnightPieces[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteKnightPieces[i].position.substr(whiteKnightPieces[i].position.length - 1, 1));
-                                    eatingMoves = whiteKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue);
+                                    eatingMoves = whiteKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2677,7 +2677,7 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2700,7 +2700,7 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2723,7 +2723,7 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2746,7 +2746,7 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2769,7 +2769,7 @@
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2800,7 +2800,7 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2823,7 +2823,7 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2846,7 +2846,7 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2869,7 +2869,7 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2892,7 +2892,7 @@
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2923,7 +2923,7 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2946,7 +2946,7 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2969,7 +2969,7 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -2992,7 +2992,7 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -3015,7 +3015,7 @@
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -3045,7 +3045,7 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -3068,7 +3068,7 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -3091,7 +3091,7 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -3114,7 +3114,7 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
@@ -3137,7 +3137,7 @@
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
+                                            for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
