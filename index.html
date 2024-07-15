@@ -63,9 +63,9 @@
                     if (this.firstMove === true) {
                         // prediction is not real movement of pawn
                         if (prediction) {
-                            this.firstMove = false;
-                        } else {
                             this.firstMove = true;
+                        } else {
+                            this.firstMove = false;
                         }
                         
 
@@ -1212,7 +1212,6 @@
                         j++;
                     }
 
-
                     // Each king Movement
                     for(let i = 0; i < kingPossibleMovement.length; i++){
                         let eachMovement_xAxisValue = parseInt(kingPossibleMovement[i].substr(6, 1));
@@ -1240,7 +1239,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1257,7 +1256,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1301,7 +1300,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1318,7 +1317,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1362,7 +1361,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1379,7 +1378,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1423,7 +1422,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1440,7 +1439,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1469,6 +1468,9 @@
                            
                         } else {
                             for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue-i < 1) {
+                                    break;
+                                }
                                 let leftDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue-i}`)
                                 
                                 switch(i) {
@@ -1487,7 +1489,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            }  else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1505,7 +1507,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1531,6 +1533,10 @@
                             
                         } else {
                             for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue+i > 8) {
+                                    break;
+                                }
+
                                 let rightDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue+i}`)
                                 
                                 switch(i) {
@@ -1549,7 +1555,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1566,7 +1572,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1595,6 +1601,10 @@
                             
                         } else {
                             for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue-i < 1) {
+                                    break;
+                                }
+
                                 let upLeftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue-i}`)
                                 
                                 switch(i) {
@@ -1613,7 +1623,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1630,7 +1640,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1659,6 +1669,10 @@
                             
                         } else {
                             for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue+i > 8) {
+                                    break;
+                                }
+
                                 let upRightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue+i}`)
                                 
                                 switch(i) {
@@ -1677,7 +1691,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1694,7 +1708,7 @@
                                                 gettingEatenMovements.push(true);
                                                 needsBreak = true;
                                                 isDangerous = true;
-                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black") || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1728,7 +1742,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1752,7 +1766,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1776,7 +1790,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1800,7 +1814,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1825,7 +1839,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1850,7 +1864,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1874,7 +1888,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = false;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -1898,7 +1912,7 @@
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
                                     gettingEatenMovements.push(true);
                                     isDangerous = true;
-                                } else if ((imagPiece.getAttribute('alt').includes("black") && this.color === "black") || (imagPiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
                             }
@@ -2170,8 +2184,8 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2193,8 +2207,8 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2216,8 +2230,8 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2239,8 +2253,8 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2257,13 +2271,13 @@
                                         }
                                         
                                         // // if black queen piece can defend or block the enemy start
-                                        for(let l = 0; l < blackQueenPieces.length; l++){
+                                        for(let l = 0; l < blackQueenPiece.length; l++){
                                             let piece_xAxisValue = parseInt(blackQueenPiece[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2292,8 +2306,8 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2315,8 +2329,8 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2338,8 +2352,8 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2361,8 +2375,8 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2379,13 +2393,13 @@
                                         }
 
                                         // // if black queen piece can defend or block the enemy start
-                                        for(let l = 0; l < blackQueenPieces.length; l++){
+                                        for(let l = 0; l < blackQueenPiece.length; l++){
                                             let piece_xAxisValue = parseInt(blackQueenPiece[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2420,8 +2434,8 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2443,8 +2457,8 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2466,8 +2480,8 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2489,8 +2503,8 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2507,13 +2521,13 @@
                                         }
                                         
                                         // // if black queen piece can defend or block the enemy start
-                                        for(let l = 0; l < blackQueenPieces.length; l++){
+                                        for(let l = 0; l < blackQueenPiece.length; l++){
                                             let piece_xAxisValue = parseInt(blackQueenPiece[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2542,8 +2556,8 @@
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2565,8 +2579,8 @@
                                             let piece_yAxisValue = parseInt(blackKnightPieces[l].position.substr(blackKnightPieces[l].position.length -1, 1));
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2588,8 +2602,8 @@
                                             let piece_yAxisValue = parseInt(blackBishopPieces[l].position.substr(blackBishopPieces[l].position.length -1, 1));
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2611,8 +2625,8 @@
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2634,8 +2648,8 @@
                                             let piece_yAxisValue = parseInt(blackQueenPiece[l].position.substr(blackQueenPiece[l].position.length -1, 1));
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
 
-                                            for(let m = 0; m < possibleMoves; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2656,7 +2670,8 @@
                                 } // end of diff_xValue is negative
 
                             } // check for up and down rook or queen
-                        } // check for all rook and queen
+                        } // check for all white rook and white queen
+                        ///////////////////
 
 
                         // if attacker is whiteQueen or white bishop
@@ -2678,7 +2693,7 @@
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2701,7 +2716,7 @@
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2724,7 +2739,7 @@
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2747,7 +2762,7 @@
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2770,7 +2785,7 @@
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2801,7 +2816,7 @@
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2847,7 +2862,7 @@
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2870,7 +2885,7 @@
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2893,7 +2908,7 @@
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2924,7 +2939,7 @@
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2947,7 +2962,7 @@
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2970,7 +2985,7 @@
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -2993,7 +3008,7 @@
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3016,7 +3031,7 @@
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3046,7 +3061,7 @@
                                             let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3069,7 +3084,7 @@
                                             let possibleMoves = blackKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3092,7 +3107,7 @@
                                             let possibleMoves = blackBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3115,7 +3130,7 @@
                                             let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3138,7 +3153,7 @@
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3157,7 +3172,1016 @@
                                     } // looping done
                                 } // attacker is top right, king is bottom right end
                             }
-                        } 
+                        } // checked if it is all white queen and white bishop
+
+
+                        // if the attacker is black rook or black queen
+                        if (attackerPieceName.includes("blackRook") || attackerPieceName.includes("blackQueen")){
+                            if(attacker_xAxisValue === king_xAxisValue) {   
+                                let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                if (diff_yValue > 0){
+                                    // positive value: king is at the left and rook is at the right
+                                    // rook or queen movement infiltration
+                                    for(let k = 1; k < diff_yValue; k++){
+
+                                        // // if white pawn pieces can defend or block the enemy start
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white knight pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whitekKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitekKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white bishop pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white bishop pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+                                        
+                                        // // if white rook piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+                                        
+                                        // // if white queen piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }   
+                                        // check diff yvalue is bigger than 0
+                                    } // for loop of movement end
+
+                                // king is at the right rook is at the left
+                                } else if (diff_yValue < 0) {
+                                    // rook or queen movement infiltration
+                                    for(let k = 1; k < Math.abs(diff_yValue); k++){
+
+                                        // // if white pawn pieces can defend or block the enemy start
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white knight pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white bishop pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white bishop pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white rook piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white queen piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }   
+                                        // check diff yvalue is bigger than 0
+                                    } // for loop of movement end
+                                }
+                            } // check for left and right rook or queen
+
+
+                            // check for up and down
+                            if(attacker_yAxisValue === king_yAxisValue) {   
+                                let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                if (diff_xValue > 0){
+                                    // positive value: king is at the up and rook is at the down
+                                    // rook or queen movement infiltration
+                                    for(let k = 1; k < diff_xValue; k++){
+
+                                        // // if white pawn pieces can defend or block the enemy start
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white knight pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white bishop pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white bishop pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+                                        
+                                        // // if white rook piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+                                        
+                                        // // if white queen piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }   
+                                        // check diff yvalue is bigger than 0
+                                    } // for loop of movement end
+
+                                // king is at the bottom rook is at the top
+                                } else if (diff_xValue < 0) {
+                                    // rook or queen movement infiltration
+                                    for(let k = 1; k < Math.abs(diff_xValue); k++){
+
+                                        // // if white pawn pieces can defend or block the enemy start
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white knight pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white bishop pieces can defend or block the enemy start
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white bishop pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white rook piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }
+
+                                        // // if white queen piece can defend or block the enemy start
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        }   
+                                        // check diff yvalue is bigger than 0
+
+                                    } // for loop of movement end
+                                } // end of diff_xValue is negative
+
+                            } // check for up and down rook or queen
+                        } // check for all white rook and white queen
+                        ///////////////////
+
+                        // if the attacker is black bishop or black queen
+                        if (attackerPieceName.includes("blackQueen") || attackerPieceName.includes("blackBishop")){
+                            let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                            let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+
+                            // it has to be diagonal
+                            if(Math.abs(diff_xValue) === Math.abs(diff_yValue)) {
+                                
+                                // attacker is bottom right, king is top left
+                                if(diff_xValue > 0 && diff_yValue > 0) {
+                                    for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                        // check if pawn pieces can block the attacker
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+                                        
+                                        // check if knight pieces can block the attacker
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if bishop pieces can block the attacker
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if rook pieces can block the attacker
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if queen piece can block the attacker
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                    } // looping done
+                                } // attacker is bottom right, king is top left end
+
+
+                                // attacker is bottom left, king is top right
+                                if(diff_xValue > 0 && diff_yValue < 0) {
+                                    for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                        // check if pawn pieces can block the attacker
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+                                        
+                                        // check if knight pieces can block the attacker
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if bishop pieces can block the attacker
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white bishop pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if rook pieces can block the attacker
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if queen piece can block the attacker
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                    } // looping done
+                                } // attacker is bottom left, king is top right end
+
+
+                                // attacker is top right, king is down left
+                                if(diff_xValue < 0 && diff_yValue > 0) {
+                                    for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                        // check if pawn pieces can block the attacker
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+                                        
+                                        // check if knight pieces can block the attacker
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if bishop pieces can block the attacker
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white bishop pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if rook pieces can block the attacker
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if queen piece can block the attacker
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                    } // looping done
+                                } // attacker is top right, king is bottom left end
+
+                                // attacker is top right, king is bottom right start
+                                if(diff_xValue < 0 && diff_yValue < 0) {
+                                    for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                        // check if pawn pieces can block the attacker
+                                        for(let l = 0; l < whitePawnPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white pawn pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+                                        
+                                        // check if knight pieces can block the attacker
+                                        for(let l = 0; l < whiteKnightPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if bishop pieces can block the attacker
+                                        for(let l = 0; l < whiteBishopPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white knight pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if rook pieces can block the attacker
+                                        for(let l = 0; l < whiteRookPieces.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white rook pieces can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                        // check if queen piece can block the attacker
+                                        for(let l = 0; l < whiteQueenPiece.length; l++){
+                                            let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                            let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                            let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                            for(let m = 0; m < possibleMoves.length; m++) {
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                    isCheckMate = false;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (isCheckMate === false) {
+                                                break;
+                                            }
+
+                                        } // if white queen piece can defend or block the enemy end
+
+                                        if (isCheckMate === false) {
+                                            break;
+                                        } 
+
+                                    } // looping done
+                                } // attacker is top right, king is bottom right end
+                            }
+                        } // checked if it is all black queen and black bishop
+
+
+
+
                     }
 
                     return isCheckMate
