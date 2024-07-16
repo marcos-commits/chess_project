@@ -4187,6 +4187,303 @@
                     return isCheckMate
                 
                 } // end of checkmate function
+
+
+                // defending Moves start
+                defendingMoves(defenderPiece, defenderCoordinate, attackerPiece, attackerCoordinate, movementType) {
+                    let defenderPieceName = defenderPiece.getAttribute('alt');
+                    let attackerPieceName = attackerPiece.getAttribute('alt');
+                    let defendingMovements = [];
+                    let foundIdx = 0;
+                    let attacker_xAxisValue = parseInt(attackerCoordinate.substr(6, 1));
+                    let attacker_yAxisValue = parseInt(attackerCoordinate.substr(attackerCoordinate.length -1, 1));
+
+                    switch (movementType) {
+                        case "eat":
+                            // if pawn can capture the attacker
+                            if (attackerPieceName.includes("white")) {
+                                // check if blackPawn can capture that thing
+                                let piece_xAxisValue;
+                                let piece_yAxisValue;
+                                let eatingMoves;
+                                let possibleMoves;
+
+
+                                switch (defenderPieceName) {
+                                    case "blackPawn":
+                                        foundIdx =  blackPawnPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                        piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length - 1, 1));
+                                        eatingMoves = blackPawnPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                defendingMovements.push(eatingMoves[j]);
+                                                break;
+                                            }
+                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                        break;
+                                    
+                                    case "blackKnight":
+                                        foundIdx =  blackKnightPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                        piece_xAxisValue = parseInt(blackKnightPieces[foundIdx].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackKnightPieces[foundIdx].position.substr(blackKnightPieces[foundIdx].position.length - 1, 1));
+                                        eatingMoves = blackKnightPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                defendingMovements.push(eatingMoves[j]);
+                                                break;
+                                            }
+                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                        break;
+                                    
+                                    case "blackBishop":
+                                        foundIdx =  blackBishopPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                        piece_xAxisValue = parseInt(blackBishopPieces[foundIdx].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackBishopPieces[foundIdx].position.substr(blackBishopPieces[foundIdx].position.length - 1, 1));
+                                        eatingMoves = blackBishopPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                defendingMovements.push(eatingMoves[j]);
+                                                break;
+                                            }
+                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                        break;
+                                    
+                                    case "blackRook":
+                                        foundIdx =  blackRookPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                        piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length - 1, 1));
+                                        eatingMoves = blackRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                defendingMovements.push(eatingMoves[j]);
+                                                break;
+                                            }
+                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                        break;
+                                    
+                                    case "blackQueen":
+                                        foundIdx =  blackQueenPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                        piece_xAxisValue = parseInt(blackQueenPiece[foundIdx].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackQueenPiece[foundIdx].position.substr(blackQueenPiece[foundIdx].position.length - 1, 1));
+                                        eatingMoves = blackQueenPiece[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                defendingMovements.push(eatingMoves[j]);
+                                                break;
+                                            }
+                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                        break;
+
+
+
+                                } // end of switch case for defender PieceName
+                                for(let i = 0; i < blackPawnPieces.length; i++) {
+                                    piece_xAxisValue = parseInt(blackPawnPieces[i].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackPawnPieces[i].position.substr(blackPawnPieces[i].position.length - 1, 1));
+                                    eatingMoves = blackPawnPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            isCheckMate = false;
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+
+
+                                    if (isCheckMate === false){
+                                        break;
+                                    }
+                                } // blackPawn check complete for blocking and capturing
+
+                                // if it is still checkmate, check blackbihop can capture or block it
+                                if (isCheckMate === true){
+                                    // check if blackBishop can capture the attacker
+                                    for(let i = 0; i < blackBishopPieces.length; i++) {
+                                        piece_xAxisValue = parseInt(blackBishopPieces[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackBishopPieces[i].position.substr(blackBishopPieces[i].position.length - 1, 1));
+                                        eatingMoves = blackBishopPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                        
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }        
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+
+                                    } // black bishop check complete
+                                } // if check mate is true or not
+                                
+
+                                if (isCheckMate === true) {
+                                    // check if blackRook can capture the attacker
+                                    for(let i = 0; i < blackRookPieces.length; i++) {
+                                        piece_xAxisValue = parseInt(blackRookPieces[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackRookPieces[i].position.substr(blackRookPieces[i].position.length - 1, 1));
+                                        eatingMoves = blackRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+
+                                    } // black rook check complete
+                                } // check if it is checkmate or not
+                                
+                                // if black queen can capture the enemy
+                                if (isCheckMate === true) {
+                                    // check if blackQueen can capture the attacker
+                                    for(let i = 0; i < blackQueenPiece.length; i++) {
+                                        piece_xAxisValue = parseInt(blackQueenPiece[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackQueenPiece[i].position.substr(blackQueenPiece[i].position.length - 1, 1));
+                                        eatingMoves = blackQueenPiece[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+
+                                    } // black queen check complete
+                                } // check if it is checkmate or not
+                                
+                                if (isCheckMate === true) {
+                                    // check if blackKnight can capture the attacker
+                                    for(let i = 0; i < blackKnightPieces.length; i++) {
+                                        piece_xAxisValue = parseInt(blackKnightPieces[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(blackKnightPieces[i].position.substr(blackKnightPieces[i].position.length - 1, 1));
+                                        eatingMoves = blackKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+
+                                    } // black Knight check complete
+                                }
+
+                            } else if (attackerPieceName.includes("black")) {
+                                // check if blackPawn can capture that thing
+                                let piece_xAxisValue;
+                                let piece_yAxisValue;
+                                let eatingMoves;
+                                let possibleMoves;
+
+                                // check if whitePawn can capture the attacker
+                                for(let i = 0; i < whitePawnPieces.length; i++) {
+                                    piece_xAxisValue = parseInt(whitePawnPieces[i].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whitePawnPieces[i].position.substr(whitePawnPieces[i].position.length - 1, 1));
+                                    eatingMoves = whitePawnPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerOriginalCoordinate) {
+                                            isCheckMate = false;
+                                            break;
+                                        }
+                                    } // inner for each loop
+
+                                    if (isCheckMate === false){
+                                        break;
+                                    }
+                                } // whitePawn check complete for blocking and capturing
+
+                                // if it is still checkmate, check blackbihop can capture or block it
+                                if (isCheckMate === true){
+                                    // check if whiteBishop can capture the attacker
+                                    for(let i = 0; i < whiteBishopPieces.length; i++) {
+                                        piece_xAxisValue = parseInt(whiteBishopPieces[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(whiteBishopPieces[i].position.substr(whiteBishopPieces[i].position.length - 1, 1));
+                                        eatingMoves = whiteBishopPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                        
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }        
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+                                    } // whiteBishop check complete
+                                }
+
+                                if (isCheckMate === true){
+                                        // check if whiteRook can capture the attacker
+                                    for(let i = 0; i < whiteRookPieces.length; i++) {
+                                        piece_xAxisValue = parseInt(whiteRookPieces[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(whiteRookPieces[i].position.substr(whiteRookPieces[i].position.length - 1, 1));
+                                        eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+
+                                    } // white rook check complete
+                                } // checking checkmate done
+
+                                if (isCheckMate === true) {
+                                        // check if whiteQueen can capture the attacker
+                                    for(let i = 0; i < whiteQueenPieces.length; i++) {
+                                        piece_xAxisValue = parseInt(whiteQueenPiece[i].position.substr(6, 1));
+                                        piece_yAxisValue = parseInt(whiteQueenPiece[i].position.substr(whiteQueenPiece[i].position.length - 1, 1));
+                                        eatingMoves = whiteQueenPiece[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                        for(let j = 0; j < eatingMoves.length; j++){
+                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
+                                                isCheckMate = false;
+                                                break;
+                                            }
+                                        } // inner for each loop
+
+                                        if (isCheckMate === false){
+                                            break;
+                                        }
+
+                                    } // white queen check complete
+                                } // checking checkmate done
+
+
+
+                            break;
+                        case "block":
+                    } // enf of switch case movements
+
+
+                } // end of defendingMoves function
                 
 
             } // end of king class
@@ -4652,6 +4949,9 @@
             let isCheckWhite = false;
             let checkedWord = document.querySelector('h1');
             let isCheckMate = false;
+            let defendingMoves = [];
+            let attackerPiece;
+            let attackerCoordination;
             // Variables End
 
             turn = "white";
@@ -4785,40 +5085,101 @@
                 // if the piece is selected
                 if(selectedPiece) {
                     // if the movement place is empty
-                    if (coordinate.innerHTML === "") {     
+                    if (coordinate.innerHTML === "") {
+                            
                         possibleMoves = possibleMove(selectedPiece, prevCoordinate, `${coordinateValue}`);
+                        if (isCheckBlack) {
+                            // Black is checked so you have to block the attacker by moving, or King has to evade
+                            defendingMoves = blackKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "block");
+                        } 
+
+                        if (isCheckWhite) {
+                            defendingMoves = whiteKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "block");
+                        }
 
                         if (possibleMoves.length > 0) {
                             possibleMoves.some((possibleMovement) => {
-                                // if it matches with coordinate movement
-                                if(possibleMovement === `${coordinateValue}`) {
-                                    coordinate.appendChild(selectedPiece);
-                                    updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+                                if (isCheckBlack || isCheckWhite) {
+                                    // if it is checked
+                                    let defendTheKingMessage = false
+                                    for(let n = 0; n < defendingMoves.length; n++) {
+                                        if(defendingMoves[n] === `${coordinateValue}`) {
+                                            defendTheKingMessage = true;
+                                            coordinate.appendChild(selectedPiece);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+                                            defendTheKingMessage = true;
+                                            switch (turn) {
+                                                case "white":
+                                                    isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckBlack) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    
+                                                    turn = "black";
+                                                    break;
+                                                case "black":
+                                                    isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckWhite) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    
+                                                    turn = "white";
+                                                    break;
+                                            } // end of switch case statement
+                                            return true;
+                                        } else {// end of if it matches possible movements
+                                            return false;
+                                        }
+                                    } // for each defending moves
 
-                                    switch (turn) {
-                                        case "white":
-                                            isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                            if (isCheckBlack) {
-                                                checkedWord = document.querySelector('h1');
-                                                checkedWord.style.opacity = 1;
-                                            }
-                                            
-                                            turn = "black";
-                                            break;
-                                        case "black":
-                                            isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                            if (isCheckWhite) {
-                                                checkedWord = document.querySelector('h1');
-                                                checkedWord.style.opacity = 1;
-                                            }
-                                            
-                                            turn = "white";
-                                            break;
-                                    } // end of switch case statement
-                                    return true;
-                                } else {// end of if it matches possible movements
-                                    return false;
+                                    if (!defendTheKingMessage) {
+                                        alert("You have to defend the King!")
+                                    }
+
+                                } else {
+                                    // it is not checked
+                                    if(possibleMovement === `${coordinateValue}`) {
+                                        coordinate.appendChild(selectedPiece);
+                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+
+                                        switch (turn) {
+                                            case "white":
+                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                attackerPiece = selectedPiece;
+                                                attackerCoordination = `${coordinateValue}`;
+                                                if (isCheckBlack) {
+                                                    checkedWord = document.querySelector('h1');
+                                                    checkedWord.style.opacity = 1;
+                                                }
+                                                
+                                                turn = "black";
+                                                break;
+                                            case "black":
+                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                attackerPiece = selectedPiece;
+                                                attackerCoordination = `${coordinateValue}`;
+                                                if (isCheckWhite) {
+                                                    checkedWord = document.querySelector('h1');
+                                                    checkedWord.style.opacity = 1;
+                                                }
+                                                
+                                                turn = "white";
+                                                break;
+                                        } // end of switch case statement
+                                        return true;
+                                    } else {// end of if it matches possible movements
+                                        return false;
+                                    }
                                 }
+
+                                // if it matches with coordinate movement
+                                
                             }); // possible moves for each statement
                         }
 
@@ -4828,45 +5189,111 @@
                     } else {
                         let otherPiece = coordinate.querySelector("img");
                         let eatingPossibilities = [];
+
+                        if (isCheckBlack) {
+                            // Black is checked so you have to block the attacker by moving, or King has to evade
+                            defendingMoves = blackKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "eat");
+                        } 
+
+                        if (isCheckWhite) {
+                            defendingMoves = whiteKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "eat");
+                        }
+
                         if (otherPiece.getAttribute('alt').includes("white") && turn === "black" || otherPiece.getAttribute('alt').includes("black") && turn === "white"){
                             eatingPossibilities = eatingPossibility(selectedPiece, prevCoordinate, `${coordinateValue}`);
 
                             if (eatingPossibilities.length > 0) {
                                 eatingPossibilities.some((eatingpossibleMovement) => {
 
+                                    if (isCheckBlack || isCheckWhite) {
+                                        // if you are in a defending position and you have to eat the enemy
+                                        let defendTheKingMessage = false
+                                        for(let n = 0; n < defendingMoves.length; n++) {
+                                            if(eatingpossibleMovement === defendingMoves[n]) {
+                                                defendTheKingMessage = true;
+                                                eatenPiece = coordinate.innerHTML;
+                                                coordinate.innerHTML = "";
+                                                coordinate.appendChild(selectedPiece);
+                                                updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
+
+                                                switch (turn) {
+                                                    case "white":
+                                                        isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                        attackerPiece = selectedPiece;
+                                                        attackerCoordination = `${coordinateValue}`;
+                                                        if (isCheckBlack) {
+                                                            checkedWord = document.querySelector('h1');
+                                                            checkedWord.style.opacity = 1;
+                                                        }
+                                                        turn = "black";
+                                                        
+                                                        break;
+                                                    case "black":
+                                                        isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                        attackerPiece = selectedPiece;
+                                                        attackerCoordination = `${coordinateValue}`;
+                                                        if (isCheckWhite) {
+                                                            checkedWord = document.querySelector('h1');
+                                                            checkedWord.style.opacity = 1;
+                                                        }
+                                                        turn = "white";
+                                                        
+                                                        break;
+                                                } // end of switch case statement
+                                                selectedPiece = null;
+                                                return true;
+
+                                            } else {// end of if it matches possible movements
+                                                return false;
+                                            }
+                                        }
+                                        
+                                        if (!defendTheKingMessage){
+                                            alert("You have to defend the king!")
+                                        }
+
+                                    } else {
+                                        // you are not in a dangerous situation
+                                        if(eatingpossibleMovement === `${coordinateValue}`) {
+                                            eatenPiece = coordinate.innerHTML;
+                                            coordinate.innerHTML = "";
+                                            coordinate.appendChild(selectedPiece);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
+
+                                            switch (turn) {
+                                                case "white":
+                                                    isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckBlack) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    turn = "black";
+                                                    
+                                                    break;
+                                                case "black":
+                                                    isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckWhite) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    turn = "white";
+                                                    
+                                                    break;
+                                            } // end of switch case statement
+                                            selectedPiece = null;
+                                            return true;
+
+                                        } else {// end of if it matches possible movements
+                                            return false;
+                                        }
+                                    }   // end of is in defending or not defending situation 
+
                                     // if it matches with coordinate movement
-                                    if(eatingpossibleMovement === `${coordinateValue}`) {
-                                        eatenPiece = coordinate.innerHTML;
-                                        coordinate.innerHTML = "";
-                                        coordinate.appendChild(selectedPiece);
-                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
-
-                                        switch (turn) {
-                                            case "white":
-                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                if (isCheckBlack) {
-                                                    checkedWord = document.querySelector('h1');
-                                                    checkedWord.style.opacity = 1;
-                                                }
-                                                turn = "black";
-                                                
-                                                break;
-                                            case "black":
-                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                if (isCheckWhite) {
-                                                    checkedWord = document.querySelector('h1');
-                                                    checkedWord.style.opacity = 1;
-                                                }
-                                                turn = "white";
-                                                
-                                                break;
-                                        } // end of switch case statement
-                                        selectedPiece = null;
-                                        return true;
-
-                                    } else {// end of if it matches possible movements
-                                        return false;
-                                    }
+                                        
                                 }); // possible moves for each statement
                             }
                         } // if you are trying to eat something end
