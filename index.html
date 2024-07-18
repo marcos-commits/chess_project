@@ -4197,290 +4197,1718 @@
                     let foundIdx = 0;
                     let attacker_xAxisValue = parseInt(attackerCoordinate.substr(6, 1));
                     let attacker_yAxisValue = parseInt(attackerCoordinate.substr(attackerCoordinate.length -1, 1));
+                    let defender_xAxisValue = parseInt(defenderCoordinate.substr(6, 1));
+                    let defender_yAxisValue = parseInt(defenderCoordinate.substr(defenderCoordinate.length - 1, 1));
+                    let king_xAxisValue = parseInt(this.position.substr(6, 1));
+                    let king_yAxisValue = parseInt(this.position.substr(this.position.length -1, 1));
 
                     switch (movementType) {
                         case "eat":
-                            // if pawn can capture the attacker
-                            if (attackerPieceName.includes("white")) {
-                                // check if blackPawn can capture that thing
-                                let piece_xAxisValue;
-                                let piece_yAxisValue;
-                                let eatingMoves;
-                                let possibleMoves;
+                            
+                            // check if defender piece can capture attacker
+                            let piece_xAxisValue;
+                            let piece_yAxisValue;
+                            let eatingMoves;
+                            let possibleMoves;
 
 
-                                switch (defenderPieceName) {
-                                    case "blackPawn":
-                                        foundIdx =  blackPawnPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
-                                        piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length - 1, 1));
-                                        eatingMoves = blackPawnPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                defendingMovements.push(eatingMoves[j]);
-                                                break;
-                                            }
-                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
-                                        break;
-                                    
-                                    case "blackKnight":
-                                        foundIdx =  blackKnightPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
-                                        piece_xAxisValue = parseInt(blackKnightPieces[foundIdx].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackKnightPieces[foundIdx].position.substr(blackKnightPieces[foundIdx].position.length - 1, 1));
-                                        eatingMoves = blackKnightPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                defendingMovements.push(eatingMoves[j]);
-                                                break;
-                                            }
-                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
-                                        break;
-                                    
-                                    case "blackBishop":
-                                        foundIdx =  blackBishopPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
-                                        piece_xAxisValue = parseInt(blackBishopPieces[foundIdx].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackBishopPieces[foundIdx].position.substr(blackBishopPieces[foundIdx].position.length - 1, 1));
-                                        eatingMoves = blackBishopPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                defendingMovements.push(eatingMoves[j]);
-                                                break;
-                                            }
-                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
-                                        break;
-                                    
-                                    case "blackRook":
-                                        foundIdx =  blackRookPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
-                                        piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length - 1, 1));
-                                        eatingMoves = blackRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                defendingMovements.push(eatingMoves[j]);
-                                                break;
-                                            }
-                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
-                                        break;
-                                    
-                                    case "blackQueen":
-                                        foundIdx =  blackQueenPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
-                                        piece_xAxisValue = parseInt(blackQueenPiece[foundIdx].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackQueenPiece[foundIdx].position.substr(blackQueenPiece[foundIdx].position.length - 1, 1));
-                                        eatingMoves = blackQueenPiece[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                defendingMovements.push(eatingMoves[j]);
-                                                break;
-                                            }
-                                        } // inner for each loop for pawn pieces possible moves(to eat the enemy)
-                                        break;
-
-
-
-                                } // end of switch case for defender PieceName
-                                for(let i = 0; i < blackPawnPieces.length; i++) {
-                                    piece_xAxisValue = parseInt(blackPawnPieces[i].position.substr(6, 1));
-                                    piece_yAxisValue = parseInt(blackPawnPieces[i].position.substr(blackPawnPieces[i].position.length - 1, 1));
-                                    eatingMoves = blackPawnPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+                            switch (defenderPieceName) {
+                                case "blackPawn":
+                                    foundIdx =  blackPawnPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = blackPawnPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
-                                            isCheckMate = false;
+                                            defendingMovements.push(eatingMoves[j]);
                                             break;
                                         }
                                     } // inner for each loop for pawn pieces possible moves(to eat the enemy)
-
-
-                                    if (isCheckMate === false){
-                                        break;
-                                    }
-                                } // blackPawn check complete for blocking and capturing
-
-                                // if it is still checkmate, check blackbihop can capture or block it
-                                if (isCheckMate === true){
-                                    // check if blackBishop can capture the attacker
-                                    for(let i = 0; i < blackBishopPieces.length; i++) {
-                                        piece_xAxisValue = parseInt(blackBishopPieces[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackBishopPieces[i].position.substr(blackBishopPieces[i].position.length - 1, 1));
-                                        eatingMoves = blackBishopPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-                                        
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }        
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
-                                            break;
-                                        }
-
-                                    } // black bishop check complete
-                                } // if check mate is true or not
+                                    break;
                                 
-
-                                if (isCheckMate === true) {
-                                    // check if blackRook can capture the attacker
-                                    for(let i = 0; i < blackRookPieces.length; i++) {
-                                        piece_xAxisValue = parseInt(blackRookPieces[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackRookPieces[i].position.substr(blackRookPieces[i].position.length - 1, 1));
-                                        eatingMoves = blackRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
-                                            break;
-                                        }
-
-                                    } // black rook check complete
-                                } // check if it is checkmate or not
-                                
-                                // if black queen can capture the enemy
-                                if (isCheckMate === true) {
-                                    // check if blackQueen can capture the attacker
-                                    for(let i = 0; i < blackQueenPiece.length; i++) {
-                                        piece_xAxisValue = parseInt(blackQueenPiece[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackQueenPiece[i].position.substr(blackQueenPiece[i].position.length - 1, 1));
-                                        eatingMoves = blackQueenPiece[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
-                                            break;
-                                        }
-
-                                    } // black queen check complete
-                                } // check if it is checkmate or not
-                                
-                                if (isCheckMate === true) {
-                                    // check if blackKnight can capture the attacker
-                                    for(let i = 0; i < blackKnightPieces.length; i++) {
-                                        piece_xAxisValue = parseInt(blackKnightPieces[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(blackKnightPieces[i].position.substr(blackKnightPieces[i].position.length - 1, 1));
-                                        eatingMoves = blackKnightPieces[i].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
-                                            break;
-                                        }
-
-                                    } // black Knight check complete
-                                }
-
-                            } else if (attackerPieceName.includes("black")) {
-                                // check if blackPawn can capture that thing
-                                let piece_xAxisValue;
-                                let piece_yAxisValue;
-                                let eatingMoves;
-                                let possibleMoves;
-
-                                // check if whitePawn can capture the attacker
-                                for(let i = 0; i < whitePawnPieces.length; i++) {
-                                    piece_xAxisValue = parseInt(whitePawnPieces[i].position.substr(6, 1));
-                                    piece_yAxisValue = parseInt(whitePawnPieces[i].position.substr(whitePawnPieces[i].position.length - 1, 1));
-                                    eatingMoves = whitePawnPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
+                                case "blackKnight":
+                                    foundIdx =  blackKnightPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(blackKnightPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackKnightPieces[foundIdx].position.substr(blackKnightPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = blackKnightPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
-                                        if (eatingMoves[j] === attackerOriginalCoordinate) {
-                                            isCheckMate = false;
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
                                             break;
                                         }
-                                    } // inner for each loop
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+                                
+                                case "blackBishop":
+                                    foundIdx =  blackBishopPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(blackBishopPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackBishopPieces[foundIdx].position.substr(blackBishopPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = blackBishopPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
-                                    if (isCheckMate === false){
-                                        break;
-                                    }
-                                } // whitePawn check complete for blocking and capturing
-
-                                // if it is still checkmate, check blackbihop can capture or block it
-                                if (isCheckMate === true){
-                                    // check if whiteBishop can capture the attacker
-                                    for(let i = 0; i < whiteBishopPieces.length; i++) {
-                                        piece_xAxisValue = parseInt(whiteBishopPieces[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(whiteBishopPieces[i].position.substr(whiteBishopPieces[i].position.length - 1, 1));
-                                        eatingMoves = whiteBishopPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-                                        
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }        
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
                                             break;
                                         }
-                                    } // whiteBishop check complete
-                                }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+                                
+                                case "blackRook":
+                                    foundIdx =  blackRookPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = blackRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
-                                if (isCheckMate === true){
-                                        // check if whiteRook can capture the attacker
-                                    for(let i = 0; i < whiteRookPieces.length; i++) {
-                                        piece_xAxisValue = parseInt(whiteRookPieces[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(whiteRookPieces[i].position.substr(whiteRookPieces[i].position.length - 1, 1));
-                                        eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
                                             break;
                                         }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+                                
+                                case "blackQueen":
+                                    foundIdx =  blackQueenPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(blackQueenPiece[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackQueenPiece[foundIdx].position.substr(blackQueenPiece[foundIdx].position.length - 1, 1));
+                                    eatingMoves = blackQueenPiece[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
-                                    } // white rook check complete
-                                } // checking checkmate done
-
-                                if (isCheckMate === true) {
-                                        // check if whiteQueen can capture the attacker
-                                    for(let i = 0; i < whiteQueenPieces.length; i++) {
-                                        piece_xAxisValue = parseInt(whiteQueenPiece[i].position.substr(6, 1));
-                                        piece_yAxisValue = parseInt(whiteQueenPiece[i].position.substr(whiteQueenPiece[i].position.length - 1, 1));
-                                        eatingMoves = whiteQueenPiece[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
-
-                                        for(let j = 0; j < eatingMoves.length; j++){
-                                            if (eatingMoves[j] === attackerOriginalCoordinate) {
-                                                isCheckMate = false;
-                                                break;
-                                            }
-                                        } // inner for each loop
-
-                                        if (isCheckMate === false){
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
                                             break;
                                         }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
 
-                                    } // white queen check complete
-                                } // checking checkmate done
+                                case "blackKing":
+                                    foundIdx =  blackKingPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(blackKingPiece[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(blackKingPiece[foundIdx].position.substr(blackKingPiece[foundIdx].position.length - 1, 1));
+                                    eatingMoves = blackKingPiece[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
 
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
 
+                                case "whitePawn":
+                                    foundIdx =  whitePawnPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = whiteKnightPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue);
 
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+
+                                case "whiteKinght":
+                                    foundIdx =  whiteKnightPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = whiteKnightPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+
+                                case "whiteBishop":
+                                    foundIdx =  whiteBishopPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = whiteBishopPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+
+                                case "whiteRook":
+                                    foundIdx =  whiteRookPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length - 1, 1));
+                                    eatingMoves = whiteRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+
+                                case "whiteQueen":
+                                    foundIdx =  whiteQueenPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(whiteQueenPiece[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whiteQueenPiece[foundIdx].position.substr(whiteQueenPiece[foundIdx].position.length - 1, 1));
+                                    eatingMoves = whiteQueenPiece[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+
+                                case "whiteKing":
+                                    foundIdx =  whiteKingPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
+                                    piece_xAxisValue = parseInt(whiteKingPiece[foundIdx].position.substr(6, 1));
+                                    piece_yAxisValue = parseInt(whiteKingPiece[foundIdx].position.substr(whiteKingPiece[foundIdx].position.length - 1, 1));
+                                    eatingMoves = whiteKingPiece[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                    for(let j = 0; j < eatingMoves.length; j++){
+                                        if (eatingMoves[j] === attackerCoordinate) {
+                                            defendingMovements.push(eatingMoves[j]);
+                                            break;
+                                        }
+                                    } // inner for each loop for pawn pieces possible moves(to eat the enemy)
+                                    break;
+    
+                                } // end of switch case for defender PieceName
+
+                            
+                            // check if blackPawn can capture that thing
                             break;
                         case "block":
+                            ///// if piece is king or other piece
+                            if (defenderPieceName.includes("King")) {
+                                // king's move case
+                                let kingPossibleMovement;
+                                if (defenderPieceName.includes("black")) {
+                                    kingPossibleMovement = blackKingPiece[0].possibleMovements(defender_xAxisValue, defender_yAxisValue);
+                                }
+
+                                if (defenderPieceName.includes("white")) {
+                                    kingPossibleMovement = whiteKingPiece[0].possibleMovements(defender_xAxisValue, defender_yAxisValue);
+                                }
+
+                                let originLength = kingPossibleMovement.length;
+
+                                 // filtering out unnecessary movements
+                                let j = 0;
+                                while(j < originLength){
+                                    let xAxisValue = parseInt(kingPossibleMovement[j].substr(6, 1));
+                                    let yAxisValue = parseInt(kingPossibleMovement[j].substr(kingPossibleMovement[j].length - 1, 1));
+
+                                    if (xAxisValue == 0 || yAxisValue == 0 || xAxisValue == 9 || yAxisValue == 9){
+                                        kingPossibleMovement.splice(j, 1)
+                                        j--;
+                                        originLength = kingPossibleMovement.length;
+                                    }
+                                    j++;
+                                }
+
+                                // if there is same color next to it, filter out as well
+                                j = 0;
+                                while(j < originLength){
+                                    let xAxisValue = parseInt(kingPossibleMovement[j].substr(6, 1));
+                                    let yAxisValue = parseInt(kingPossibleMovement[j].substr(kingPossibleMovement[j].length - 1, 1));
+                                    let cell = document.querySelector(`.cell_${xAxisValue}_${yAxisValue}`);
+                                    if (cell.querySelector("img")){
+                                        let imageCell = cell.querySelector("img");
+                                        if ((imageCell.getAttribute('alt').includes("white") && this.color === "white") || (imageCell.getAttribute('alt').includes("black") && this.color === "black")) {
+                                            kingPossibleMovement.splice(j, 1);
+                                            j--;
+                                            originLength = kingPossibleMovement.length;
+                                        }
+                                    }
+                                    j++;
+                                }
+
+                                /////////////////////// check king's movements
+                                // Each king Movement
+                                for(let i = 0; i < kingPossibleMovement.length; i++){
+                                    let eachMovement_xAxisValue = parseInt(kingPossibleMovement[i].substr(6, 1));
+                                    let eachMovement_yAxisValue = parseInt(kingPossibleMovement[i].substr(kingPossibleMovement[i].length -1, 1));
+                                    let isDangerous = false;
+                                    let needsBreak = false;
+
+                                    // check left start rook queen
+                                    if(eachMovement_yAxisValue == 1) {
+                                        
+                                    } else {
+                                        for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
+                                            // if y axis value is one, then don't check left
+                                            let leftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                            
+                                            switch(i) {
+                                                case eachMovement_yAxisValue - 1:
+                                                    if (leftPiece.querySelector("img")) {
+                                                        let leftImagePiece = leftPiece.querySelector("img");
+                                                        if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {  
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (leftPiece.querySelector("img")) {
+                                                        let leftImagePiece = leftPiece.querySelector("img");
+                                                        if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+                                                
+                                        } // end of inner for each statement left side
+                                    } // check left finished
+
+                                    // if isDangerous is true then go to the next outer for each element of loop so continue
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // check right rook and queen
+                                    if(eachMovement_yAxisValue == 8) {
+                                        
+                                    } else {
+                                        for(let i = eachMovement_yAxisValue + 1; i <= 8; i++) {
+                                            let rightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                            
+                                            switch(i) {
+                                                case eachMovement_yAxisValue + 1:
+                                                    if (rightPiece.querySelector("img")) {
+                                                        let rightImagePiece = rightPiece.querySelector("img");
+                                                        if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (rightPiece.querySelector("img")) {
+                                                        let rightImagePiece = rightPiece.querySelector("img");
+                                                        if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+
+                                        } // end of inner for each statement
+                                    } // End of checking right side statement
+
+                                    // if isDangerous is true then go to the next outer for each element of loop so continue
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // check up rook and queen
+                                    if(eachMovement_xAxisValue == 1) {
+                                        
+                                    } else {
+                                        for(let i = eachMovement_xAxisValue - 1; i >= 1; i--) {
+                                            let upPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                            
+                                            switch(i) {
+                                                case eachMovement_xAxisValue - 1:
+                                                    if (upPiece.querySelector("img")) {
+                                                        let upImagePiece = upPiece.querySelector("img");
+                                                        if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen") || upImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen") || upImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (upPiece.querySelector("img")) {
+                                                        let upImagePiece = upPiece.querySelector("img");
+                                                        if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+
+                                        } // end of for each statement
+                                    } // End of checking up side statement
+
+                                    // if isDangerous is true then go to the next outer for each element of loop so continue
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // check down side statement queen and rook
+                                    if(eachMovement_xAxisValue == 8) {
+                                        
+                                    } else {
+                                        for(let i = eachMovement_xAxisValue + 1; i <= 8; i++) {
+                                            let downPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                            
+                                            switch(i) {
+                                                case eachMovement_xAxisValue + 1:
+                                                    if (downPiece.querySelector("img")) {
+                                                        let downImagePiece = downPiece.querySelector("img");
+                                                        if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen") || downImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen") || downImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (downPiece.querySelector("img")) {
+                                                        let downImagePiece = downPiece.querySelector("img");
+                                                        if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+                                        } // end of for each statement
+                                    } // End of checking down side statement
+
+                                    // if isDangerous is true then go to the next outer for each element of loop so continue
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // Checking diagonally left down
+                                    if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 8) {
+                                    
+                                    } else {
+                                        for(let i = 1; i <= 8; i++) {
+                                            if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue-i < 1) {
+                                                break;
+                                            }
+                                            let leftDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue-i}`)
+                                            
+                                            switch(i) {
+                                                case 1:
+                                                    if (leftDownPiece.querySelector("img")) {
+                                                        let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                                        if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen") || leftDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen") || leftDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if (((leftDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((leftDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                            gettingEatenMovements.push(true);
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (leftDownPiece.querySelector("img")) {
+                                                        let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                                        if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    break;
+                                            } // end of switch case
+                                            if (needsBreak) {
+                                                break;
+                                            }    
+                                        } // diagonal left down for each statement
+                                    } // diagonal left down finished
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // checking diagonally right down
+                                    if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 8) {
+                                        
+                                    } else {
+                                        for(let i = 1; i <= 8; i++) {
+                                            if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue+i > 8) {
+                                                break;
+                                            }
+
+                                            let rightDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue+i}`)
+                                            
+                                            switch(i) {
+                                                case 1:
+                                                    if (rightDownPiece.querySelector("img")) {
+                                                        let rightDownImagePiece = rightDownPiece.querySelector("img");
+                                                        if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen") || rightDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen") || rightDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if (((rightDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((rightDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (rightDownPiece.querySelector("img")) {
+                                                        let rightDownImagePiece = rightDownPiece.querySelector("img");
+                                                        if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+                                        } // end of for each statement
+                                    } // End of checking diagonally right down side statement
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+
+                                    // diagonal up left checking
+                                    if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 1) {
+                                        
+                                    } else {
+                                        for(let i = 1; i <= 8; i++) {
+                                            if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue-i < 1) {
+                                                break;
+                                            }
+
+                                            let upLeftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue-i}`)
+                                            
+                                            switch(i) {
+                                                case 1:
+                                                    if (upLeftPiece.querySelector("img")) {
+                                                        let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                                        if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen") || upLeftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen") || upLeftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if (((upLeftImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upLeftImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (upLeftPiece.querySelector("img")) {
+                                                        let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                                        if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+
+                                        } // end of for each statement
+                                    } // End of checking diagonally up left side statement
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // check diagonally up right
+                                    if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 1) {
+                                        
+                                    } else {
+                                        for(let i = 1; i <= 8; i++) {
+                                            if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue+i > 8) {
+                                                break;
+                                            }
+
+                                            let upRightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue+i}`)
+                                            
+                                            switch(i) {
+                                                case 1:
+                                                    if (upRightPiece.querySelector("img")) {
+                                                        let upRightImagePiece = upRightPiece.querySelector("img");
+                                                        if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen") || upRightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen") || upRightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if (((upRightImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upRightImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    } 
+                                                    break;
+                                                default:
+                                                    if (upRightPiece.querySelector("img")) {
+                                                        let upRightImagePiece = upRightPiece.querySelector("img");
+                                                        if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                            needsBreak = true;
+                                                            isDangerous = true;
+                                                        } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        }
+                                                    }
+                                                    
+                                                    break;
+                                            } // end of switch case
+
+                                            if (needsBreak) {
+                                                break;
+                                            }
+                                        } // end of for each statement
+                                    } // End of checking diagonally up left side statement
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // Check left side if enemy Knight is there
+                                    if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue-2 >= 1 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue-2}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue-1 >= 1 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue-1}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue-2 >= 1 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue-2}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue-1 >= 1 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue-1}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    // check right if knight is there
+                                    if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue+2 <= 8 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue+2}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+
+                                    if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue+1 <= 8 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue+1}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue+2 <= 8 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue+2}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = false;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = false;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (isDangerous) {
+                                        continue;
+                                    }
+                                    
+                                    // start over
+                                    needsBreak = false;
+                                    isDangerous = false;
+
+                                    if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue+1 <= 8 ){
+                                        let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue+1}`);
+                                        if (knightPiecePossibleStance.querySelector("img")) {
+                                            let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                            if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                                isDangerous = true;
+                                            } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                                isDangerous = false;
+                                            }
+                                        }
+                                    }
+                                    
+                                    // last element
+                                    if (isDangerous) {
+                                        continue;
+                                    } else {
+                                        defendingMovements.push(`.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`);
+                                    }
+                                
+
+                                } // End of outer for each statement for king movements
+                                /////////////////////// check king's movements end
+
+
+                            } else {
+                                ////////////////////// other piece blocking the king start
+                                // if the attacker is black rook or black queen
+                                let piece_xAxisValue;
+                                let piece_yAxisValue;
+                                let possibleMoves;
+
+                                if (attackerPieceName.includes("blackRook") || attackerPieceName.includes("blackQueen")){
+                                    // check left and right
+                                    if(attacker_xAxisValue === king_xAxisValue) {   
+                                        let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+                                        if (diff_yValue > 0){
+                                            // positive value: king is at the left and rook is at the right
+                                            // rook or queen movement infiltration
+                                            for(let k = 1; k < diff_yValue; k++){
+                                                //////// Switch cases for each piece
+                                                switch (defenderPieceName) {
+                                                    case "whitePawn":
+                                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteKnight":
+                                                        foundIdx = whiteKnightPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteKnightPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteBishop":
+                                                        foundIdx = whiteBishopPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteBishopPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteRook":
+                                                        foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteQueen":
+                                                        piece_xAxisValue = parseInt(whiteQueenPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteQueenPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    
+                                                    case "whiteKing":
+                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break; 
+                                                }   /////// end of switch case for defending piece can block the enemy         
+                                            } 
+                                        // king is at the right rook is at the left
+                                        } else if (diff_yValue < 0) {
+                                            // rook or queen movement infiltration
+                                            for(let k = 1; k < Math.abs(diff_yValue); k++){
+                                                /////////////// king is at the right and enemy rook is at the left
+                                                //////// Switch cases for each piece
+                                                switch (defenderPieceName) {
+                                                    case "whitePawn":
+                                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteKnight":
+                                                        foundIdx = whiteKnightPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteKnightPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteBishop":
+                                                        foundIdx = whiteBishopPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteBishopPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteRook":
+                                                        foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteQueen":
+                                                        piece_xAxisValue = parseInt(whiteQueenPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteQueenPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    
+                                                    case "whiteKing":
+                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;      
+                                                } /////// end of switch case for defending piece can block the enemy
+                                            
+                                                /////////////// king is at the right and enemy rook is at the left
+                                                // check diff yvalue is bigger than 0
+                                            } // for loop of movement end
+                                        } // check for left and right rook or queen
+                                    } // everything complete for left and right check
+
+
+                                    // check for up and down
+                                    if(attacker_yAxisValue === king_yAxisValue) {   
+                                        let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                        if (diff_xValue > 0){
+                                            // positive value: king is at the up and rook is at the down
+                                            // rook or queen movement infiltration
+                                            for(let k = 1; k < diff_xValue; k++){
+
+                                                //// if white pawn pieces can defend or block the enemy start
+                                                switch (defenderPieceName) {
+                                                    case "whitePawn":
+                                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteKnight":
+                                                        foundIdx = whiteKnightPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteKnightPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteBishop":
+                                                        foundIdx = whiteBishopPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteBishopPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteRook":
+                                                        foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteQueen":
+                                                        piece_xAxisValue = parseInt(whiteQueenPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteQueenPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    
+                                                    case "whiteKing":
+                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;      
+                                                } /////// end of switch case for defending piece can block the enemy
+                                            }
+                                                //// if white pawn pieces can defend or block the enemy end
+                                        // king is at the bottom rook is at the top
+                                        } else if (diff_xValue < 0) {
+                                            // rook or queen movement infiltration
+                                            for(let k = 1; k < Math.abs(diff_xValue); k++){
+
+                                                // // if white pawn pieces can defend or block the enemy start
+                                                switch (defenderPieceName) {
+                                                    case "whitePawn":
+                                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteKnight":
+                                                        foundIdx = whiteKnightPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteKnightPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteBishop":
+                                                        foundIdx = whiteBishopPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteBishopPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteRook":
+                                                        foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteQueen":
+                                                        piece_xAxisValue = parseInt(whiteQueenPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteQueenPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    
+                                                    case "whiteKing":
+                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;      
+                                                } /////// end of switch case for defending piece can block the enemy
+
+                                            } // for loop of movement end
+                                        } // end of diff_xValue is negative
+
+                                    } // check for up and down rook or queen
+                                } // check for all white rook and white queen
+                                ///////////////////
+
+                                // if the attacker is black bishop or black queen
+                                if (attackerPieceName.includes("blackQueen") || attackerPieceName.includes("blackBishop")){
+                                    let diff_xValue = attacker_xAxisValue - king_xAxisValue;
+                                    let diff_yValue = attacker_yAxisValue - king_yAxisValue;
+
+                                    // it has to be diagonal
+                                    if(Math.abs(diff_xValue) === Math.abs(diff_yValue)) {
+                                        
+                                        // attacker is bottom right, king is top left
+                                        if(diff_xValue > 0 && diff_yValue > 0) {
+                                            for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                                // check if pawn pieces can block the attacker
+                                                switch (defenderPieceName) {
+                                                    case "whitePawn":
+                                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteKnight":
+                                                        foundIdx = whiteKnightPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteKnightPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteBishop":
+                                                        foundIdx = whiteBishopPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteBishopPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteRook":
+                                                        foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteQueen":
+                                                        piece_xAxisValue = parseInt(whiteQueenPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteQueenPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    
+                                                    case "whiteKing":
+                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break; 
+                                                }   /////// end of switch case for defending piece can block the enemy
+
+                                            } // looping done
+                                        } // attacker is bottom right, king is top left end
+
+
+                                        // attacker is bottom left, king is top right
+                                        if(diff_xValue > 0 && diff_yValue < 0) {
+                                            for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                                // check if pawn pieces can block the attacker
+                                                switch (defenderPieceName) {
+                                                    case "whitePawn":
+                                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteKnight":
+                                                        foundIdx = whiteKnightPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKnightPieces[foundIdx].position.substr(whiteKnightPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteKnightPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteBishop":
+                                                        foundIdx = whiteBishopPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteBishopPieces[foundIdx].position.substr(whiteBishopPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteBishopPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteRook":
+                                                        foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
+                                                        piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    case "whiteQueen":
+                                                        piece_xAxisValue = parseInt(whiteQueenPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteQueenPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break;
+                                                    
+                                                    case "whiteKing":
+                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
+                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteQueenPiece[0].position.length -1, 1));
+                                                        possibleMoves = whiteQueenPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+
+                                                        for(let m = 0; m < possibleMoves.length; m++) {
+                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
+                                                                defendingMovements.push(possibleMoves[m]);
+                                                            }
+                                                        }
+
+                                                        break; 
+                                                }   /////// end of switch case for defending piece can block the enemy
+                                            } // looping done
+                                        } // attacker is bottom left, king is top right end
+
+
+                                        // attacker is top right, king is down left
+                                        if(diff_xValue < 0 && diff_yValue > 0) {
+                                            for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                                // check if pawn pieces can block the attacker
+                                                for(let l = 0; l < whitePawnPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white pawn pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+                                                
+                                                // check if knight pieces can block the attacker
+                                                for(let l = 0; l < whiteKnightPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white knight pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                                // check if bishop pieces can block the attacker
+                                                for(let l = 0; l < whiteBishopPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white bishop pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                                // check if rook pieces can block the attacker
+                                                for(let l = 0; l < whiteRookPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white rook pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                                // check if queen piece can block the attacker
+                                                for(let l = 0; l < whiteQueenPiece.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                                    let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white queen piece can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                            } // looping done
+                                        } // attacker is top right, king is bottom left end
+
+                                        // attacker is top right, king is bottom right start
+                                        if(diff_xValue < 0 && diff_yValue < 0) {
+                                            for (let k = 1; k < Math.abs(diff_xValue); k++) {
+
+                                                // check if pawn pieces can block the attacker
+                                                for(let l = 0; l < whitePawnPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white pawn pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+                                                
+                                                // check if knight pieces can block the attacker
+                                                for(let l = 0; l < whiteKnightPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteKnightPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteKnightPieces[l].position.substr(whiteKnightPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whiteKnightPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white knight pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                                // check if bishop pieces can block the attacker
+                                                for(let l = 0; l < whiteBishopPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteBishopPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteBishopPieces[l].position.substr(whiteBishopPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whiteBishopPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white knight pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                                // check if rook pieces can block the attacker
+                                                for(let l = 0; l < whiteRookPieces.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
+                                                    let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white rook pieces can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                                // check if queen piece can block the attacker
+                                                for(let l = 0; l < whiteQueenPiece.length; l++){
+                                                    let piece_xAxisValue = parseInt(whiteQueenPiece[l].position.substr(6, 1));
+                                                    let piece_yAxisValue = parseInt(whiteQueenPiece[l].position.substr(whiteQueenPiece[l].position.length -1, 1));
+                                                    let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+
+                                                    for(let m = 0; m < possibleMoves.length; m++) {
+                                                        if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
+                                                            isCheckMate = false;
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    if (isCheckMate === false) {
+                                                        break;
+                                                    }
+
+                                                } // if white queen piece can defend or block the enemy end
+
+                                                if (isCheckMate === false) {
+                                                    break;
+                                                } 
+
+                                            } // looping done
+                                        } // attacker is top right, king is bottom right end
+                                    }
+                                } // checked if it is all black queen and black bishop
+                                ////////////////////// other pieces blocking calculation done
+
+                            }
+
                     } // enf of switch case movements
+
+                    return defendingMovements;
 
 
                 } // end of defendingMoves function
