@@ -7249,19 +7249,11 @@
                         possibleMoves = possibleMove(selectedPiece, prevCoordinate, `${coordinateValue}`);
 
                         if (possibleMoves.length > 0) {
-                            for(let o = 0; o < possibleMoves.length; o++) {
-
-                                
-                            }
-                            possibleMoves.some((possibleMovement) => {
-                                // if it is checked
-                                if (isCheckBlack || isCheckWhite) {
-                                    // if it is checked
-                                    defendTheKingMessage = false;
+                            // check if it is checked situation
+                            if (isCheckBlack || isCheckWhite) {
+                                defendTheKingMessage = false;
                                     for(let n = 0; n < defendingMoves.length; n++) {
                                         if(defendingMoves[n] === `${coordinateValue}`) {
-
-
                                             // pawn check
                                             if (selectedPiece.getAttribute('alt').includes("Pawn")){
                                                 pawnMatch = true;
@@ -7304,64 +7296,56 @@
                                                     turn = "white";
                                                     break;
                                             } // end of switch case statement
-                                            return true;
-                                        } else {// end of if it matches possible movements
-                                            return false;
-                                        }
+                                            break;
+                                        } // end of if it matches possible movements
                                     } // for each defending moves
 
-                                    
+                            } else {
+                                // not checked
+                                defendTheKingMessage = true;
 
-                                } else {
-                                    defendTheKingMessage = true;
-                                    // it is not checked
-                                    if(possibleMovement === `${coordinateValue}`) {
-                                        coordinate.appendChild(selectedPiece);
-                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+                                for(let o = 0; o < possibleMoves.length; o++) {
+                                    if(possibleMoves[o] === `${coordinateValue}`) {
+                                            coordinate.appendChild(selectedPiece);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
 
-                                        // pawn check
-                                        if (selectedPiece.getAttribute('alt').includes("Pawn")){
-                                            pawnMatch = true;
-                                        }
+                                            // pawn check
+                                            if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                                pawnMatch = true;
+                                            }
 
-                                        switch (turn) {
-                                            case "white":
-                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                attackerPiece = selectedPiece;
-                                                attackerCoordination = `${coordinateValue}`;
-                                                if (isCheckBlack) {
-                                                    checkedWord = document.querySelector('h1');
-                                                    checkedWord.style.opacity = 1;
-                                                }
-                                                
-                                                turn = "black";
-                                                break;
-                                            case "black":
-                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                attackerPiece = selectedPiece;
-                                                attackerCoordination = `${coordinateValue}`;
-                                                if (isCheckWhite) {
-                                                    checkedWord = document.querySelector('h1');
-                                                    checkedWord.style.opacity = 1;
-                                                }
-                                                
-                                                turn = "white";
-                                                break;
-                                        } // end of switch case statement
-                                        return true;
-                                    } else {// end of if it matches possible movements
-                                        return false;
-                                    }
-                                }
-
-                                // if it matches with coordinate movement
+                                            switch (turn) {
+                                                case "white":
+                                                    isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckBlack) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    
+                                                    turn = "black";
+                                                    break;
+                                                case "black":
+                                                    isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckWhite) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    
+                                                    turn = "white";
+                                                    break;
+                                            } // end of switch case statement
+                                            break;
+                                        } // end of if it matches possible movements
+                                            
+                                        
                                 
-                            }); // possible moves for each statement
+                                } // for loop for the possible moves length not checked
 
-
-
-
-
+                           } /////// if else isCheckBlack isCheckWhite finished
                             
                         }
 
@@ -7386,13 +7370,12 @@
                             eatingPossibilities = eatingPossibility(selectedPiece, prevCoordinate, `${coordinateValue}`);
 
                             if (eatingPossibilities.length > 0) {
-                                eatingPossibilities.some((eatingpossibleMovement) => {
 
-                                    if (isCheckBlack || isCheckWhite) {
-                                        // if you are in a defending position and you have to eat the enemy
-                                        defendTheKingMessage = false
+                                if (isCheckBlack || isCheckWhite) {
+                                     // if you are in a defending position and you have to eat the enemy
+                                    for(let p = 0; p < eatingPossibilities.length; p++) {
                                         for(let n = 0; n < defendingMoves.length; n++) {
-                                            if(eatingpossibleMovement === defendingMoves[n]) {
+                                            if(eatingPossibilities[p] === defendingMoves[n]) {
                                                 defendTheKingMessage = true;
                                                 eatenPiece = coordinate.innerHTML;
                                                 coordinate.innerHTML = "";
@@ -7437,67 +7420,59 @@
                                                         break;
                                                 } // end of switch case statement
                                                 selectedPiece = null;
-                                                return true;
+                                                break;
 
-                                            } else {// end of if it matches possible movements
-                                                return false;
-                                            }
-                                        }
-                                        
-                                        
+                                            } // end of if it matches possible movements       
+                                        } // for loop for defending moves length
 
-                                    } else {
-                                        // you are not in a dangerous situation
-                                        defendTheKingMessage = true;
-                                        if(eatingpossibleMovement === `${coordinateValue}`) {
-                                            eatenPiece = coordinate.innerHTML;
-                                            coordinate.innerHTML = "";
-                                            coordinate.appendChild(selectedPiece);
-                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
+                                    } // for loop for eating possibilities length
+                                } else {
+                                    // you are not in a dangerous situation
+                                    defendTheKingMessage = true;
+                                    for (let q = 0; q < eatingPossibilities.length; q++) {
+                                        if(eatingPossibilities[q] === `${coordinateValue}`) {
+                                                eatenPiece = coordinate.innerHTML;
+                                                coordinate.innerHTML = "";
+                                                coordinate.appendChild(selectedPiece);
+                                                updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
 
-                                            // pawn check
-                                            if (selectedPiece.getAttribute('alt').includes("Pawn")){
-                                                pawnMatch = true;
-                                            }
+                                                // pawn check
+                                                if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                                    pawnMatch = true;
+                                                }
 
-                                            switch (turn) {
-                                                case "white":
-                                                    isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                    attackerPiece = selectedPiece;
-                                                    attackerCoordination = `${coordinateValue}`;
-                                                    if (isCheckBlack) {
-                                                        checkedWord = document.querySelector('h1');
-                                                        checkedWord.style.opacity = 1;
-                                                    }
-                                                    turn = "black";
-                                                    
-                                                    break;
-                                                case "black":
-                                                    isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                    attackerPiece = selectedPiece;
-                                                    attackerCoordination = `${coordinateValue}`;
-                                                    if (isCheckWhite) {
-                                                        checkedWord = document.querySelector('h1');
-                                                        checkedWord.style.opacity = 1;
-                                                    }
-                                                    turn = "white";
-                                                    
-                                                    break;
-                                            } // end of switch case statement
-                                            selectedPiece = null;
-                                            return true;
+                                                switch (turn) {
+                                                    case "white":
+                                                        isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                        attackerPiece = selectedPiece;
+                                                        attackerCoordination = `${coordinateValue}`;
+                                                        if (isCheckBlack) {
+                                                            checkedWord = document.querySelector('h1');
+                                                            checkedWord.style.opacity = 1;
+                                                        }
+                                                        turn = "black";
+                                                        
+                                                        break;
+                                                    case "black":
+                                                        isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                        attackerPiece = selectedPiece;
+                                                        attackerCoordination = `${coordinateValue}`;
+                                                        if (isCheckWhite) {
+                                                            checkedWord = document.querySelector('h1');
+                                                            checkedWord.style.opacity = 1;
+                                                        }
+                                                        turn = "white";
+                                                        
+                                                        break;
+                                                } // end of switch case statement
+                                                selectedPiece = null;
+                                                break;
 
-                                        } else {// end of if it matches possible movements
-                                            return false;
-                                        }
-                                    }   // end of is in defending or not defending situation 
+                                        } // end of if it matches possible movements
 
-                                    // if it matches with coordinate movement
-                                        
-                                }); // possible moves for each statement
-
-
-
+                                    } // eating possibilities length       
+                                    
+                                }
                             }
                         } else {// if you are trying to eat something end
                             if (selectedPiece.getAttribute('alt').includes("Pawn")){
@@ -7506,6 +7481,8 @@
                         }
    
                     }
+
+                    selectedPiece = null;
 
                     if (!defendTheKingMessage){
                         let pieceName = tempSelectedPiece.getAttribute('alt');
