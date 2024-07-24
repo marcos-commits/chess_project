@@ -1254,6 +1254,9 @@
                                             } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1269,6 +1272,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1315,6 +1321,9 @@
                                             } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1330,6 +1339,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1376,6 +1388,9 @@
                                             } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1391,6 +1406,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1437,6 +1455,9 @@
                                             } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1452,6 +1473,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1504,6 +1528,9 @@
                                             } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
 
                                         } 
@@ -1520,6 +1547,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1570,6 +1600,9 @@
                                             } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1585,6 +1618,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1638,6 +1674,9 @@
                                             } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1653,6 +1692,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -1706,6 +1748,9 @@
                                             } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                 needsBreak = true;
                                                 isDangerous = false;
+                                            } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
                                             }
                                         } 
                                         break;
@@ -1721,6 +1766,9 @@
                                                 needsBreak = true;
                                                 isDangerous = true;
                                             } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                 needsBreak = true;
                                                 isDangerous = false;
                                             }
@@ -4517,6 +4565,9 @@
                                                         } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4530,6 +4581,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4574,6 +4628,9 @@
                                                         } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4587,6 +4644,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4631,6 +4691,9 @@
                                                         } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4644,6 +4707,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4688,6 +4754,9 @@
                                                         } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4701,6 +4770,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4745,10 +4817,12 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if (((leftDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((leftDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
-                                                            gettingEatenMovements.push(true);
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4765,6 +4839,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4812,6 +4889,9 @@
                                                         } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4825,6 +4905,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4875,6 +4958,9 @@
                                                         } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4888,6 +4974,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -4938,6 +5027,9 @@
                                                         } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
                                                             needsBreak = true;
                                                             isDangerous = false;
+                                                        } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                            needsBreak = true;
+                                                            isDangerous = false;
                                                         }
                                                     } 
                                                     break;
@@ -4951,6 +5043,9 @@
                                                             needsBreak = true;
                                                             isDangerous = true;
                                                         } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                            needsBreak = true;
+                                                            isDangerous = false;
+                                                        } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
                                                             needsBreak = true;
                                                             isDangerous = false;
                                                         }
@@ -5238,18 +5333,7 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
+                                                    
                                                 }   /////// end of switch case for defending piece can block the enemy         
                                             } 
                                         // king is at the right rook is at the left
@@ -5324,18 +5408,7 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break;      
+                                                         
                                                 } /////// end of switch case for defending piece can block the enemy
                                             
                                                 /////////////// king is at the right and enemy rook is at the left
@@ -5420,18 +5493,7 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break;      
+                                                         
                                                 } /////// end of switch case for defending piece can block the enemy
                                             }
                                                 //// if white pawn pieces can defend or block the enemy end
@@ -5507,18 +5569,7 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break;      
+                                                         
                                                 } /////// end of switch case for defending piece can block the enemy
 
                                             } // for loop of movement end
@@ -5607,18 +5658,6 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
                                                 }   /////// end of switch case for defending piece can block the enemy
 
                                             } // looping done
@@ -5696,18 +5735,6 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
                                                 }   /////// end of switch case for defending piece can block the enemy
                                             } // looping done
                                         } // attacker is bottom left, king is top right end
@@ -5784,18 +5811,6 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
                                                 }   /////// end of switch case for defending piece can block the enemy
                                             } // looping done
                                         } // attacker is top right, king is bottom left end
@@ -5872,18 +5887,6 @@
 
                                                         break;
                                                     
-                                                    case "whiteKing":
-                                                        piece_xAxisValue = parseInt(whiteKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(whiteKingPiece[0].position.substr(whiteKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = whiteKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
                                                 }   /////// end of switch case for defending piece can block the enemy
 
                                             } // looping done
@@ -5969,18 +5972,7 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
+                                                
                                                 }   /////// end of switch case for defending piece can block the enemy         
                                             } 
                                         // king is at the right rook is at the left
@@ -6055,18 +6047,7 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break;      
+                                                         
                                                 } /////// end of switch case for defending piece can block the enemy
                                             
                                                 /////////////// king is at the right and enemy rook is at the left
@@ -6151,18 +6132,7 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackeKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break;      
+                                                         
                                                 } /////// end of switch case for defending piece can block the enemy
                                             }
                                                 //// if white pawn pieces can defend or block the enemy end
@@ -6238,18 +6208,7 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break;      
+                                                          
                                                 } /////// end of switch case for defending piece can block the enemy
 
                                             } // for loop of movement end
@@ -6338,18 +6297,6 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
                                                 }   /////// end of switch case for defending piece can block the enemy
 
                                             } // looping done
@@ -6426,19 +6373,7 @@
                                                         }
 
                                                         break;
-                                                    
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackQueenPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
+                                
                                                 }   /////// end of switch case for defending piece can block the enemy
                                             } // looping done
                                         } // attacker is bottom left, king is top right end
@@ -6515,18 +6450,6 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
                                                 }   /////// end of switch case for defending piece can block the enemy
                                             } // looping done
                                         } // attacker is top right, king is bottom left end
@@ -6603,18 +6526,7 @@
 
                                                         break;
                                                     
-                                                    case "blackKing":
-                                                        piece_xAxisValue = parseInt(blackKingPiece[0].position.substr(6, 1));
-                                                        piece_yAxisValue = parseInt(blackKingPiece[0].position.substr(blackKingPiece[0].position.length -1, 1));
-                                                        possibleMoves = blackKingPiece[0].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
-
-                                                        for(let m = 0; m < possibleMoves.length; m++) {
-                                                            if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
-                                                                defendingMovements.push(possibleMoves[m]);
-                                                            }
-                                                        }
-
-                                                        break; 
+                                                    
                                                 }   /////// end of switch case for defending piece can block the enemy
 
                                             } // looping done
@@ -6955,7 +6867,7 @@
                                         break;
                                     case "bishop":
                                         var blackBishop = new Bishop(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
-                                        blackBishop.push(blackBishop);
+                                        blackBishopPieces.push(blackBishop);
                                         blackBishopPieces.splice(foundIdx, 1);
                                         newCoordinatePiece.innerHTML = "";
                                         newCoordinatePiece.innerHTML = `<img src="./img/blackBishop.png" alt="blackBishop">`;
@@ -7306,6 +7218,8 @@
 
                                 for(let o = 0; o < possibleMoves.length; o++) {
                                     if(possibleMoves[o] === `${coordinateValue}`) {
+                                            // 
+
                                             coordinate.appendChild(selectedPiece);
                                             updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
 
@@ -7358,9 +7272,18 @@
 
                         if (isCheckBlack) {
                             // Black is checked so you have to block the attacker by moving, or King has to evade
-                            defendingMoves = blackKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "eat");
+                            if (selectedPiece.getAttribute('alt').includes("King")) {
+                                defendingMoves = blackKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "block");
+                            } else {
+                                defendingMoves = blackKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "eat");
+                            }
+                            
                         } else if (isCheckWhite) {
-                            defendingMoves = whiteKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "eat");
+                            if (selectedPiece.getAttribute('alt').includes("King")) {
+                                defendingMoves = whiteKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "block");
+                            } else {
+                                defendingMoves = whiteKingPiece[0].defendingMoves(selectedPiece, prevCoordinate, attackerPiece, attackerCoordination, "eat");
+                            }
                         } else {
                             defendTheKingMessage = true;
                         }
