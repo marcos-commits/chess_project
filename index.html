@@ -2503,7 +2503,7 @@
                                             let possibleMoves = blackQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -3509,7 +3509,7 @@
                                             let possibleMoves = whiteQueenPiece[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
-                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
+                                                if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
                                                     isCheckMate = false;
                                                     break;
                                                 }
@@ -6543,6 +6543,742 @@
 
 
                 } // end of defendingMoves function
+
+
+                // isInDanger function
+                isInDanger() {
+
+                    let kingPossibleMovement = [];
+                    let defendingMovements = [];
+                    let xAxisValue = parseInt(this.position.substr(6, 1));
+                    let yAxisValue = parseInt(this.position.substr(this.position.length - 1, 1));
+                    let kingIsInDanger = false;
+
+                    kingPossibleMovement.push(`cell_${xAxisValue}_${yAxisValue}`);
+
+                    /////////////////////// check king's movements
+                    // Each king Movement
+                    for(let i = 0; i < kingPossibleMovement.length; i++){
+                        let eachMovement_xAxisValue = xAxisValue;
+                        let eachMovement_yAxisValue = yAxisValue;
+                        let isDangerous = false;
+                        let needsBreak = false;
+
+                        // check left start rook queen
+                        if(eachMovement_yAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
+                                // if y axis value is one, then don't check left
+                                let leftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                
+                                switch(i) {
+                                    case eachMovement_yAxisValue - 1:
+                                        if (leftPiece.querySelector("img")) {
+                                            let leftImagePiece = leftPiece.querySelector("img");
+                                            if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {  
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (leftPiece.querySelector("img")) {
+                                            let leftImagePiece = leftPiece.querySelector("img");
+                                            if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                                    
+                            } // end of inner for each statement left side
+                        } // check left finished
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check right rook and queen
+                        if(eachMovement_yAxisValue == 8) {
+                            
+                        } else {
+                            for(let i = eachMovement_yAxisValue + 1; i <= 8; i++) {
+                                let rightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                
+                                switch(i) {
+                                    case eachMovement_yAxisValue + 1:
+                                        if (rightPiece.querySelector("img")) {
+                                            let rightImagePiece = rightPiece.querySelector("img");
+                                            if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (rightPiece.querySelector("img")) {
+                                            let rightImagePiece = rightPiece.querySelector("img");
+                                            if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of inner for each statement
+                        } // End of checking right side statement
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check up rook and queen
+                        if(eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = eachMovement_xAxisValue - 1; i >= 1; i--) {
+                                let upPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                
+                                switch(i) {
+                                    case eachMovement_xAxisValue - 1:
+                                        if (upPiece.querySelector("img")) {
+                                            let upImagePiece = upPiece.querySelector("img");
+                                            if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen") || upImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen") || upImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upPiece.querySelector("img")) {
+                                            let upImagePiece = upPiece.querySelector("img");
+                                            if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of for each statement
+                        } // End of checking up side statement
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check down side statement queen and rook
+                        if(eachMovement_xAxisValue == 8) {
+                            
+                        } else {
+                            for(let i = eachMovement_xAxisValue + 1; i <= 8; i++) {
+                                let downPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                
+                                switch(i) {
+                                    case eachMovement_xAxisValue + 1:
+                                        if (downPiece.querySelector("img")) {
+                                            let downImagePiece = downPiece.querySelector("img");
+                                            if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen") || downImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen") || downImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (downPiece.querySelector("img")) {
+                                            let downImagePiece = downPiece.querySelector("img");
+                                            if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking down side statement
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // Checking diagonally left down
+                        if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 8) {
+                        
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue-i < 1) {
+                                    break;
+                                }
+                                let leftDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue-i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (leftDownPiece.querySelector("img")) {
+                                            let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                            if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen") || leftDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen") || leftDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((leftDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((leftDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+
+                                        } 
+                                        break;
+                                    default:
+                                        if (leftDownPiece.querySelector("img")) {
+                                            let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                            if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        break;
+                                } // end of switch case
+                                if (needsBreak) {
+                                    break;
+                                }    
+                            } // diagonal left down for each statement
+                        } // diagonal left down finished
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // checking diagonally right down
+                        if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 8) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue+i > 8) {
+                                    break;
+                                }
+
+                                let rightDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue+i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (rightDownPiece.querySelector("img")) {
+                                            let rightDownImagePiece = rightDownPiece.querySelector("img");
+                                            if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen") || rightDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen") || rightDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((rightDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((rightDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (rightDownPiece.querySelector("img")) {
+                                            let rightDownImagePiece = rightDownPiece.querySelector("img");
+                                            if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally right down side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+
+                        // diagonal up left checking
+                        if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue-i < 1) {
+                                    break;
+                                }
+
+                                let upLeftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue-i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (upLeftPiece.querySelector("img")) {
+                                            let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen") || upLeftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen") || upLeftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((upLeftImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upLeftImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upLeftPiece.querySelector("img")) {
+                                            let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of for each statement
+                        } // End of checking diagonally up left side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check diagonally up right
+                        if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue+i > 8) {
+                                    break;
+                                }
+
+                                let upRightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue+i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (upRightPiece.querySelector("img")) {
+                                            let upRightImagePiece = upRightPiece.querySelector("img");
+                                            if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen") || upRightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen") || upRightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((upRightImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upRightImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upRightPiece.querySelector("img")) {
+                                            let upRightImagePiece = upRightPiece.querySelector("img");
+                                            if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally up left side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // Check left side if enemy Knight is there
+                        if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue-2 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue-2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue-1 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue-1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue-2 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue-2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue-1 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue-1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check right if knight is there
+                        if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue+2 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue+2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+
+                        if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue+1 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue+1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue+2 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue+2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = false;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = false;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue+1 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue+1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+                        
+                        // last element
+                        if (isDangerous) {
+                            continue;
+                        } else {
+                            defendingMovements.push(`.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`);
+                        }
+                    
+
+                    } // End of outer for each statement for king movements
+                    /////////////////////// check king's movements end
+
+                    if (defendingMovements.length > 0) {
+                        kingIsInDanger = false;
+                        return kingIsInDanger;
+                    } else {
+                        kingIsInDanger = true;
+                        return kingIsInDanger;
+                    }
+
+                } // IsInDanger function finished
                 
 
             } // end of king class
@@ -6834,7 +7570,7 @@
                                     case "queen":
                                         var whiteQueen = new Queen(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
                                         whiteQueenPiece.push(whiteQueen);
-                                        whitePawnPiece.splice(foundIdx, 1);
+                                        whitePawnPieces.splice(foundIdx, 1);
                                         newCoordinatePiece.innerHTML = "";
                                         newCoordinatePiece.innerHTML = `<img src="./img/whiteQueen.png" alt="whiteQueen">`;
                                         break;
@@ -7013,6 +7749,8 @@
             let attackerCoordination;
             let defendTheKingMessage;
             let pawnMatch = false;
+            let kingInDanger = false;
+            let prevCoordinateDIV;
             // Variables End
 
             turn = "white";
@@ -7218,11 +7956,30 @@
 
                                 for(let o = 0; o < possibleMoves.length; o++) {
                                     if(possibleMoves[o] === `${coordinateValue}`) {
-                                            // 
+                                        coordinate.appendChild(selectedPiece);
+                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
 
-                                            coordinate.appendChild(selectedPiece);
-                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+                                        // Check whether if the king is in danger
+                                        if (turn === "white") {
+                                            kingInDanger = whiteKingPiece[0].isInDanger();
+                                        } else {
+                                            kingInDanger = blackKingPiece[0].isInDanger();
+                                        }
+                                        
+                                        // if king is in danger don't move
+                                        if (kingInDanger) {
+                                            // reverse the update
+                                            prevCoordinateDIV.appendChild(selectedPiece);
+                                            updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, false, "", blackUp);
+                                            coordinate.innerHTML = "";
+                                            defendTheKingMessage = false;
 
+                                            // pawn check
+                                            if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                                pawnMatch = false;
+                                            }
+
+                                        } else {
                                             // pawn check
                                             if (selectedPiece.getAttribute('alt').includes("Pawn")){
                                                 pawnMatch = true;
@@ -7252,8 +8009,11 @@
                                                     turn = "white";
                                                     break;
                                             } // end of switch case statement
-                                            break;
-                                        } // end of if it matches possible movements
+                                        }
+
+                                        
+                                        break;
+                                    } // end of if it matches possible movements
                                             
                                         
                                 
@@ -7354,11 +8114,29 @@
                                     defendTheKingMessage = true;
                                     for (let q = 0; q < eatingPossibilities.length; q++) {
                                         if(eatingPossibilities[q] === `${coordinateValue}`) {
-                                                eatenPiece = coordinate.innerHTML;
-                                                coordinate.innerHTML = "";
-                                                coordinate.appendChild(selectedPiece);
-                                                updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
+                                            eatenPiece = coordinate.innerHTML;
+                                            coordinate.innerHTML = "";
+                                            coordinate.appendChild(selectedPiece);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
 
+                                            if (turn === "white") {
+                                                kingInDanger = whiteKingPiece[0].isInDanger();
+                                            } else {
+                                                kingInDanger = blackKingPiece[0].isInDanger();
+                                            }
+
+                                            if (kingInDanger) {
+                                                // king is in danger, reverse the update
+                                                coordinate.innerHTML = eatenPiece;
+                                                prevCoordinateDIV.appendChild(selectedPiece);
+                                                updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, true, otherPiece, blackUp);
+                                                // pawn check
+                                                if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                                    pawnMatch = false;
+                                                }
+
+                                                defendTheKingMessage = false;
+                                            } else {
                                                 // pawn check
                                                 if (selectedPiece.getAttribute('alt').includes("Pawn")){
                                                     pawnMatch = true;
@@ -7390,6 +8168,9 @@
                                                 } // end of switch case statement
                                                 selectedPiece = null;
                                                 break;
+                                            }
+
+                                                
 
                                         } // end of if it matches possible movements
 
@@ -7467,6 +8248,7 @@
                     // pawnMatch and defendTheKingMessage default
                     pawnMatch = false;
                     defendTheKingMessage = false;
+                    kingInDanger = false;
 
 
                 } else {
@@ -7479,6 +8261,7 @@
                             selectedPiece = null;
                         } else {
                             prevCoordinate = `${coordinateValue}`;
+                            prevCoordinateDIV = coordinate;
                         }
                         
                     } // inner if image if statement
