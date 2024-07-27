@@ -2415,7 +2415,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -2537,7 +2537,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -2665,7 +2665,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -2787,7 +2787,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -2923,7 +2923,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -3046,7 +3046,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -3169,7 +3169,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -3291,7 +3291,7 @@
                                         for(let l = 0; l < blackPawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackPawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackPawnPieces[l].position.substr(blackPawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = blackPawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -3421,7 +3421,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -3543,7 +3543,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -3671,7 +3671,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -3793,7 +3793,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -3928,7 +3928,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -4051,7 +4051,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -4174,7 +4174,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -4296,7 +4296,7 @@
                                         for(let l = 0; l < whitePawnPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whitePawnPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whitePawnPieces[l].position.substr(whitePawnPieces[l].position.length -1, 1));
-                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                            let possibleMoves = whitePawnPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -5401,7 +5401,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue-k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -5476,7 +5476,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue+k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -5561,7 +5561,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -5637,7 +5637,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -5726,7 +5726,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -5803,7 +5803,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -5879,7 +5879,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -5955,7 +5955,7 @@
                                                         foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = whitePawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -6040,7 +6040,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue-k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -6115,7 +6115,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue, attacker_yAxisValue+k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -6200,7 +6200,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -6276,7 +6276,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -6365,7 +6365,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue-k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -6442,7 +6442,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue-k, attacker_yAxisValue+k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -6518,7 +6518,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue-k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -6594,7 +6594,7 @@
                                                         foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackPawnPieces[foundIdx].position.substr(blackPawnPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
+                                                        possibleMoves = blackPawnPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true, attacker_xAxisValue+k, attacker_yAxisValue+k);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -8166,34 +8166,40 @@
 
                                                 foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue}`});
 
-                                                // white Pawn is in downward position
-                                                if (whitePawnPieces[foundIdx].blackUp && (updated_xAxisValue === 3) && (updated_yAxisValue !== previous_yAxisValue)) {
-                                                    // white is in down position
-                                                    downardPiece = document.querySelector(`.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`);
-                                                    if (downardPiece.querySelector("img")) {
-                                                        downardImagePiece = downardPiece.querySelector("img");
-                                                        if(downardImagePiece.getAttribute('alt').includes("blackPawn")) {
-                                                            foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`});
-                                                            blackPawnPieces.splice(foundIdx, 1);
-                                                            downardPiece.innerHTML = "";
-                                                        } // if down image contains blackPawn
-                                                    } // if downward piece has a piece
-                                                } // if white pawn pieces is in downard position
+                                                switch (foundIdx) {
+                                                    case -1:
+                                                        // pawn is promoted
+                                                        break;
+                                                    default:
+                                                        // white Pawn is in downward position
+                                                        if (whitePawnPieces[foundIdx].blackUp && (updated_xAxisValue === 3) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                            // white is in down position
+                                                            downardPiece = document.querySelector(`.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`);
+                                                            if (downardPiece.querySelector("img")) {
+                                                                downardImagePiece = downardPiece.querySelector("img");
+                                                                if(downardImagePiece.getAttribute('alt').includes("blackPawn")) {
+                                                                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`});
+                                                                    blackPawnPieces.splice(foundIdx, 1);
+                                                                    downardPiece.innerHTML = "";
+                                                                } // if down image contains blackPawn
+                                                            } // if downward piece has a piece
+                                                        } // if white pawn pieces is in downard position
 
-                                                // white Pawn is in upward position
-                                                if ((!whitePawnPieces[foundIdx].blackUp) && (updated_xAxisValue === 6) && (updated_yAxisValue !== previous_yAxisValue)) {
-                                                    // white is in down position
-                                                    upperPiece = document.querySelector(`.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`);
-                                                    if (upperPiece.querySelector("img")) {
-                                                        upperImagePiece = upperPiece.querySelector("img");
-                                                        if(upperImagePiece.getAttribute('alt').includes("blackPawn")) {
-                                                            foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`});
-                                                            blackPawnPieces.splice(foundIdx, 1);
-                                                            upperPiece.innerHTML = "";
-                                                        } // if up image contains blackPawn
-                                                    } // if upward piece has a piece
-                                                } // if white pawn pieces is in upward position
-
+                                                        // white Pawn is in upward position
+                                                        if ((!whitePawnPieces[foundIdx].blackUp) && (updated_xAxisValue === 6) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                            // white is in down position
+                                                            upperPiece = document.querySelector(`.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`);
+                                                            if (upperPiece.querySelector("img")) {
+                                                                upperImagePiece = upperPiece.querySelector("img");
+                                                                if(upperImagePiece.getAttribute('alt').includes("blackPawn")) {
+                                                                    foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`});
+                                                                    blackPawnPieces.splice(foundIdx, 1);
+                                                                    upperPiece.innerHTML = "";
+                                                                } // if up image contains blackPawn
+                                                            } // if upward piece has a piece
+                                                        } // if white pawn pieces is in upward position
+                                                        break;
+                                                } // end of switch case
 
                                             } // if selected piece is white pawn
 
@@ -8211,34 +8217,43 @@
 
                                                 foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue}`});
 
-                                                // black Pawn is in upper position
-                                                if (blackPawnPieces[foundIdx].blackUp && (updated_xAxisValue === 6) && (updated_yAxisValue !== previous_yAxisValue)) {
-                                                    // white is in down position
-                                                    upperPiece = document.querySelector(`.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`);
-                                                    if (upperPiece.querySelector("img")) {
-                                                        upperImagePiece = upperPiece.querySelector("img");
-                                                        if(upperImagePiece.getAttribute('alt').includes("whitePawn")) {
-                                                            foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`});
-                                                            whitePawnPieces.splice(foundIdx, 1);
-                                                            upperPiece.innerHTML = "";
-                                                        } // if down image contains whitekPawn
-                                                    } // if downward piece has a piece
-                                                } // if black pawn pieces is in downard position
+                                                switch (foundIdx) {
+                                                    case -1:
+                                                        // pawn is promoted
+                                                        break;
+                                                    default:
+                                                        // black Pawn is in upper position
+                                                        if (blackPawnPieces[foundIdx].blackUp && (updated_xAxisValue === 6) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                            // white is in down position
+                                                            upperPiece = document.querySelector(`.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`);
+                                                            if (upperPiece.querySelector("img")) {
+                                                                upperImagePiece = upperPiece.querySelector("img");
+                                                                if(upperImagePiece.getAttribute('alt').includes("whitePawn")) {
+                                                                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`});
+                                                                    whitePawnPieces.splice(foundIdx, 1);
+                                                                    upperPiece.innerHTML = "";
+                                                                } // if down image contains whitekPawn
+                                                            } // if downward piece has a piece
+                                                        } // if black pawn pieces is in downard position
 
-                                                // black Pawn is in downward position
-                                                if ((!blackPawnPieces[foundIdx].blackUp) && (updated_xAxisValue === 3) && (updated_yAxisValue !== previous_yAxisValue)) {
-                                                    // white is in down position
-                                                    downardPiece = document.querySelector(`.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`);
-                                                    if (downardPiece.querySelector("img")) {
-                                                        downardImagePiece = downardPiece.querySelector("img");
-                                                        if(downardImagePiece.getAttribute('alt').includes("whitePawn")) {
-                                                            foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`});
-                                                            whitePawnPieces.splice(foundIdx, 1);
-                                                            downardPiece.innerHTML = "";
-                                                        } // if up image contains blackPawn
-                                                    } // if upward piece has a piece
-                                                } // if white pawn pieces is in upward position
-                                            } // if selected piece is black pawn
+                                                        // black Pawn is in downward position
+                                                        if ((!blackPawnPieces[foundIdx].blackUp) && (updated_xAxisValue === 3) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                            // white is in down position
+                                                            downardPiece = document.querySelector(`.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`);
+                                                            if (downardPiece.querySelector("img")) {
+                                                                downardImagePiece = downardPiece.querySelector("img");
+                                                                if(downardImagePiece.getAttribute('alt').includes("whitePawn")) {
+                                                                    foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`});
+                                                                    whitePawnPieces.splice(foundIdx, 1);
+                                                                    downardPiece.innerHTML = "";
+                                                                } // if up image contains blackPawn
+                                                            } // if upward piece has a piece
+                                                        } // if white pawn pieces is in upward position
+                                                        break;
+                                                } // end of switch case
+
+                                                    
+                                                } // if selected piece is black pawn
 
 
 
