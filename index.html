@@ -55,11 +55,17 @@
                     this.blackUp = blackUp;
                     this.color = color;
                     this.numberOfMoves = 0;
+                    this.enPassant = true;
                 }
 
                 
-                possibleMove(xAxisValue, yAxisValue, prediction) {
+                possibleMove(xAxisValue, yAxisValue, prediction, newxAxisValue, newyAxisValue) {
                     let possibleMovements = [];
+                    let leftPiece;
+                    let rightPiece;
+                    let leftImagePiece;
+                    let rightImagePiece;
+                    let foundIdx;
 
                     if (this.firstMove === true && this.numberOfMoves === 0) {
                         // prediction is not real movement of pawn
@@ -84,12 +90,135 @@
                     } else {
                         if ((this.blackUp && this.color === "black") || (!this.blackUp && this.color === "white")) {
                             if (parseInt(yAxisValue) <= 8) {
+                                
+                                // if the current xAxisValue equals 5
+                                if (parseInt(xAxisValue) === 5) {
+                                    // check if there is left piece
+                                    if (parseInt(yAxisValue) > 1) {
+                                        leftPiece = document.querySelector(`.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)-1}`);
+                                        if (leftPiece.querySelector("img")) {
+                                            leftImagePiece = leftPiece.querySelector("img");
+                                        }
+                                    }
+
+                                    // check if there is right piece
+                                    if (parseInt(yAxisValue) < 8) {
+                                        rightPiece = document.querySelector(`.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)+1}`);
+                                        if (rightPiece.querySelector("img")) {
+                                            rightImagePiece = rightPiece.querySelector("img");    
+                                        }
+                                    }
+
+                                    // check left image
+                                    if (leftImagePiece !== undefined && leftImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") {
+                                        foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)-1}`});
+                                        if (blackPawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    } else if (leftImagePiece !== undefined && leftImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") {
+                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)-1}`});
+                                        if (whitePawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    }
+
+                                    // check right image
+                                    if (rightImagePiece !== undefined && rightImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") {
+                                        foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)+1}`});
+                                        if (blackPawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    } else if (rightImagePiece !== undefined && rightImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") {
+                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)+1}`});
+                                        if (whitePawnPieces[foundIdx].numberOfMoves == 1) {
+                                            possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                            this.enPassant = false;
+                                        }
+                                    }
+
+
+                                } // it has to be the fifth row
+
                                 possibleMovements.push(`.cell_${parseInt(xAxisValue) + 1}_${yAxisValue}`);
                             }
                         }
 
                         if ((!this.blackUp && this.color === "black") || (this.blackUp && this.color === "white")) {
                             if (parseInt(yAxisValue) >= 1) {
+                                // if the current yAxisValue equals 4
+                                if (parseInt(xAxisValue) === 4) {
+                                    // check if there is left piece
+                                    if (parseInt(yAxisValue) > 1) {
+                                        leftPiece = document.querySelector(`.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)-1}`);
+                                        if (leftPiece.querySelector("img")) {
+                                            leftImagePiece = leftPiece.querySelector("img");
+                                        }
+                                    }
+
+                                    // check if there is right piece
+                                    if (parseInt(yAxisValue) < 8) {
+                                        rightPiece = document.querySelector(`.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)+1}`);
+                                        if (rightPiece.querySelector("img")) {
+                                            rightImagePiece = rightPiece.querySelector("img");    
+                                        }
+                                    }
+
+                                    // check left image
+                                    if (leftImagePiece !== undefined && leftImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") {
+                                        foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)-1}`});
+                                        if (blackPawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    } else if (leftImagePiece !== undefined && leftImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") {
+                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)-1}`});
+                                        if (whitePawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    }
+
+                                    // check right image
+                                    if (rightImagePiece !== undefined && rightImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") {
+                                        foundIdx = blackPawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)+1}`});
+                                        if (blackPawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    } else if (rightImagePiece !== undefined && rightImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") {
+                                        foundIdx = whitePawnPieces.findIndex((eachClass) => {return eachClass.position === `.cell_${parseInt(xAxisValue)}_${parseInt(yAxisValue)+1}`});
+                                        if (whitePawnPieces[foundIdx].numberOfMoves == 1) {
+                                            if (this.enPassant) {
+                                                possibleMovements = this.eatingPossibility(xAxisValue, yAxisValue, true);
+                                                this.enPassant = false;
+                                            }
+                                            
+                                        }
+                                    }
+                                } // it has to be the fifth row
+
+
                                 possibleMovements.push(`.cell_${parseInt(xAxisValue) - 1}_${yAxisValue}`);
                             }
                         }
@@ -7344,10 +7473,10 @@
                 if (foundIdx !== -1) {
                     switch (pieceName){
                         case "whitePawn":
-                            possibleMoves = whitePawnPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, false);
+                            possibleMoves = whitePawnPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, false, newxAxisValue, newyAxisValue);
                             break;
                         case "blackPawn":
-                            possibleMoves = blackPawnPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, false);
+                            possibleMoves = blackPawnPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, false, newxAxisValue, newyAxisValue);
                             break;
                         case "blackRook":
                             possibleMoves = blackRookPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
@@ -7493,7 +7622,7 @@
 
 
             // updating pieces start
-            function updateCoordinate(piece, prevCoordinate, coordinates, eaten, eatenPiece) {
+            function updateCoordinate(piece, prevCoordinate, coordinates, eaten, eatenPiece, reverse, blackup) {
                 let foundIdx = 0;
                 let prev_xAxisValue = prevCoordinate.substr(6, 1);
                 let prev_yAxisValue = prevCoordinate.substr(coordinates.length -1, 1);
@@ -7705,6 +7834,48 @@
                     }
                 }
 
+                // reverse the update
+                if (reverse) {
+                    if (eatenPiece.getAttribute('alt').includes("whitePawn")) {
+                        var whitePawn = new Pawn(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                        whitePawnPieces.push(whitePawn);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackPawn")) {
+                        var blackPawn = new Pawn(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                        blackPawnPieces.push(blackPawn);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackRook")) {
+                        var blackRook = new Rook(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                        blackRookPieces.push(blackRook);
+                    } else if (eatenPiece.getAttribute('alt').includes("whiteRook")) {
+                        var whiteRook = new Rook(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                        whiteRookPieces.push(whiteRook);
+                    } else if (eatenPiece.getAttribute('alt').includes("whiteBishop")) {
+                        var whiteBishop = new Bishop(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                        whiteBishopPieces.push(whiteBishop);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackBishop")) {
+                        var blackBishop = new Bishop(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                        blackBishopPieces.push(blackBishop);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackKnight")) {
+                        var blackKnight = new Knight(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                        blackKnightPieces.push(blackKnight);
+                    } else if (eatenPiece.getAttribute('alt').includes("whiteKnight")) {
+                        var whiteKnight = new Knight(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                        whiteKnightPieces.push(whiteKnight);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackQueen")) {
+                        var blackQueen = new Queen(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                        blackQueenPiece.push(blackQueen);
+                    } else if (eatenPiece.getAttribute('alt').includes("whiteQueen")) {
+                        var whiteQueen = new Queen(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                        whiteQueenPiece.push(whiteQueen);
+                    } else if (eatenPiece.getAttribute('alt').includes("blackKing")) {
+                        var blackKing = new King(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "black");
+                        blackKingPiece.push(blackKing);
+                    } else {
+                        var whiteKing = new King(`.cell_${new_xAxisValue}_${new_yAxisValue}`, blackUp, "white");
+                        whiteKingPiece.push(whiteKing);
+                    }
+                }
+
+
             }
             // updating pieces end
 
@@ -7911,7 +8082,7 @@
                                            
                                             defendTheKingMessage = true;
                                             coordinate.appendChild(selectedPiece);
-                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", false, blackUp);
                                             defendTheKingMessage = true;
 
                                             // if it is defended isCheckWhite or isCheckBlack becomes false
@@ -7957,7 +8128,7 @@
                                 for(let o = 0; o < possibleMoves.length; o++) {
                                     if(possibleMoves[o] === `${coordinateValue}`) {
                                         coordinate.appendChild(selectedPiece);
-                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", blackUp);
+                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", false, blackUp);
 
                                         // Check whether if the king is in danger
                                         if (turn === "white") {
@@ -7970,7 +8141,7 @@
                                         if (kingInDanger) {
                                             // reverse the update
                                             prevCoordinateDIV.appendChild(selectedPiece);
-                                            updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, false, "", blackUp);
+                                            updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, false, "", false, blackUp);
                                             coordinate.innerHTML = "";
                                             defendTheKingMessage = false;
 
@@ -7981,9 +8152,95 @@
 
                                         } else {
                                             // pawn check
-                                            if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                            if (selectedPiece.getAttribute('alt').includes("whitePawn")){
+                                                let previous_xAxisValue = parseInt(prevCoordinate.substr(6, 1));
+                                                let previous_yAxisValue = parseInt(prevCoordinate.substr(prevCoordinate.length -1, 1));
+                                                let updated_xAxisValue = parseInt(`${coordinateValue}`.substr(6, 1));
+                                                let updated_yAxisValue = parseInt(`${coordinateValue}`.substr(`${coordinateValue}`.length -1, 1));
+                                                let upperPiece;
+                                                let upperImagePiece;
+                                                let downardPiece;
+                                                let downardImagePiece;
+
                                                 pawnMatch = true;
-                                            }
+
+                                                foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue}`});
+
+                                                // white Pawn is in downward position
+                                                if (whitePawnPieces[foundIdx].blackUp && (updated_xAxisValue === 3) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                    // white is in down position
+                                                    downardPiece = document.querySelector(`.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`);
+                                                    if (downardPiece.querySelector("img")) {
+                                                        downardImagePiece = downardPiece.querySelector("img");
+                                                        if(downardImagePiece.getAttribute('alt').includes("blackPawn")) {
+                                                            foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`});
+                                                            blackPawnPieces.splice(foundIdx, 1);
+                                                            downardPiece.innerHTML = "";
+                                                        } // if down image contains blackPawn
+                                                    } // if downward piece has a piece
+                                                } // if white pawn pieces is in downard position
+
+                                                // white Pawn is in upward position
+                                                if ((!whitePawnPieces[foundIdx].blackUp) && (updated_xAxisValue === 6) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                    // white is in down position
+                                                    upperPiece = document.querySelector(`.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`);
+                                                    if (upperPiece.querySelector("img")) {
+                                                        upperImagePiece = upperPiece.querySelector("img");
+                                                        if(upperImagePiece.getAttribute('alt').includes("blackPawn")) {
+                                                            foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`});
+                                                            blackPawnPieces.splice(foundIdx, 1);
+                                                            upperPiece.innerHTML = "";
+                                                        } // if up image contains blackPawn
+                                                    } // if upward piece has a piece
+                                                } // if white pawn pieces is in upward position
+
+
+                                            } // if selected piece is white pawn
+
+                                            if (selectedPiece.getAttribute('alt').includes("blackPawn")){
+                                                let previous_xAxisValue = parseInt(prevCoordinate.substr(6, 1));
+                                                let previous_yAxisValue = parseInt(prevCoordinate.substr(prevCoordinate.length -1, 1));
+                                                let updated_xAxisValue = parseInt(`${coordinateValue}`.substr(6, 1));
+                                                let updated_yAxisValue = parseInt(`${coordinateValue}`.substr(`${coordinateValue}`.length -1, 1));
+                                                let upperPiece;
+                                                let upperImagePiece;
+                                                let downardPiece;
+                                                let downardImagePiece;
+
+                                                pawnMatch = true;
+
+                                                foundIdx = blackPawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue}`});
+
+                                                // black Pawn is in upper position
+                                                if (blackPawnPieces[foundIdx].blackUp && (updated_xAxisValue === 6) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                    // white is in down position
+                                                    upperPiece = document.querySelector(`.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`);
+                                                    if (upperPiece.querySelector("img")) {
+                                                        upperImagePiece = upperPiece.querySelector("img");
+                                                        if(upperImagePiece.getAttribute('alt').includes("whitePawn")) {
+                                                            foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue-1}_${updated_yAxisValue}`});
+                                                            whitePawnPieces.splice(foundIdx, 1);
+                                                            upperPiece.innerHTML = "";
+                                                        } // if down image contains whitekPawn
+                                                    } // if downward piece has a piece
+                                                } // if black pawn pieces is in downard position
+
+                                                // black Pawn is in downward position
+                                                if ((!blackPawnPieces[foundIdx].blackUp) && (updated_xAxisValue === 3) && (updated_yAxisValue !== previous_yAxisValue)) {
+                                                    // white is in down position
+                                                    downardPiece = document.querySelector(`.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`);
+                                                    if (downardPiece.querySelector("img")) {
+                                                        downardImagePiece = downardPiece.querySelector("img");
+                                                        if(downardImagePiece.getAttribute('alt').includes("whitePawn")) {
+                                                            foundIdx = whitePawnPieces.findIndex(function(cellNumber){return cellNumber.position === `.cell_${updated_xAxisValue+1}_${updated_yAxisValue}`});
+                                                            whitePawnPieces.splice(foundIdx, 1);
+                                                            downardPiece.innerHTML = "";
+                                                        } // if up image contains blackPawn
+                                                    } // if upward piece has a piece
+                                                } // if white pawn pieces is in upward position
+                                            } // if selected piece is black pawn
+
+
 
                                             switch (turn) {
                                                 case "white":
@@ -8063,7 +8320,7 @@
                                                 eatenPiece = coordinate.innerHTML;
                                                 coordinate.innerHTML = "";
                                                 coordinate.appendChild(selectedPiece);
-                                                updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
+                                                updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, false, blackUp);
 
 
                                                 if (isCheckBlack) {
@@ -8117,7 +8374,7 @@
                                             eatenPiece = coordinate.innerHTML;
                                             coordinate.innerHTML = "";
                                             coordinate.appendChild(selectedPiece);
-                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, blackUp);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, false, blackUp);
 
                                             if (turn === "white") {
                                                 kingInDanger = whiteKingPiece[0].isInDanger();
@@ -8129,7 +8386,7 @@
                                                 // king is in danger, reverse the update
                                                 coordinate.innerHTML = eatenPiece;
                                                 prevCoordinateDIV.appendChild(selectedPiece);
-                                                updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, true, otherPiece, blackUp);
+                                                updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, false, otherPiece, true, blackUp);
                                                 // pawn check
                                                 if (selectedPiece.getAttribute('alt').includes("Pawn")){
                                                     pawnMatch = false;
@@ -8277,7 +8534,7 @@
     </div>
     <p></p>
     <div class="checked">
-        <h1>CHECKED</h1>
+        <h1>CHECK</h1>
     </div>
     
 </body>
