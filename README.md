@@ -9,7 +9,7 @@ Whoever catches the King wins the game
 **Rule 3**
 Each takes turn
 
-
+___
 **Piece Movements**
 
 <*Pawn*>
