@@ -4667,7 +4667,7 @@
                                     foundIdx =  whitePawnPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
                                     piece_xAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whitePawnPieces[foundIdx].position.substr(whitePawnPieces[foundIdx].position.length - 1, 1));
-                                    eatingMoves = whiteKnightPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, true);
+                                    eatingMoves = whitePawnPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
@@ -5470,9 +5470,9 @@
                                         if (knightPiecePossibleStance.querySelector("img")) {
                                             let imagePiece = knightPiecePossibleStance.querySelector("img");
                                             if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
-                                                isDangerous = false;
+                                                isDangerous = true;
                                             } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
-                                                isDangerous = false;
+                                                isDangerous = true;
                                             } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                                 isDangerous = false;
                                             }
@@ -7490,9 +7490,9 @@
                             if (knightPiecePossibleStance.querySelector("img")) {
                                 let imagePiece = knightPiecePossibleStance.querySelector("img");
                                 if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
-                                    isDangerous = false;
+                                    isDangerous = true;
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
-                                    isDangerous = false;
+                                    isDangerous = true;
                                 } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
@@ -8221,9 +8221,9 @@
                             if (knightPiecePossibleStance.querySelector("img")) {
                                 let imagePiece = knightPiecePossibleStance.querySelector("img");
                                 if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
-                                    isDangerous = false;
+                                    isDangerous = true;
                                 } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
-                                    isDangerous = false;
+                                    isDangerous = true;
                                 } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
                                     isDangerous = false;
                                 }
