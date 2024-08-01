@@ -11,4 +11,4 @@ Each takes turn
 
 **Piece Movements**
 
-![pawn](https://github.com/marcos-commits/chess_project/blob/main/img/whitePawn.png/100/100)
+![pawn](https://github.com/marcos-commits/chess_project/blob/main/img/blackPawn.png) 
