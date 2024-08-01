@@ -10,6 +10,16 @@ Whoever catches the King wins the game
 Each takes turn
 
 ___
+
+**How to Start a Game**
+
+ * Git clone to your local computer
+   
+ * Copy path your whole index.html, and open your browser and copy and paste it
+
+ * **Start playing Chess!!**
+
+___
 **Piece Movements**
 
 <*Pawn*>
