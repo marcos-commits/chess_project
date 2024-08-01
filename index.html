@@ -285,9 +285,10 @@
                     this.position = rookPosition;
                     this.blackUp = blackUp;
                     this.color = color;
+                    this.numberOfMoves = 0;
                 }
 
-                possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue) {
+                possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue, prediction) {
                     let possibleMovements = [];
 
                     if(newxAxisValue == xAxisValue) {
@@ -346,6 +347,10 @@
                             } // end of for each statement
                         }
                     } // end of if newyAxisValue == yAxisValue statement
+
+                    if (!prediction) {
+                        this.numberOfMoves++;
+                    }
                 
                     return possibleMovements;   
                 }
@@ -355,7 +360,7 @@
                 }
 
                 // eating possibilities
-                eatingPossibility(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue) {
+                eatingPossibility(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue, prediction) {
                     let possibleMovements = [];
                     let recNumber = 0;
 
@@ -449,6 +454,10 @@
                             }
                         }
                     } // end of if newyAxisValue == yAxisValue statement
+
+                    if(!prediction) {
+                        this.numberOfMoves++;
+                    }
 
                     return possibleMovements;
 
@@ -1020,11 +1029,13 @@
                     this.position = kingPosition;
                     this.blackUp = blackUp;
                     this.color = color;
+                    this.numberOfMoves = 0;
                 }
 
-                possibleMove(xAxisValue, yAxisValue) {
+                possibleMove(xAxisValue, yAxisValue, prediction) {
                     let possibleMovements = [];
                     let arr_col_recNumber = [];
+                    let castlingCheck;
                     arr_col_recNumber.push(yAxisValue);
                     arr_col_recNumber.push(yAxisValue+1);
                     arr_col_recNumber.push(yAxisValue-1);
@@ -1041,10 +1052,132 @@
                     });
 
                     possibleMovements.push(`.cell_${xAxisValue}_${yAxisValue+1}`);
-                    possibleMovements.push(`.cell_${xAxisValue}_${yAxisValue-1}`)
+                    possibleMovements.push(`.cell_${xAxisValue}_${yAxisValue-1}`);
+
+                    if(this.numberOfMoves === 0) {
+                        for (let i = 1; i < 3; i++) {
+                            let leftPiece = document.querySelector(`.cell_${xAxisValue}_${yAxisValue-i}`);
+                            let foundIdx = 0;
+                            let numberOfMovedRook = 1;
+                            // check left piece
+                            if (!leftPiece.querySelector("img")){
+                                // check out top
+                                if ((this.blackUp  && this.color === "black") || (!this.blackUp  && this.color === "white")) {
+                                    switch (this.color) {
+                                        case "black":
+                                            foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${1}_${1}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = blackRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                        case "white":
+                                            foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${1}_${1}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = whiteRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                    } // end of switch case
+                                    
+                                }
+
+                                // check out down
+                                if ((this.blackUp  && this.color === "white") || (!this.blackUp  && this.color === "black")) {
+                                    switch (this.color) {
+                                        case "black":
+                                            foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${8}_${1}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = blackRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                        case "white":
+                                            foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${8}_${1}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = whiteRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                    } // end of switch case
+                                    
+                                }
+
+                                castlingCheck = this.castlingVerification(xAxisValue, yAxisValue-i);
+                                if (!castlingCheck && numberOfMovedRook === 0 && i === 2) {
+                                    possibleMovements.push( `.cell_${xAxisValue}_${yAxisValue-i}`)
+                                } // king is not in danger check
+
+                                if (castlingCheck) {
+                                    break;
+                                }
+                            } else {// check if left piece has an image
+                                break;
+                            }
+                        
+                        } // left piece done
+
+                        // right piece check
+                        for (let i = 1; i < 3; i++) {
+                            let rightPiece = document.querySelector(`.cell_${xAxisValue}_${yAxisValue+i}`);
+                            let foundIdx = 0;
+                            let numberOfMovedRook = 1;
+                            // check for right piece
+                            if (!rightPiece.querySelector("img")){
+                                // check out top
+                                if ((this.blackUp  && this.color === "black") || (!this.blackUp  && this.color === "white")) {
+                                    switch (this.color) {
+                                        case "black":
+                                            foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${1}_${8}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = blackRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                        case "white":
+                                            foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${1}_${8}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = whiteRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                    } // end of switch case
+                                    
+                                }
+
+                                // check out down
+                                if ((this.blackUp  && this.color === "white") || (!this.blackUp  && this.color === "black")) {
+                                    switch (this.color) {
+                                        case "black":
+                                            foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${8}_${8}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = blackRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                        case "white":
+                                            foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${8}_${8}`});
+                                            if (foundIdx !== -1) {
+                                                numberOfMovedRook = whiteRookPieces[foundIdx].numberOfMoves;
+                                            }
+                                            break;
+                                    } // end of switch case
+                                    
+                                }
+
+                                castlingCheck = this.castlingVerification(xAxisValue, yAxisValue+i);
+                                if (!castlingCheck && numberOfMovedRook === 0 && i === 2) {
+                                    possibleMovements.push( `.cell_${xAxisValue}_${yAxisValue+i}`)
+                                } // castling check
+                                if (castlingCheck) {
+                                    break;
+                                }
+                            } else { // check if right piece has an image  
+                                break;
+                            }
+                        } // check for statement right piece
+
+                    } // if number of king's move is 0
+
+                    if (!prediction) {
+                        this.numberOfMoves++;
+                    }
 
                     return possibleMovements;
-                }
+                } // end of possibleMove function
 
                 // update position
                 updatePosition(newCoordinates) {
@@ -1280,7 +1413,7 @@
                         }
                     // King attacking possible movements
                     } else if(attackerPieceName.includes("King")) {
-                        possibleMovements = this.possibleMove(attacker_xAxisValue, attacker_yAxisValue);
+                        possibleMovements = this.possibleMove(attacker_xAxisValue, attacker_yAxisValue, true);
                     }
 
                     possibleMovements.some((attackCoordinate) => {
@@ -1311,7 +1444,7 @@
                 checkMate(king_xAxisValue, king_yAxisValue, attackerPiece, attackerCoordinate, attackerOriginalCoordinate) {
                     let kingPossibleMovement = [];
                     let gettingEatenMovements = [];
-                    kingPossibleMovement = this.possibleMove(king_xAxisValue, king_yAxisValue);
+                    kingPossibleMovement = this.possibleMove(king_xAxisValue, king_yAxisValue, true);
                     let originLength = kingPossibleMovement.length;
                     let foundIndex = 0;
                     let isCheckMate = true;
@@ -2183,7 +2316,7 @@
                                 for(let i = 0; i < blackRookPieces.length; i++) {
                                     piece_xAxisValue = parseInt(blackRookPieces[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(blackRookPieces[i].position.substr(blackRookPieces[i].position.length - 1, 1));
-                                    eatingMoves = blackRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = blackRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
@@ -2248,7 +2381,7 @@
                                 for(let i = 0; i < blackKingPiece.length; i++) {
                                     piece_xAxisValue = parseInt(blackKingPiece[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(blackKingPiece[i].position.substr(blackKingPiece[i].position.length - 1, 1));
-                                    eatingMoves = blackKingPiece[i].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = blackKingPiece[i].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2315,7 +2448,7 @@
                                 for(let i = 0; i < whiteRookPieces.length; i++) {
                                     piece_xAxisValue = parseInt(whiteRookPieces[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteRookPieces[i].position.substr(whiteRookPieces[i].position.length - 1, 1));
-                                    eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = whiteRookPieces[i].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2379,7 +2512,7 @@
                                 for(let i = 0; i < whiteKingPiece.length; i++) {
                                     piece_xAxisValue = parseInt(whiteKingPiece[i].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteKingPiece[i].position.substr(whiteKingPiece[i].position.length - 1, 1));
-                                    eatingMoves = whiteKingPiece[i].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = whiteKingPiece[i].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerOriginalCoordinate) {
@@ -2484,7 +2617,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -2606,7 +2739,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -2734,7 +2867,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -2856,7 +2989,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -2992,7 +3125,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -3115,7 +3248,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -3238,7 +3371,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -3360,7 +3493,7 @@
                                         for(let l = 0; l < blackRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(blackRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(blackRookPieces[l].position.substr(blackRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+                                            let possibleMoves = blackRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -3490,7 +3623,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -3612,7 +3745,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -3740,7 +3873,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -3862,7 +3995,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -3997,7 +4130,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -4120,7 +4253,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -4243,7 +4376,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -4365,7 +4498,7 @@
                                         for(let l = 0; l < whiteRookPieces.length; l++){
                                             let piece_xAxisValue = parseInt(whiteRookPieces[l].position.substr(6, 1));
                                             let piece_yAxisValue = parseInt(whiteRookPieces[l].position.substr(whiteRookPieces[l].position.length -1, 1));
-                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+                                            let possibleMoves = whiteRookPieces[l].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k, true);
 
                                             for(let m = 0; m < possibleMoves.length; m++) {
                                                 if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -4492,7 +4625,7 @@
                                     foundIdx =  blackRookPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
                                     piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length - 1, 1));
-                                    eatingMoves = blackRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = blackRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
@@ -4520,7 +4653,7 @@
                                     foundIdx =  blackKingPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
                                     piece_xAxisValue = parseInt(blackKingPiece[foundIdx].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(blackKingPiece[foundIdx].position.substr(blackKingPiece[foundIdx].position.length - 1, 1));
-                                    eatingMoves = blackKingPiece[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = blackKingPiece[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
@@ -4576,7 +4709,7 @@
                                     foundIdx =  whiteRookPieces.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
                                     piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length - 1, 1));
-                                    eatingMoves = whiteRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = whiteRookPieces[foundIdx].eatingPossibility(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
@@ -4604,7 +4737,7 @@
                                     foundIdx =  whiteKingPiece.findIndex(function(eachPiece) {return eachPiece.position === defenderCoordinate});
                                     piece_xAxisValue = parseInt(whiteKingPiece[foundIdx].position.substr(6, 1));
                                     piece_yAxisValue = parseInt(whiteKingPiece[foundIdx].position.substr(whiteKingPiece[foundIdx].position.length - 1, 1));
-                                    eatingMoves = whiteKingPiece[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue);
+                                    eatingMoves = whiteKingPiece[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, true);
 
                                     for(let j = 0; j < eatingMoves.length; j++){
                                         if (eatingMoves[j] === attackerCoordinate) {
@@ -4625,11 +4758,11 @@
                                 // king's move case
                                 let kingPossibleMovement;
                                 if (defenderPieceName.includes("black")) {
-                                    kingPossibleMovement = blackKingPiece[0].possibleMove(defender_xAxisValue, defender_yAxisValue);
+                                    kingPossibleMovement = blackKingPiece[0].possibleMove(defender_xAxisValue, defender_yAxisValue, true);
                                 }
 
                                 if (defenderPieceName.includes("white")) {
-                                    kingPossibleMovement = whiteKingPiece[0].possibleMove(defender_xAxisValue, defender_yAxisValue);
+                                    kingPossibleMovement = whiteKingPiece[0].possibleMove(defender_xAxisValue, defender_yAxisValue, true);
                                 }
 
                                 let originLength = kingPossibleMovement.length;
@@ -5440,7 +5573,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -5515,7 +5648,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -5600,7 +5733,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -5676,7 +5809,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -5765,7 +5898,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -5842,7 +5975,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -5918,7 +6051,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -5994,7 +6127,7 @@
                                                         foundIdx = whiteRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(whiteRookPieces[foundIdx].position.substr(whiteRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+                                                        possibleMoves = whiteRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -6079,7 +6212,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue-k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue-k}`){
@@ -6154,7 +6287,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue, attacker_yAxisValue+k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue}_${attacker_yAxisValue+k}`){
@@ -6239,7 +6372,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue}`){
@@ -6315,7 +6448,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue}`){
@@ -6404,7 +6537,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue-k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue-k}`){
@@ -6481,7 +6614,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue-k, attacker_yAxisValue+k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue-k}_${attacker_yAxisValue+k}`){
@@ -6557,7 +6690,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue-k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue-k}`){
@@ -6633,7 +6766,7 @@
                                                         foundIdx = blackRookPieces.findIndex((eachClass) => {return eachClass.position === defenderCoordinate;});
                                                         piece_xAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(6, 1));
                                                         piece_yAxisValue = parseInt(blackRookPieces[foundIdx].position.substr(blackRookPieces[foundIdx].position.length -1, 1));
-                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k);
+                                                        possibleMoves = blackRookPieces[foundIdx].possibleMove(piece_xAxisValue, piece_yAxisValue, attacker_xAxisValue+k, attacker_yAxisValue+k, true);
 
                                                         for(let m = 0; m < possibleMoves.length; m++) {
                                                             if (possibleMoves[m] === `.cell_${attacker_xAxisValue+k}_${attacker_yAxisValue+k}`){
@@ -7408,6 +7541,736 @@
                     }
 
                 } // IsInDanger function finished
+
+                castlingVerification(xAxisValue, yAxisValue) {
+                    let kingPossibleMovement = [];
+                    let defendingMovements = [];
+                    let kingIsInDanger = false;
+
+                    kingPossibleMovement.push(`cell_${xAxisValue}_${yAxisValue}`);
+
+                    /////////////////////// check king's movements
+                    // Each king Movement
+                    for(let i = 0; i < kingPossibleMovement.length; i++){
+                        let eachMovement_xAxisValue = xAxisValue;
+                        let eachMovement_yAxisValue = yAxisValue;
+                        let isDangerous = false;
+                        let needsBreak = false;
+
+                        // check left start rook queen
+                        if(eachMovement_yAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = eachMovement_yAxisValue - 1; i >= 1; i--) {
+                                // if y axis value is one, then don't check left
+                                let leftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                
+                                switch(i) {
+                                    case eachMovement_yAxisValue - 1:
+                                        if (leftPiece.querySelector("img")) {
+                                            let leftImagePiece = leftPiece.querySelector("img");
+                                            if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen") || leftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {  
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen") || leftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (leftPiece.querySelector("img")) {
+                                            let leftImagePiece = leftPiece.querySelector("img");
+                                            if((leftImagePiece.getAttribute('alt').includes("whiteRook") || leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("blackRook") || leftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftImagePiece.getAttribute('alt').includes("whiteRook")) && (!leftImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftImagePiece.getAttribute('alt').includes("blackRook")) && (!leftImagePiece.getAttribute('alt').includes("blackQueen")) && (leftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                                    
+                            } // end of inner for each statement left side
+                        } // check left finished
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check right rook and queen
+                        if(eachMovement_yAxisValue == 8) {
+                            
+                        } else {
+                            for(let i = eachMovement_yAxisValue + 1; i <= 8; i++) {
+                                let rightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue}_${i}`)
+                                
+                                switch(i) {
+                                    case eachMovement_yAxisValue + 1:
+                                        if (rightPiece.querySelector("img")) {
+                                            let rightImagePiece = rightPiece.querySelector("img");
+                                            if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen") || rightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen") || rightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (rightPiece.querySelector("img")) {
+                                            let rightImagePiece = rightPiece.querySelector("img");
+                                            if((rightImagePiece.getAttribute('alt').includes("whiteRook") || rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("blackRook") || rightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightImagePiece.getAttribute('alt').includes("whiteRook")) && (!rightImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightImagePiece.getAttribute('alt').includes("blackRook")) && (!rightImagePiece.getAttribute('alt').includes("blackQueen")) && (rightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of inner for each statement
+                        } // End of checking right side statement
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check up rook and queen
+                        if(eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = eachMovement_xAxisValue - 1; i >= 1; i--) {
+                                let upPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                
+                                switch(i) {
+                                    case eachMovement_xAxisValue - 1:
+                                        if (upPiece.querySelector("img")) {
+                                            let upImagePiece = upPiece.querySelector("img");
+                                            if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen") || upImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen") || upImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upPiece.querySelector("img")) {
+                                            let upImagePiece = upPiece.querySelector("img");
+                                            if((upImagePiece.getAttribute('alt').includes("whiteRook") || upImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("blackRook") || upImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upImagePiece.getAttribute('alt').includes("blackKing")) ) || (upImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upImagePiece.getAttribute('alt').includes("whiteRook")) && (!upImagePiece.getAttribute('alt').includes("whiteQueen")) && (upImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upImagePiece.getAttribute('alt').includes("blackRook")) && (!upImagePiece.getAttribute('alt').includes("blackQueen")) && (upImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of for each statement
+                        } // End of checking up side statement
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check down side statement queen and rook
+                        if(eachMovement_xAxisValue == 8) {
+                            
+                        } else {
+                            for(let i = eachMovement_xAxisValue + 1; i <= 8; i++) {
+                                let downPiece = document.querySelector(`.cell_${i}_${eachMovement_yAxisValue}`)
+                                
+                                switch(i) {
+                                    case eachMovement_xAxisValue + 1:
+                                        if (downPiece.querySelector("img")) {
+                                            let downImagePiece = downPiece.querySelector("img");
+                                            if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen") || downImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen") || downImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (downPiece.querySelector("img")) {
+                                            let downImagePiece = downPiece.querySelector("img");
+                                            if((downImagePiece.getAttribute('alt').includes("whiteRook") || downImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("blackRook") || downImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((downImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!downImagePiece.getAttribute('alt').includes("blackKing")) ) || (downImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!downImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!downImagePiece.getAttribute('alt').includes("whiteRook")) && (!downImagePiece.getAttribute('alt').includes("whiteQueen")) && (downImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!downImagePiece.getAttribute('alt').includes("blackRook")) && (!downImagePiece.getAttribute('alt').includes("blackQueen")) && (downImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking down side statement
+
+                        // if isDangerous is true then go to the next outer for each element of loop so continue
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // Checking diagonally left down
+                        if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 8) {
+                        
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue-i < 1) {
+                                    break;
+                                }
+                                let leftDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue-i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (leftDownPiece.querySelector("img")) {
+                                            let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                            if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen") || leftDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen") || leftDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((leftDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((leftDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+
+                                        } 
+                                        break;
+                                    default:
+                                        if (leftDownPiece.querySelector("img")) {
+                                            let leftDownImagePiece = leftDownPiece.querySelector("img");
+                                            if((leftDownImagePiece.getAttribute('alt').includes("whiteBishop") || leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("blackBishop") || leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((leftDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!leftDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (leftDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!leftDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!leftDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (leftDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!leftDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!leftDownImagePiece.getAttribute('alt').includes("blackQueen")) && (leftDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        break;
+                                } // end of switch case
+                                if (needsBreak) {
+                                    break;
+                                }    
+                            } // diagonal left down for each statement
+                        } // diagonal left down finished
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // checking diagonally right down
+                        if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 8) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue+i > 8 || eachMovement_yAxisValue+i > 8) {
+                                    break;
+                                }
+
+                                let rightDownPiece = document.querySelector(`.cell_${eachMovement_xAxisValue+i}_${eachMovement_yAxisValue+i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (rightDownPiece.querySelector("img")) {
+                                            let rightDownImagePiece = rightDownPiece.querySelector("img");
+                                            if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen") || rightDownImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen") || rightDownImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((rightDownImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (!this.blackUp)) || ((rightDownImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (rightDownPiece.querySelector("img")) {
+                                            let rightDownImagePiece = rightDownPiece.querySelector("img");
+                                            if((rightDownImagePiece.getAttribute('alt').includes("whiteBishop") || rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("blackBishop") || rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((rightDownImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!rightDownImagePiece.getAttribute('alt').includes("blackKing")) ) || (rightDownImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!rightDownImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!rightDownImagePiece.getAttribute('alt').includes("whiteBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("whiteQueen")) && (rightDownImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!rightDownImagePiece.getAttribute('alt').includes("blackBishop")) && (!rightDownImagePiece.getAttribute('alt').includes("blackQueen")) && (rightDownImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally right down side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+
+                        // diagonal up left checking
+                        if(eachMovement_yAxisValue == 1 || eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue-i < 1) {
+                                    break;
+                                }
+
+                                let upLeftPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue-i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (upLeftPiece.querySelector("img")) {
+                                            let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen") || upLeftImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen") || upLeftImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((upLeftImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upLeftImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upLeftPiece.querySelector("img")) {
+                                            let upLeftImagePiece = upLeftPiece.querySelector("img");
+                                            if((upLeftImagePiece.getAttribute('alt').includes("whiteBishop") || upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("blackBishop") || upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upLeftImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upLeftImagePiece.getAttribute('alt').includes("blackKing")) ) || (upLeftImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upLeftImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upLeftImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("whiteQueen")) && (upLeftImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upLeftImagePiece.getAttribute('alt').includes("blackBishop")) && (!upLeftImagePiece.getAttribute('alt').includes("blackQueen")) && (upLeftImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+
+                            } // end of for each statement
+                        } // End of checking diagonally up left side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check diagonally up right
+                        if(eachMovement_yAxisValue == 8 || eachMovement_xAxisValue == 1) {
+                            
+                        } else {
+                            for(let i = 1; i <= 8; i++) {
+                                if (eachMovement_xAxisValue-i < 1 || eachMovement_yAxisValue+i > 8) {
+                                    break;
+                                }
+
+                                let upRightPiece = document.querySelector(`.cell_${eachMovement_xAxisValue-i}_${eachMovement_yAxisValue+i}`)
+                                
+                                switch(i) {
+                                    case 1:
+                                        if (upRightPiece.querySelector("img")) {
+                                            let upRightImagePiece = upRightPiece.querySelector("img");
+                                            if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen") || upRightImagePiece.getAttribute('alt').includes("whiteKing")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen") || upRightImagePiece.getAttribute('alt').includes("blackKing")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if (((upRightImagePiece.getAttribute('alt').includes("blackPawn") && this.color === "white") && (this.blackUp)) || ((upRightImagePiece.getAttribute('alt').includes("whitePawn") && this.color === "black") && (!this.blackUp))) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        } 
+                                        break;
+                                    default:
+                                        if (upRightPiece.querySelector("img")) {
+                                            let upRightImagePiece = upRightPiece.querySelector("img");
+                                            if((upRightImagePiece.getAttribute('alt').includes("whiteBishop") || upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (this.color === "black")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("blackBishop") || upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (this.color === "white")) {
+                                                needsBreak = true;
+                                                isDangerous = true;
+                                            } else if ((upRightImagePiece.getAttribute('alt').includes("black") && this.color === "black" && (!upRightImagePiece.getAttribute('alt').includes("blackKing")) ) || (upRightImagePiece.getAttribute('alt').includes("white") && this.color === "white" && (!upRightImagePiece.getAttribute('alt').includes("whiteKing")))) {
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            } else if (((!upRightImagePiece.getAttribute('alt').includes("whiteBishop")) && (!upRightImagePiece.getAttribute('alt').includes("whiteQueen")) && (upRightImagePiece.getAttribute('alt').includes("white")) && (this.color === "black")) || (((!upRightImagePiece.getAttribute('alt').includes("blackBishop")) && (!upRightImagePiece.getAttribute('alt').includes("blackQueen")) && (upRightImagePiece.getAttribute('alt').includes("black"))) && (this.color === "white"))) {  
+                                                needsBreak = true;
+                                                isDangerous = false;
+                                            }
+                                        }
+                                        
+                                        break;
+                                } // end of switch case
+
+                                if (needsBreak) {
+                                    break;
+                                }
+                            } // end of for each statement
+                        } // End of checking diagonally up left side statement
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // Check left side if enemy Knight is there
+                        if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue-2 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue-2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue-1 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue-1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue-2 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue-2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue-1 >= 1 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue-1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        // check right if knight is there
+                        if(eachMovement_xAxisValue-1 >= 1 && eachMovement_yAxisValue+2 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-1}_${eachMovement_yAxisValue+2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+
+                        if(eachMovement_xAxisValue-2 >= 1 && eachMovement_yAxisValue+1 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue-2}_${eachMovement_yAxisValue+1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+1 <= 8 && eachMovement_yAxisValue+2 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+1}_${eachMovement_yAxisValue+2}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = false;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = false;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+
+                        if (isDangerous) {
+                            continue;
+                        }
+                        
+                        // start over
+                        needsBreak = false;
+                        isDangerous = false;
+
+                        if(eachMovement_xAxisValue+2 <= 8 && eachMovement_yAxisValue+1 <= 8 ){
+                            let knightPiecePossibleStance = document.querySelector(`.cell_${eachMovement_xAxisValue+2}_${eachMovement_yAxisValue+1}`);
+                            if (knightPiecePossibleStance.querySelector("img")) {
+                                let imagePiece = knightPiecePossibleStance.querySelector("img");
+                                if((imagePiece.getAttribute('alt').includes("whiteKnight")) && (this.color === "black")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("blackKnight")) && (this.color === "white")) {
+                                    isDangerous = true;
+                                } else if ((imagePiece.getAttribute('alt').includes("black") && this.color === "black") || (imagePiece.getAttribute('alt').includes("white") && this.color === "white")) {
+                                    isDangerous = false;
+                                }
+                            }
+                        }
+                        
+                        // last element
+                        if (isDangerous) {
+                            continue;
+                        } else {
+                            defendingMovements.push(`.cell_${eachMovement_xAxisValue}_${eachMovement_yAxisValue}`);
+                        }
+                    
+
+                    } // End of outer for each statement for king movements
+                    /////////////////////// check king's movements end
+
+                    if (defendingMovements.length > 0) {
+                        kingIsInDanger = false;
+                        return kingIsInDanger;
+                    } else {
+                        kingIsInDanger = true;
+                        return kingIsInDanger;
+                    }
+                } // castlingVerification check done
                 
 
             } // end of king class
@@ -7479,10 +8342,10 @@
                             possibleMoves = blackPawnPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, false, newxAxisValue, newyAxisValue);
                             break;
                         case "blackRook":
-                            possibleMoves = blackRookPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            possibleMoves = blackRookPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue, false);
                             break;
                         case "whiteRook":
-                            possibleMoves = whiteRookPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            possibleMoves = whiteRookPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue, false);
                             break;
                         case "blackBishop":
                             possibleMoves = blackBishopPieces[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
@@ -7503,10 +8366,10 @@
                             possibleMoves = whiteQueenPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
                             break;
                         case "blackKing":
-                            possibleMoves = blackKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            possibleMoves = blackKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, false);
                             break;
                         case "whiteKing":
-                            possibleMoves = whiteKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, newxAxisValue, newyAxisValue);
+                            possibleMoves = whiteKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, false);
                             break;
                     }
                     
@@ -7580,10 +8443,10 @@
                             possibleMoves = blackPawnPieces[foundIdx].eatingPossibility(xAxisValue, yAxisValue , false);
                             break;
                         case "whiteRook":
-                            possibleMoves = whiteRookPieces[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            possibleMoves = whiteRookPieces[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue, false);
                             break;
                         case "blackRook":
-                            possibleMoves = blackRookPieces[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            possibleMoves = blackRookPieces[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue, false);
                             break;
                         case "blackBishop":
                             possibleMoves = blackBishopPieces[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
@@ -7604,10 +8467,10 @@
                             possibleMoves = whiteQueenPiece[foundIdx].eatingPossibility(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
                             break;
                         case "blackKing":
-                            possibleMoves = blackKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            possibleMoves = blackKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, false);
                             break;
                         case "whiteKing":
-                            possibleMoves = whiteKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, new_xAxisValue, new_yAxisValue);
+                            possibleMoves = whiteKingPiece[foundIdx].possibleMove(xAxisValue, yAxisValue, false);
                             break;
                     }
                     
@@ -7922,6 +8785,7 @@
             let pawnMatch = false;
             let kingInDanger = false;
             let prevCoordinateDIV;
+            let counter = 1;
             // Variables End
 
             turn = "white";
@@ -8072,60 +8936,105 @@
                         if (possibleMoves.length > 0) {
                             // check if it is checked situation
                             if (isCheckBlack || isCheckWhite) {
+
+                                // when it is check castling is impossible
+                                if (selectedPiece.getAttribute('alt').includes("King")) {
+                                    let previous_xAxisValue = parseInt(prevCoordinate.substr(6, 1));
+                                    let previous_yAxisValue = parseInt(prevCoordinate.substr(prevCoordinate.length -1, 1));
+                                    let originLength = defendingMoves.length;
+                                    let i = 0;
+                                    let castlingMove = false;
+
+                                    while (i < originLength) {
+                                        if ((defendingMoves[i] === `.cell_${previous_xAxisValue}_${previous_yAxisValue+2}`) || (defendingMoves[i] === `.cell_${previous_xAxisValue}_${previous_yAxisValue-2}`)) {
+                                            defendingMoves.splice(i, 1);
+                                            castlingMove = true;
+                                            i--;
+                                            originLength = defendingMoves.length;
+                                        }
+                                        i++;
+                                    } // loop
+
+
+                                }// castling move filtered out
+
+
+
                                 defendTheKingMessage = false;
-                                    for(let n = 0; n < defendingMoves.length; n++) {
-                                        if(defendingMoves[n] === `${coordinateValue}`) {
-                                            // pawn check
-                                            if (selectedPiece.getAttribute('alt').includes("Pawn")){
-                                                pawnMatch = true;
-                                            }
-                                           
-                                            defendTheKingMessage = true;
-                                            coordinate.appendChild(selectedPiece);
-                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", false, blackUp);
-                                            defendTheKingMessage = true;
+                                for(let n = 0; n < defendingMoves.length; n++) {
+                                    if(defendingMoves[n] === `${coordinateValue}`) {
+                                        // pawn check
+                                        if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                            pawnMatch = true;
+                                        }
+                                        
+                                        defendTheKingMessage = true;
+                                        coordinate.appendChild(selectedPiece);
+                                        updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", false, blackUp);
+                                        defendTheKingMessage = true;
 
-                                            // if it is defended isCheckWhite or isCheckBlack becomes false
-                                            if (isCheckBlack){
-                                                isCheckBlack = false;
-                                            } else if (isCheckWhite) {
-                                                isCheckWhite = false;
-                                            }
+                                        // if it is defended isCheckWhite or isCheckBlack becomes false
+                                        if (isCheckBlack){
+                                            isCheckBlack = false;
+                                        } else if (isCheckWhite) {
+                                            isCheckWhite = false;
+                                        }
 
 
-                                            switch (turn) {
-                                                case "white":
-                                                    isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                    attackerPiece = selectedPiece;
-                                                    attackerCoordination = `${coordinateValue}`;
-                                                    if (isCheckBlack) {
-                                                        checkedWord = document.querySelector('h1');
-                                                        checkedWord.style.opacity = 1;
-                                                    }
-                                                    
-                                                    turn = "black";
-                                                    break;
-                                                case "black":
-                                                    isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                    attackerPiece = selectedPiece;
-                                                    attackerCoordination = `${coordinateValue}`;
-                                                    if (isCheckWhite) {
-                                                        checkedWord = document.querySelector('h1');
-                                                        checkedWord.style.opacity = 1;
-                                                    }
-                                                    
-                                                    turn = "white";
-                                                    break;
-                                            } // end of switch case statement
-                                            break;
-                                        } // end of if it matches possible movements
-                                    } // for each defending moves
+                                        switch (turn) {
+                                            case "white":
+                                                isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                attackerPiece = selectedPiece;
+                                                attackerCoordination = `${coordinateValue}`;
+                                                if (isCheckBlack) {
+                                                    checkedWord = document.querySelector('h1');
+                                                    checkedWord.style.opacity = 1;
+                                                }
+                                                
+                                                turn = "black";
+                                                break;
+                                            case "black":
+                                                isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                attackerPiece = selectedPiece;
+                                                attackerCoordination = `${coordinateValue}`;
+                                                if (isCheckWhite) {
+                                                    checkedWord = document.querySelector('h1');
+                                                    checkedWord.style.opacity = 1;
+                                                }
+                                                
+                                                turn = "white";
+                                                break;
+                                        } // end of switch case statement
+                                        break;
+                                    } // end of if it matches possible movements
+                                } // for each defending moves
+
+                                if (!defendTheKingMessage) {
+                                    if (selectedPiece.getAttribute('alt').includes("blackKing")){
+                                        blackKingPiece[0].numberOfMoves = blackKingPiece[0].numberOfMoves - 1; 
+                                    }
+
+                                    if (selectedPiece.getAttribute('alt').includes("whiteKing")){
+                                        whiteKingPiece[0].numberOfMoves = whiteKingPiece[0].numberOfMoves - 1; 
+                                    }
+
+                                    if (selectedPiece.getAttribute('alt').includes("blackRook")){
+                                        foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === prevCoordinate});
+                                        blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves - 1; 
+                                    }
+
+                                    if (selectedPiece.getAttribute('alt').includes("whiteRook")){
+                                        foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === prevCoordinate});
+                                        whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves - 1; 
+                                    }
+                                }
 
                             } else {
                                 // not checked
                                 defendTheKingMessage = true;
-
+                                counter = 0;
                                 for(let o = 0; o < possibleMoves.length; o++) {
+                                    // possibleMoves matches the clicked coordinateValue
                                     if(possibleMoves[o] === `${coordinateValue}`) {
                                         coordinate.appendChild(selectedPiece);
                                         updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, false, "", false, blackUp);
@@ -8150,8 +9059,28 @@
                                                 pawnMatch = false;
                                             }
 
+                                            // rook check
+                                            if (selectedPiece.getAttribute('alt').includes("whiteRook")) {
+                                                foundIdx = whiteRookPieces.findIndex((eachRookClass) => {return eachRookClass.position === prevCoordinate});
+                                                whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves - 1; 
+                                            }
+
+                                            if (selectedPiece.getAttribute('alt').includes("blackRook")) {
+                                                foundIdx = blackRookPieces.findIndex((eachRookClass) => {return eachRookClass.position === prevCoordinate});
+                                                blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves - 1; 
+                                            }
+
+                                            if (selectedPiece.getAttribute('alt').includes("blackKing")) {
+                                                blackKingPiece[0].numberOfMoves = blackKingPiece[0].numberOfMoves - 1; 
+                                            }
+
+                                            if (selectedPiece.getAttribute('alt').includes("whiteKing")) {
+                                                whiteKingPiece[0].numberOfMoves = whiteKingPiece[0].numberOfMoves - 1; 
+                                            }
+
                                         } else {
                                             // pawn check
+                                            defendTheKingMessage = true;
                                             if (selectedPiece.getAttribute('alt').includes("whitePawn")){
                                                 let previous_xAxisValue = parseInt(prevCoordinate.substr(6, 1));
                                                 let previous_yAxisValue = parseInt(prevCoordinate.substr(prevCoordinate.length -1, 1));
@@ -8253,8 +9182,89 @@
                                                 } // end of switch case
 
                                                     
-                                                } // if selected piece is black pawn
+                                            } // if selected piece is black pawn
 
+                                            // if selected is king (to check castle movement)
+                                            if (selectedPiece.getAttribute('alt').includes("King")){
+                                                let previous_xAxisValue = parseInt(prevCoordinate.substr(6, 1));
+                                                let previous_yAxisValue = parseInt(prevCoordinate.substr(prevCoordinate.length -1, 1));
+                                                let updated_xAxisValue = parseInt(`${coordinateValue}`.substr(6, 1));
+                                                let updated_yAxisValue = parseInt(`${coordinateValue}`.substr(`${coordinateValue}`.length -1, 1));
+                                                let diff_yAxisValue = updated_yAxisValue - previous_yAxisValue;
+                                                let rookSelectedPiece;
+                                                let rookImagePiece;
+                                                let anotherSelectedPart;
+
+                                                // moved right two times upper part
+                                                if (diff_yAxisValue === 2 && updated_xAxisValue === 1) {
+                                                    rookSelectedPiece = document.querySelector(`.cell_1_8`);
+                                                    rookImagePiece = rookSelectedPiece.querySelector("img");
+                                                    updateCoordinate(rookImagePiece, `.cell_1_8`, `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`, false, "", false, blackUp);
+                                                    anotherSelectedPart = document.querySelector(`.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`);
+                                                    anotherSelectedPart.appendChild(rookImagePiece);
+                                                    rookSelectedPiece.innerHTML = "";
+                                                    if (rookImagePiece.getAttribute("alt").includes("black")){
+                                                        foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves + 1;
+                                                    } else {
+                                                        foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves + 1;
+                                                    }
+                                                }
+
+                                                // moved right two times down part
+                                                if (diff_yAxisValue === 2 && updated_xAxisValue === 8) {
+                                                    rookSelectedPiece = document.querySelector(`.cell_8_8`);
+                                                    rookImagePiece = rookSelectedPiece.querySelector("img");
+                                                    updateCoordinate(rookImagePiece, `.cell_8_8`, `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`, false, "", false, blackUp);
+                                                    anotherSelectedPart = document.querySelector(`.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`);
+                                                    anotherSelectedPart.appendChild(rookImagePiece);
+                                                    rookSelectedPiece.innerHTML = "";
+                                                    if (rookImagePiece.getAttribute("alt").includes("black")){
+                                                        foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves + 1;
+                                                    } else {
+                                                        foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves + 1;
+                                                    }
+                                                }
+
+                                                // moved left two times upper part
+                                                if (diff_yAxisValue === -2 && updated_xAxisValue === 1) {
+                                                    rookSelectedPiece = document.querySelector(`.cell_1_1`);
+                                                    rookImagePiece = rookSelectedPiece.querySelector("img");
+                                                    updateCoordinate(rookImagePiece, `.cell_1_1`, `.cell_${updated_xAxisValue}_${updated_yAxisValue+1}`, false, "", false, blackUp);
+                                                    anotherSelectedPart = document.querySelector(`.cell_${updated_xAxisValue}_${updated_yAxisValue+1}`);
+                                                    anotherSelectedPart.appendChild(rookImagePiece);
+                                                    rookSelectedPiece.innerHTML = "";
+                                                    if (rookImagePiece.getAttribute("alt").includes("black")){
+                                                        foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves + 1;
+                                                    } else {
+                                                        foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves + 1;
+                                                    }
+                                                }
+                                                
+                                                // moved left two times down part
+                                                if (diff_yAxisValue === -2 && updated_xAxisValue === 8) {
+                                                    rookSelectedPiece = document.querySelector(`.cell_8_1`);
+                                                    rookImagePiece = rookSelectedPiece.querySelector("img");
+                                                    updateCoordinate(rookImagePiece, `.cell_8_1`, `.cell_${updated_xAxisValue}_${updated_yAxisValue+1}`, false, "", false, blackUp);
+                                                    anotherSelectedPart = document.querySelector(`.cell_${updated_xAxisValue}_${updated_yAxisValue+1}`);
+                                                    anotherSelectedPart.appendChild(rookImagePiece);
+                                                    rookSelectedPiece.innerHTML = "";
+                                                    if (rookImagePiece.getAttribute("alt").includes("black")){
+                                                        foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves + 1;
+                                                    } else {
+                                                        foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === `.cell_${updated_xAxisValue}_${updated_yAxisValue-1}`});
+                                                        whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves + 1;
+                                                    }
+                                                }
+                                                    
+                                            } // if selected piece is black king for castling
+                                            
 
 
                                             switch (turn) {
@@ -8281,19 +9291,39 @@
                                                     turn = "white";
                                                     break;
                                             } // end of switch case statement
-                                        }
+                                        } // if king is in danger or not in danger
 
                                         
                                         break;
                                     } // end of if it matches possible movements
                                             
                                         
-                                
+                                    counter = counter + 1;
                                 } // for loop for the possible moves length not checked
 
-                           } /////// if else isCheckBlack isCheckWhite finished
+                                // if there is no match
+                                if (counter === possibleMoves.length || possibleMoves.length === 0) {
+                                    if (selectedPiece.getAttribute('alt').includes("blackKing")){
+                                        blackKingPiece[0].numberOfMoves = blackKingPiece[0].numberOfMoves - 1; 
+                                    }
+
+                                    if (selectedPiece.getAttribute('alt').includes("whiteKing")){
+                                        whiteKingPiece[0].numberOfMoves = whiteKingPiece[0].numberOfMoves - 1; 
+                                    }
+
+                                    if (selectedPiece.getAttribute('alt').includes("blackRook")){
+                                        foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === prevCoordinate});
+                                        blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves - 1; 
+                                    }
+
+                                    if (selectedPiece.getAttribute('alt').includes("whiteRook")){
+                                        foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === prevCoordinate});
+                                        whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves - 1; 
+                                    }
+                                }
+                           } /////// if else isCheckBlack isCheckWhite finished else not check
                             
-                        }
+                        } // possible Moves length is bigger than 0
 
                         selectedPiece = null;
                         
@@ -8328,62 +9358,85 @@
 
                                 if (isCheckBlack || isCheckWhite) {
                                      // if you are in a defending position and you have to eat the enemy
-                                    for(let p = 0; p < eatingPossibilities.length; p++) {
-                                        for(let n = 0; n < defendingMoves.length; n++) {
-                                            if(eatingPossibilities[p] === defendingMoves[n]) {
-                                                defendTheKingMessage = true;
-                                                eatenPiece = coordinate.innerHTML;
-                                                coordinate.innerHTML = "";
-                                                coordinate.appendChild(selectedPiece);
-                                                updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, false, blackUp);
+                                    
+                                    for(let n = 0; n < defendingMoves.length; n++) {
+                                        if(defendingMoves[n] === `${coordinateValue}`) {
+                                            defendTheKingMessage = true;
+                                            eatenPiece = coordinate.innerHTML;
+                                            coordinate.innerHTML = "";
+                                            coordinate.appendChild(selectedPiece);
+                                            updateCoordinate(selectedPiece, prevCoordinate, `${coordinateValue}`, true, otherPiece, false, blackUp);
 
 
-                                                if (isCheckBlack) {
-                                                    isCheckBlack = false;
-                                                } else if (isCheckWhite) {
-                                                    isCheckWhite = false;
-                                                }
+                                            if (isCheckBlack) {
+                                                isCheckBlack = false;
+                                            } else if (isCheckWhite) {
+                                                isCheckWhite = false;
+                                            }
 
-                                                // pawn check
-                                                if (selectedPiece.getAttribute('alt').includes("Pawn")){
-                                                    pawnMatch = true;
-                                                }
+                                            // pawn check
+                                            if (selectedPiece.getAttribute('alt').includes("Pawn")){
+                                                pawnMatch = true;
+                                            }
 
 
-                                                switch (turn) {
-                                                    case "white":
-                                                        isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                        attackerPiece = selectedPiece;
-                                                        attackerCoordination = `${coordinateValue}`;
-                                                        if (isCheckBlack) {
-                                                            checkedWord = document.querySelector('h1');
-                                                            checkedWord.style.opacity = 1;
-                                                        }
-                                                        turn = "black";
-                                                        
-                                                        break;
-                                                    case "black":
-                                                        isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
-                                                        attackerPiece = selectedPiece;
-                                                        attackerCoordination = `${coordinateValue}`;
-                                                        if (isCheckWhite) {
-                                                            checkedWord = document.querySelector('h1');
-                                                            checkedWord.style.opacity = 1;
-                                                        }
-                                                        turn = "white";
-                                                        
-                                                        break;
-                                                } // end of switch case statement
-                                                selectedPiece = null;
-                                                break;
+                                            switch (turn) {
+                                                case "white":
+                                                    isCheckBlack = blackKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckBlack) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    turn = "black";
+                                                    
+                                                    break;
+                                                case "black":
+                                                    isCheckWhite = whiteKingPiece[0].checked(selectedPiece, `${coordinateValue}`, turn, prevCoordinate);
+                                                    attackerPiece = selectedPiece;
+                                                    attackerCoordination = `${coordinateValue}`;
+                                                    if (isCheckWhite) {
+                                                        checkedWord = document.querySelector('h1');
+                                                        checkedWord.style.opacity = 1;
+                                                    }
+                                                    turn = "white";
+                                                    
+                                                    break;
+                                            } // end of switch case statement
+                                            selectedPiece = null;
+                                            break;
 
-                                            } // end of if it matches possible movements       
-                                        } // for loop for defending moves length
+                                        } // end of if it matches possible movements       
+                                    } // for loop for defending moves length
+                                        
+                                    
 
-                                    } // for loop for eating possibilities length
+                                    if (!defendTheKingMessage) {
+                                        if (selectedPiece.getAttribute('alt').includes("blackKing")){
+                                            blackKingPiece[0].numberOfMoves = blackKingPiece[0].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("whiteKing")){
+                                            whiteKingPiece[0].numberOfMoves = whiteKingPiece[0].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("blackRook")){
+                                            foundIdx = blackRookPieces.findIndex((rookClass) => {return rookClass.position === prevCoordinate});
+                                            blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("whiteRook")){
+                                            foundIdx = whiteRookPieces.findIndex((rookClass) => {return rookClass.position === prevCoordinate});
+                                            whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves - 1; 
+                                        }
+                                    }
+
+
                                 } else {
                                     // you are not in a dangerous situation
                                     defendTheKingMessage = true;
+                                    counter = 0;
                                     for (let q = 0; q < eatingPossibilities.length; q++) {
                                         if(eatingPossibilities[q] === `${coordinateValue}`) {
                                             eatenPiece = coordinate.innerHTML;
@@ -8404,11 +9457,13 @@
                                                 updateCoordinate(selectedPiece, `${coordinateValue}`, prevCoordinate, false, otherPiece, true, blackUp);
                                                 // pawn check
                                                 if (selectedPiece.getAttribute('alt').includes("Pawn")){
-                                                    pawnMatch = false;
+                                                    pawnMatch = true;
                                                 }
 
                                                 defendTheKingMessage = false;
+                                                break;
                                             } else {
+                                                defendTheKingMessage = true;
                                                 // pawn check
                                                 if (selectedPiece.getAttribute('alt').includes("Pawn")){
                                                     pawnMatch = true;
@@ -8445,9 +9500,36 @@
                                                 
 
                                         } // end of if it matches possible movements
+                                        counter = counter + 1;
 
-                                    } // eating possibilities length       
+                                    } // eating possibilities length    
                                     
+                                    
+                                    // rook check
+                                    if (!defendTheKingMessage || counter === eatingPossibilities.length) {
+                                        if (selectedPiece.getAttribute('alt').includes("whiteRook")) {
+                                            foundIdx = whiteRookPieces.findIndex((eachRookClass) => {return eachRookClass.position === prevCoordinate});
+                                            whiteRookPieces[foundIdx].numberOfMoves = whiteRookPieces[foundIdx].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("blackRook")) {
+                                            foundIdx = blackRookPieces.findIndex((eachRookClass) => {return eachRookClass.position === prevCoordinate});
+                                            blackRookPieces[foundIdx].numberOfMoves = blackRookPieces[foundIdx].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("blackKing")) {
+                                            blackKingPiece[0].numberOfMoves = blackKingPiece[0].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("whiteKing")) {
+                                            whiteKingPiece[0].numberOfMoves = whiteKingPiece[0].numberOfMoves - 1; 
+                                        }
+
+                                        if (selectedPiece.getAttribute('alt').includes("Pawn") && !defendTheKingMessage){
+                                           pawnMatch = true;
+                                        }
+                                        
+                                    } 
                                 }
                             }
                         } else {// if you are trying to eat something end
