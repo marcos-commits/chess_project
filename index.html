@@ -8786,6 +8786,7 @@
             let kingInDanger = false;
             let prevCoordinateDIV;
             let counter = 1;
+            let tempPiece;
             // Variables End
 
             turn = "white";
@@ -8979,6 +8980,10 @@
                                         } else if (isCheckWhite) {
                                             isCheckWhite = false;
                                         }
+
+                                        // Because of Pawn Promotion verify it again
+                                        tempPiece = document.querySelector(`${coordinateValue}`);
+                                        selectedPiece = tempPiece.querySelector("img");
 
 
                                         switch (turn) {
@@ -9265,7 +9270,9 @@
                                                     
                                             } // if selected piece is black king for castling
                                             
-
+                                            // Because of Pawn Promotion verify it again
+                                            tempPiece = document.querySelector(`${coordinateValue}`);
+                                            selectedPiece = tempPiece.querySelector("img");
 
                                             switch (turn) {
                                                 case "white":
@@ -9379,6 +9386,10 @@
                                                 pawnMatch = true;
                                             }
 
+                                            // Because of Pawn Promotion verify it again
+                                            tempPiece = document.querySelector(`${coordinateValue}`);
+                                            selectedPiece = tempPiece.querySelector("img");
+
 
                                             switch (turn) {
                                                 case "white":
@@ -9468,6 +9479,10 @@
                                                 if (selectedPiece.getAttribute('alt').includes("Pawn")){
                                                     pawnMatch = true;
                                                 }
+
+                                                // Because of Pawn Promotion verify it again
+                                                tempPiece = document.querySelector(`${coordinateValue}`);
+                                                selectedPiece = tempPiece.querySelector("img");
 
                                                 switch (turn) {
                                                     case "white":
