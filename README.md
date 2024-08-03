@@ -24,7 +24,7 @@ ___
 
 <*Pawn(폰)*>
 
-<img src="https://github.com/marcos-commits/chess_project/blob/main/img/blackPawn.png" width="50px" height="50px" title="blackPawn" /> 
+<img src="https://github.com/marcos-commits/chess_project/blob/main/img/whitePawn.png" width="50px" height="50px" title="whitePawn" /> 
   
  * First movement can go forward one or two times(첫 번째 움직일때 앞으로 1번 아니면 2번 전진 할 수 있다.)
    
@@ -39,7 +39,7 @@ ___
 
 <*Rook(룩)*>
 
-<img src="https://github.com/marcos-commits/chess_project/blob/main/img/blackRook.png" width="50px" height="50px" title="blackRook" />
+<img src="https://github.com/marcos-commits/chess_project/blob/main/img/whiteRook.png" width="50px" height="50px" title="whiteRook" />
 
  * Can move forward, backward, left, and right (전진, 후진, 왼쪽, 오른쪽으로 자유 자재로 움직일 수 있다.)
    
@@ -52,7 +52,7 @@ ___
 
 <*Knight(기사)*>
 
-<img src="https://github.com/marcos-commits/chess_project/blob/main/img/blackKnight.png" width="50px" height="50px" title="blackKnight" />
+<img src="https://github.com/marcos-commits/chess_project/blob/main/img/whiteKnight.png" width="50px" height="50px" title="whiteKnight" />
 
  * Can move 1 forward or downward and 2 sideways (left or right); Can move 2 forward or downward and 1 sideways (left or right) [앞으로나 뒤로 한 칸 그리고 왼쪽이나 오른쪽으로 두 칸 이동이 가능하고 아니면 앞으로나 뒤로 두 칸 그리고 왼쪽이나 오른쪽으로 한 칸 이동이 가능하다.)
    
@@ -63,7 +63,7 @@ ___
 
 <*Bishop(비숍)*>
 
-<img src="https://github.com/marcos-commits/chess_project/blob/main/img/blackBishop.png" width="50px" height="50px" title="blackBishop" />
+<img src="https://github.com/marcos-commits/chess_project/blob/main/img/whiteBishop.png" width="50px" height="50px" title="whiteBishop" />
 
  * Can only move diagonally (대각선으로만 자유자재로 움직임이 가능하다.)
    
@@ -72,7 +72,7 @@ ___
 
 <*Queen(여왕)*>
 
-<img src="https://github.com/marcos-commits/chess_project/blob/main/img/blackQueen.png" width="50px" height="50px" title="blackQueen" />
+<img src="https://github.com/marcos-commits/chess_project/blob/main/img/whiteQueen.png" width="50px" height="50px" title="whiteQueen" />
 
  * Movement is a combination of rook and bishop(Can move forward, downward, left, right, and diagonally) [비숍과 룩의 움직임들을 합쳐 놓은 것이라고 볼 수 있다.)
    
@@ -81,7 +81,7 @@ ___
 
 <*King(왕)*>
 
-<img src="https://github.com/marcos-commits/chess_project/blob/main/img/blackKing.png" width="50px" height="50px" title="blackKing" />
+<img src="https://github.com/marcos-commits/chess_project/blob/main/img/whiteKing.png" width="50px" height="50px" title="whiteKing" />
 
  * Movement is a combination of rook and bishop, but it can only move only one spot(Can move 1 forward, 1 downward, 1 left, 1 right, and 1 diagonal movement [여왕의 움직임과 동일하나 왕은 한 칸만 이동이 가능하다.]
    
